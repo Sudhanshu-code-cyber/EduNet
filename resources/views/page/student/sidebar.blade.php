@@ -35,7 +35,7 @@
                <p class="text-xs font-semibold text-gray-400 uppercase mb-2">Overview</p>
                <ul class="space-y-1">
                   <li>
-                     <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
+                     <a href="{{route('/student')}}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
                         📋 <span>Dashboard</span>
                      </a>
                   </li>
@@ -47,7 +47,13 @@
                <p class="text-xs font-semibold text-gray-400 uppercase mb-2">Learning</p>
                <ul class="space-y-1">
                   <li>
-                     <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
+                     <a href="{{route('student.myclass')}}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
+                        📘 <span>My Class</span>
+                     </a>
+                  </li>
+
+                  <li>
+                     <a href="{{route('student.mytimetable')}}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
                         📘 <span>My Class</span>
                      </a>
                   </li>
