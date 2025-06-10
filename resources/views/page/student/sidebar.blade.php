@@ -1,4 +1,4 @@
-<div class="w-full sm:w-3/12">
+<div class="w-full sm:w-[20%]">
    <!-- Toggle Button for Mobile -->
    <button data-drawer-target="sidebar-multi-level-sidebar" data-drawer-toggle="sidebar-multi-level-sidebar"
       aria-controls="sidebar-multi-level-sidebar" type="button"
@@ -12,7 +12,7 @@
    </button>
 
    <!-- Sidebar -->
-   <aside class="w-full sm:w-80 h-screen bg-white border-r border-gray-200 shadow-sm">
+   <aside class="w-full sm:w-64 h-screen bg-white border-r border-gray-200 shadow-sm">
       <div class="flex flex-col h-full p-5 text-gray-700 space-y-6">
 
          <!-- Profile -->
@@ -65,7 +65,7 @@
                <ul class="space-y-1">
                   <li>
                      <a href="#" class="flex items-center gap-2 px-3 py-2 rounded bg-purple-100 text-purple-700">
-                        📝 <span>Assignment & Homework</span>
+                        📝 <span>Assignment </span>
                      </a>
                   </li>
                   <li>

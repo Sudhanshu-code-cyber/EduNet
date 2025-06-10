@@ -126,7 +126,7 @@
     <div class="flex">
 
 @include('page/student/sidebar')
-<div class=" w-9/12 mr-10 mt-5">
+<div class=" w-[80%] mr-10 mt-5">
  @include( 'page.student.header')
 
 
