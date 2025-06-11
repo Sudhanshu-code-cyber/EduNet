@@ -1,4 +1,4 @@
-  <header class="bg-white shadow-md rounded-full ">
+  <header class="bg-white shadow-md rounded-full  ">
                 <div class=" mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center h-16">
                         <!-- Logo and Navigation -->
