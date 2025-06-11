@@ -73,7 +73,7 @@
 
   <!-- Attendance Table -->
   <section class="overflow-x-auto max-w-full mx-auto rounded-2xl shadow-sm bg-white p-8">
-    <h2 class="text-3xl font-semibold text-gray-900 mb-8 text-center md:text-left">
+    <h2 class="text-2xl font-semibold text-gray-500 mb-8 text-center md:text-left">
       Attendance Sheet - Class 1, Section A - March 2024
     </h2>
     <table class="min-w-max w-full border-collapse border border-gray-200 text-gray-700 select-none">

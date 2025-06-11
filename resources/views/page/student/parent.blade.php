@@ -8,7 +8,123 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+       
+        
+       
+        
+        .student-info h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .student-info p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .overview-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .present .card-icon {
+            background: rgba(76, 175, 80, 0.15);
+            color: #4CAF50;
+        }
+        
+        .absent .card-icon {
+            background: rgba(244, 67, 54, 0.15);
+            color: #F44336;
+        }
+        
+        .percentage .card-icon {
+            background: rgba(33, 150, 243, 0.15);
+            color: #2196F3;
+        }
+        
+        .days .card-icon {
+            background: rgba(255, 152, 0, 0.15);
+            color: #FF9800;
+        }
+        
+        .card-content {
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .card-footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 10px;
+        }
+        
+       
+        
+        
+        
+        
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -124,20 +240,18 @@
 </head>
 
 <body class="bg-gray-50">
-    <div class="flex">
+   <div class="flex">
+   @include('page.student.sidebar')
 
-@include('page/student/sidebar')
-<div class=" w-[80%] mr-10 mt-5">
- @include( 'page.student.header')
+   <div class="w-full sm:ml-64"> 
+      @include('page.student.header')
 
-
-@section('content')
-
-@show
+      <div class="p-4">
+         @yield('content')
+      </div>
+   </div>
 </div>
 
-    </div>
-    <!-- Header -->
 
 
 

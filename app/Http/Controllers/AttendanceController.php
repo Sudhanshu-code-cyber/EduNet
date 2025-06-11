@@ -12,12 +12,7 @@ class AttendanceController extends Controller
     {
         return view('page.teacher.attendance');
     }
-    /**
-     * Process the attendance filter form submission and return the filtered attendance data.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\View\View
-     */
+
     public function search(Request $request)
     {
         // Validate the request data
@@ -67,12 +62,7 @@ class AttendanceController extends Controller
                     'attendanceData' => $attendanceData,
                 ]);
             }
-            /**
-             * Save the attendance data.
-             *
-             * @param  \Illuminate\Http\Request  $request
-             * @return \Illuminate\Http\RedirectResponse
-             */
+          
             public function save(Request $request)
             {
                 // Validate the request data
@@ -118,7 +108,7 @@ class AttendanceController extends Controller
                 ]);
             }
         }
-        // Redirect back to the attendance page with a success message
+
         return redirect()->route('attendance.index')->with('success', 'Attendance saved successfully!');
     }
 }

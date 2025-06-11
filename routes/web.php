@@ -6,8 +6,9 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TeacherController;
 
 Route::get('/student',[StudentController::class,'dashboard'])->name('/student');
-Route::get('/student/myclass',[StudentController::class,'myclass'])->name('student.myclass');
-Route::get('/student/mytimetable',[StudentController::class,'showTimetable'])->name('student.mytimetable');
+Route::get('/student/myclass',[StudentController::class,'showTimetable'])->name('student.myclass');
+Route::get('/student/attendance',[StudentController::class,'attendance'])->name('student.attendance');
+Route::get('/student/assignment',[StudentController::class,'assignment'])->name('student.assignment');
 
 Route::get('/teacher', function () {
     return view('page.teacher.dashboard');

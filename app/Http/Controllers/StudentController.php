@@ -27,7 +27,18 @@ class StudentController extends Controller
         // Add more entries...
     ];
 
-    return view('page.student.mytimetable', compact('timetable'));
+    return view('page.student.myclass', compact('timetable'));
 }
+
+
+ public function attendance(){
+        return view('page.student.attendance');
+    }
+
+
+     public function assignment(){
+        return view('page.student.assignment');
+    }
+
 
 }
