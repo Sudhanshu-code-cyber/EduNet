@@ -9,6 +9,8 @@ Route::get('/student',[StudentController::class,'dashboard'])->name('/student');
 Route::get('/student/myclass',[StudentController::class,'showTimetable'])->name('student.myclass');
 Route::get('/student/attendance',[StudentController::class,'attendance'])->name('student.attendance');
 Route::get('/student/assignment',[StudentController::class,'assignment'])->name('student.assignment');
+Route::get('/student/myresult',[StudentController::class,'myresult'])->name('student.myresult');
+Route::get('/student/marksheet',[StudentController::class,'marksheet'])->name('student.marksheet');
 
 Route::get('/teacher', function () {
     return view('page.teacher.dashboard');
