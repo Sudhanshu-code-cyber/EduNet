@@ -86,6 +86,34 @@ class TeacherController extends Controller
 
 }
 
+public function noticeBoard()
+{
+    $notices = collect([
+        (object)[
+            'title' => 'Holiday Announcement',
+            'details' => 'The school will remain closed on 15th August for Independence Day.',
+            'posted_by' => 'Principal',
+            'date' => '2025-08-15'
+        ],
+        (object)[
+            'title' => 'Exam Schedule',
+            'details' => "Midterm exams will start from 1st September.\nMake sure to collect your admit cards.",
+            'posted_by' => 'Exam Department',
+            'date' => '2025-08-25'
+        ],
+        (object)[
+            'title' => 'PTM Notice',
+            'details' => 'Parents are requested to attend the PTM on 5th September at 9 AM.',
+            'posted_by' => 'Class Teacher',
+            'date' => '2025-09-05'
+        ]
+    ]);
 
+    return view('page.teacher.notices', compact('notices'));
+}
+
+public function studentlist(){
+    return view('page.teacher.student-list');
+}
 
 }

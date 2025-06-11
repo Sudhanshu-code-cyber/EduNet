@@ -19,4 +19,5 @@ Route::get('/teacher', function () {
 Route::get('teacher/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get('/teacher/myclass',[TeacherController::class,'myclass'])->name('teacher.myclass');
 Route::get('/teacher/timetable', [TeacherController::class, 'timetable'])->name('teacher.timetable'); 
-Route::get('/teacher/studentlist', [TeacherController::class, 'studentlist'])->name('teacher.students.index');
+Route::get('/teacher/studentlist', [TeacherController::class, 'studentlist'])->name('teacher.studentlist');
+Route::get('/teacher/notice',[TeacherController::class, 'noticeBoard'])->name('teacher.notice');

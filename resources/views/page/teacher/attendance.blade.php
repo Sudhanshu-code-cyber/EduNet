@@ -13,7 +13,7 @@
   </header>
 
   <!-- Filter Form -->
-  <section class="bg-gray-50 p-8 rounded-2xl shadow-sm max-w-5xl mx-auto mb-16">
+  <section class="bg-gray-50 p-8 rounded-2xl shadow-lg max-w-5xl mx-auto mb-16">
     <form method="GET" action="#" class="grid grid-cols-1 md:grid-cols-5 gap-6">
       <div>
         <label for="class" class="block text-sm font-semibold text-gray-700 mb-2">Class</label>
@@ -72,7 +72,7 @@
   </section>
 
   <!-- Attendance Table -->
-  <section class="overflow-x-auto max-w-full mx-auto rounded-2xl shadow-sm bg-white p-8">
+  <section class="overflow-x-auto max-w-full mx-auto rounded-2xl shadow-lg bg-white p-8">
     <h2 class="text-2xl font-semibold text-gray-500 mb-8 text-center md:text-left">
       Attendance Sheet - Class 1, Section A - March 2024
     </h2>
