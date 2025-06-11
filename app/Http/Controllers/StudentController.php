@@ -39,6 +39,19 @@ class StudentController extends Controller
      public function assignment(){
         return view('page.student.assignment');
     }
+public function myresult(){
+        return view('page.student.myresult');
+    }
+
+
+    public function marksheet(){
+        return view('page.student.marksheet');
+    }
+
+
+
+
+ 
 
 
 }
