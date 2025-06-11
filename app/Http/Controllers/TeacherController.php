@@ -75,7 +75,6 @@ class TeacherController extends Controller
                 'type' => 'free',
             ],
         ],
-        // ... other days of the week
         'Wednesday' => [],
         'Thursday' => [],
         'Friday' => [],
@@ -86,5 +85,7 @@ class TeacherController extends Controller
     return view('page.teacher.timetable', compact('weeklyTimetable'));
 
 }
+
+
 
 }
