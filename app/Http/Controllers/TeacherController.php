@@ -116,4 +116,8 @@ public function studentlist(){
     return view('page.teacher.student-list');
 }
 
+public function homework(){
+    return view('page.teacher.classwork.homework');
+}
+
 }
