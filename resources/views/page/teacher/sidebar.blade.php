@@ -60,19 +60,19 @@
           <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Academic</p>
           <ul class="space-y-0.5">
             <li>
-              <a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+              <a href="{{ route('teacher.homework') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
                 <i class="fas fa-book-open w-4 text-center text-gray-500"></i>
-                Assignments
+               Homework
               </a>
             </li>
             <li>
-              <a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+              <a href="{{ route('teacher.exam') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
                 <i class="fas fa-file-signature w-4 text-center text-gray-500"></i>
                 Exam Management
               </a>
             </li>
             <li>
-              <a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+              <a href="{{ route('teacher.marksentry') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
                 <i class="fas fa-chart-line w-4 text-center text-gray-500"></i>
                 Marks Entry
               </a>
