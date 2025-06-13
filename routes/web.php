@@ -53,4 +53,7 @@ Route::get('/teacher/homework',[TeacherController::class, 'homework'])->name('te
 
 Route::get('/teacher/exam',[ExamController::class,'exam'])->name('teacher.exam');
 Route::get('/teacher/marksentry',[ExamController::class,'marksentry'])->name('teacher.marksentry');
+Route::get('/teacher/homework',[TeacherController::class, 'homework'])->name('teacher.homework');
 
+Route::get('/teacher/exam',[ExamController::class,'exam'])->name('teacher.exam');
+Route::get('/teacher/marksentry',[ExamController::class,'marksentry'])->name('teacher.marksentry');
