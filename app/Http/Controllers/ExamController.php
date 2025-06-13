@@ -11,7 +11,22 @@ class ExamController extends Controller
     }
 
     public function marksentry(){
-        return view('page.teacher.marks-entry');
+        $student = [
+            'name' => 'Riya Sharma',
+            'subjects' => [
+                ['name' => 'Mathematics', 'marks' => 55],
+                ['name' => 'Science', 'marks' => 48],
+                ['name' => 'English', 'marks' => 50],
+                ['name' => 'Hindi', 'marks' => 52],
+                ['name' => 'SST', 'marks' => 49],
+                ['name' => 'Sanskrit', 'marks' => 51],
+            ],
+            'total' => 600,
+            'obtained' => 305,
+            'result' => 'Pass',
+            'percentage' => '50.8%',
+        ];
+        return view('page.teacher.marks-entry',compact('student'));
     }
 
     public function examschedule(){

@@ -6,12 +6,7 @@
     
         <h1 class="text-4xl font-bold text-blue-800 mb-6">Exam Schedule</h1>
          
-        <div class="flex justify-end items-center gap-4 mb-3">
-            <!-- Filter Button -->
-            <button data-modal-target="filter-modal" data-modal-toggle="filter-modal"
-                class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2 shadow-md hover:shadow-lg text-sm flex items-center gap-2">
-                <i class="fa-solid fa-filter"></i> Filter
-            </button>
+        @include('page.teacher.examinations.filter-modal')
         
             @include('page.teacher.examinations.exam-schedule-modal')
         </div>

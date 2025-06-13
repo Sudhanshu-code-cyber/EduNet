@@ -1,3 +1,11 @@
+
+<div class="flex justify-end items-center gap-4 mb-3">
+    <!-- Filter Button -->
+    <button data-modal-target="filter-modal" data-modal-toggle="filter-modal"
+        class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2 shadow-md hover:shadow-lg text-sm flex items-center gap-2">
+        <i class="fa-solid fa-filter"></i> Filter
+    </button>
+
 <!-- Filter Modal -->
 <div id="filter-modal" tabindex="-1" aria-hidden="true"
     class="hidden fixed top-0 left-0 right-0 z-50 justify-center items-center w-full inset-0 h-screen bg-black bg-opacity-50 overflow-y-auto">

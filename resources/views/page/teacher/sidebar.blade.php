@@ -106,7 +106,7 @@
           </a>
         </li>
         <li>
-          <a href=""
+          <a href="{{ route('teacher.examschedule') }}"
             class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
          Exam Schedule
           </a>
