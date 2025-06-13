@@ -39,7 +39,7 @@ Route::get('teacher/attendance', [AttendanceController::class, 'index'])->name('
 Route::get('/teacher/myclass', [TeacherController::class, 'myclass'])->name('teacher.myclass');
 Route::get('/teacher/timetable', [TeacherController::class, 'timetable'])->name('teacher.timetable');
 Route::get('/teacher/studentlist', [TeacherController::class, 'studentlist'])->name('teacher.studentlist');
-<<<<<<< HEAD
+
 Route::get('/teacher/notice', [TeacherController::class, 'noticeBoard'])->name('teacher.notice');
 
 
@@ -47,10 +47,10 @@ Route::get('/teacher/notice', [TeacherController::class, 'noticeBoard'])->name('
 Route::get('/parent', function () {
     return view('page.admin.parent');
 })->name('/parent');
-=======
+
 Route::get('/teacher/notice',[TeacherController::class, 'noticeBoard'])->name('teacher.notice');
 Route::get('/teacher/homework',[TeacherController::class, 'homework'])->name('teacher.homework');
 
 Route::get('/teacher/exam',[ExamController::class,'exam'])->name('teacher.exam');
 Route::get('/teacher/marksentry',[ExamController::class,'marksentry'])->name('teacher.marksentry');
->>>>>>> 2dd966227e8e0024c1d153f1b431afd8b71dbd28
+
