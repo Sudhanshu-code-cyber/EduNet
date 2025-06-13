@@ -49,6 +49,15 @@ public function myresult(){
     }
 
 
+     public function myfee(){
+        return view('page.student.myfee');
+    }
+
+    public function notice(){
+        return view('page.student.notice');
+    }
+
+
 
 
  

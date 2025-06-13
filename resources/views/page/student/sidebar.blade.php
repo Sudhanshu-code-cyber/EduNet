@@ -84,13 +84,13 @@
                      </a>
                   </li>
                   <li>
-                     <a href="#"
+                     <a href="{{route('student.myfee')}}"
                         class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
                         💰 <span>Fee Status</span>
                      </a>
                   </li>
                   <li>
-                     <a href="#"
+                     <a href="{{route('student.notice')}}"
                         class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
                         📢 <span>Notices & Announcements</span>
                      </a>
