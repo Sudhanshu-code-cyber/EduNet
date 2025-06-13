@@ -120,4 +120,8 @@ public function homework(){
     return view('page.teacher.classwork.homework');
 }
 
+public function submission(){
+    return view('page.teacher.classwork.submission');
+}
+
 }

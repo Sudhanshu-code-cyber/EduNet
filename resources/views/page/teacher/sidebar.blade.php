@@ -55,43 +55,92 @@
           </ul>
         </div>
   
-        <!-- Academic -->
-        <div>
-          <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Academic</p>
-          <ul class="space-y-0.5">
-            <li>
-              <a href="{{ route('teacher.homework') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-                <i class="fas fa-book-open w-4 text-center text-gray-500"></i>
-               Homework
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('teacher.exam') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-                <i class="fas fa-file-signature w-4 text-center text-gray-500"></i>
-                Exam Management
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('teacher.marksentry') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-                <i class="fas fa-chart-line w-4 text-center text-gray-500"></i>
-                Marks Entry
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('teacher.timetable') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-                <i class="fas fa-clock w-4 text-center text-gray-500"></i>
-                Timetable
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('teacher.notice') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-                <i class="fas fa-bullhorn w-4 text-center text-gray-500"></i>
-                Notices
-              </a>
-            </li>
-          </ul>
-        </div>
-  
+       <!-- Academic -->
+<div x-data="{ open: false }">
+  <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Academic</p>
+  <ul class="space-y-0.5">
+
+   <!-- Homework Dropdown -->
+<li x-data="{ openHomework: false }">
+  <button @click="openHomework = !openHomework"
+    class="w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+    <span class="flex items-center gap-2">
+      <i class="fas fa-book-open w-4 text-center text-gray-500"></i>
+      Homework
+    </span>
+    <i :class="openHomework ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-xs text-gray-500"></i>
+  </button>
+
+  <ul x-show="openHomework" x-transition class="ml-6 mt-1 space-y-0.5 text-sm">
+         <li>
+          <a href="{{ route('teacher.homework') }}"
+            class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+            All Homework
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('teacher.submission') }}"
+            class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+            Submission
+          </a>
+        </li>
+      </ul>
+    </li>
+
+  <!-- Exam Management Dropdown -->
+<li x-data="{ openExam: false }">
+  <button @click="openExam = !openExam"
+    class="w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+    <span class="flex items-center gap-2">
+      <i class="fas fa-file-signature w-4 text-center text-gray-500"></i>
+      Exam Management
+    </span>
+    <i :class="openExam ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-xs text-gray-500"></i>
+  </button>
+
+  <ul x-show="openExam" x-transition class="ml-6 mt-1 space-y-0.5 text-sm">
+        <li>
+          <a href="{{ route('teacher.exam') }}"
+            class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+        Exam
+          </a>
+        </li>
+        <li>
+          <a href=""
+            class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+         Exam Schedule
+          </a>
+        </li>
+        <li>
+          <a href=""
+            class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+         Exam Results
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li>
+      <a href="{{ route('teacher.marksentry') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+        <i class="fas fa-chart-line w-4 text-center text-gray-500"></i>
+        Marks Entry
+      </a>
+    </li>
+    <li>
+      <a href="{{ route('teacher.timetable') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+        <i class="fas fa-clock w-4 text-center text-gray-500"></i>
+        Timetable
+      </a>
+    </li>
+    <li>
+      <a href="{{ route('teacher.notice') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+        <i class="fas fa-bullhorn w-4 text-center text-gray-500"></i>
+        Notices
+      </a>
+    </li>
+  </ul>
+</div>
+
         <!-- Account -->
         <div>
           <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Account</p>

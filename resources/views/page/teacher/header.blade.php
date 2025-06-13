@@ -19,59 +19,67 @@
                     <span class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-500 text-white text-xs text-center rounded-full">3</span>
                 </a>
 
-                <!-- User Dropdown (hover-based) -->
-                <div class="relative group">
-                    <!-- Dropdown Toggle -->
-                    <div class="flex items-center cursor-pointer">
-                        <img src="https://i.pravatar.cc/300" alt="Profile Picture"
-                             class="w-9 h-9 rounded-full object-cover" />
-                        <span class="ml-2 hidden md:inline font-medium text-gray-800">Ms. Briganza</span>
-                        <svg class="w-4 h-4 ml-1 hidden md:inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
+              <!-- User Dropdown (click-based) -->
+<div class="dropdown relative">
+    <div class="flex items-center text-sm font-medium text-gray-900 rounded-full focus:outline-none">
+    <img src="https://i.pravatar.cc/300" alt="Profile Picture" class="w-9 h-9 rounded-full object-cover" />
+    <span class="ml-2 hidden md:inline font-medium text-gray-800">Ms. Briganza</span>
+    <button  onclick="toggleDropdown('teacherDropdown')">
+        <svg class="w-4 h-4 ml-1 hidden md:inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+<div>
 
-                    <!-- Dropdown Menu -->
-                    <div class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-50 hidden group-hover:block">
-                        <!-- User Info -->
-                        <div class="px-4 py-3 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
-                            <div class="flex items-center">
-                                <img src="https://i.pravatar.cc/300" alt="Profile"
-                                     class="w-12 h-12 rounded-full object-cover">
-                                <div class="ml-3">
-                                    <p class="font-semibold text-gray-800">Ms. Briganza</p>
-                                    <p class="text-sm text-gray-600">Teacher</p>
-                                    <span class="inline-block mt-1 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Active</span>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Dropdown Menu -->
+    <div id="teacherDropdown" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-50 hidden">
+        <!-- User Info -->
+        <div class="px-4 py-3 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div class="flex items-center">
+                <img src="https://i.pravatar.cc/300" alt="Profile" class="w-12 h-12 rounded-full object-cover">
+                <div class="ml-3">
+                    <p class="font-semibold text-gray-800">Ms. Briganza</p>
+                    <p class="text-sm text-gray-600">Teacher</p>
+                    <span class="inline-block mt-1 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Active</span>
+                </div>
+            </div>
+        </div>
 
-                        <!-- Links -->
-                        <ul class="py-2">
-                            <li>
-                                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
-                                    <i class="fas fa-user mr-3 text-gray-500 w-5"></i> My Profile
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
-                                    <i class="fas fa-cog mr-3 text-gray-500 w-5"></i> Settings
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
-                                    <i class="fas fa-book mr-3 text-gray-500 w-5"></i> My Subjects
-                                </a>
-                            </li>
-                        </ul>
+        <!-- Links -->
+        <ul class="py-2">
+            <li>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-user mr-3 text-gray-500 w-5"></i> My Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-cog mr-3 text-gray-500 w-5"></i> Settings
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
+                    <i class="fas fa-book mr-3 text-gray-500 w-5"></i> My Subjects
+                </a>
+            </li>
+            <li class="border-t border-gray-100 pt-2 bg-gray-50">
+    <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
+        <i class="fas fa-sign-out-alt mr-3 text-gray-500 w-5"></i> Sign Out
+    </a>
+            </li>
+        </ul>
+    </div>
+</div>
 
-                        <!-- Sign Out -->
-                        <div class="border-t border-gray-100 pt-2 bg-gray-50">
-                            <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-sign-out-alt mr-3 text-gray-500 w-5"></i> Sign Out
-                            </a>
-                        </div>
+<script>
+    function toggleDropdown(dropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        dropdown.classList.toggle('hidden');
+    }
+</script>
+
+
+                        
                     </div>
                 </div>
                 <!-- End Dropdown -->

@@ -14,23 +14,28 @@
         </button>
     </div>
 
-    <!-- Filter and Search -->
-    <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
-        <!-- Search Bar -->
-        <div class="flex gap-2">
-            <input type="text" placeholder="Search homework..." 
-                class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm">
-                <i class="fa-solid fa-magnifying-glass"></i> Search
-            </button>
-        </div>
+  <!-- Filter and Search -->
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
 
-        <!-- Filter Button -->
-        <button data-modal-target="filter-modal" data-modal-toggle="filter-modal"
-            class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2 shadow-md hover:shadow-lg text-sm flex items-center gap-2">
-            <i class="fa-solid fa-filter"></i> Filter
+    <!-- Search and Filters -->
+    <div class="flex flex-wrap gap-3">
+        <!-- Search Input -->
+        <input type="text" placeholder="Search by title..."
+            class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-60 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+        <!-- Search Button -->
+        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
         </button>
     </div>
+
+    <!-- Filter Button -->
+    <button data-modal-target="filter-modal" data-modal-toggle="filter-modal"
+        class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2 shadow-md hover:shadow-lg text-sm flex items-center gap-2">
+        <i class="fa-solid fa-filter"></i> Filter
+    </button>
+</div>
+
 
     <!-- Homework Table -->
     <div class="overflow-x-auto bg-white shadow-xl rounded-lg border border-gray-200">
@@ -40,6 +45,7 @@
                     <th class="px-4 py-3 text-left">ID</th>
                     <th class="px-4 py-3 text-left">Class</th>
                     <th class="px-4 py-3 text-left">Section</th>
+                    <th class="px-4 py-3 text-left">Title</th>
                     <th class="px-4 py-3 text-left">Subject</th>
                     <th class="px-4 py-3 text-left">Homework Date</th>
                     <th class="px-4 py-3 text-left">Submission Date</th>
@@ -47,12 +53,14 @@
                     <th class="px-4 py-3 text-left">Action</th>
                 </tr>
             </thead>
+            
             <tbody class="divide-y divide-gray-200">
                 <!-- Sample Row -->
                 <tr class="hover:bg-gray-100 transition-all duration-300">
                     <td class="px-4 py-3 font-medium text-gray-700">HW1783929</td>
                     <td class="px-4 py-3">I</td>
                     <td class="px-4 py-3">A</td>
+                    <td class="px-4 py-3">English Grammar Worksheet</td> <!-- Title -->
                     <td class="px-4 py-3">English</td>
                     <td class="px-4 py-3">10 May 2024</td>
                     <td class="px-4 py-3">12 May 2024</td>
@@ -74,6 +82,7 @@
                         </div>
                     </td>
                 </tr>
+                
             </tbody>
         </table>
     </div>
