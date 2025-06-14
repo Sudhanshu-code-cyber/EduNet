@@ -31,6 +31,8 @@ Route::get('/parent', function () {
 })->name('/parent');
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
+    Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
+    Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
    
 });
 

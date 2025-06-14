@@ -16,7 +16,7 @@
         /* Sidebar Styles */
         .sidebar {
             background: linear-gradient(160deg, #2c3e50 0%, #1a2530 100%);
-            width: 280px;
+            width: ;
             display: flex;
             flex-direction: column;
             box-shadow: 5px 0 25px rgba(0, 0, 0, 0.2);
@@ -329,9 +329,9 @@
                     <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
                 </a>
                 <div class="dropdown-content" id="studentsContent">
-                    <a href="#" class="dropdown-link">Total Students</a>
+                    <a href="{{route('admin.allstudent')}}" class="dropdown-link">Total Students</a>
                     <a href="#" class="dropdown-link">Student Details</a>
-                    <a href="#" class="dropdown-link">Add New Student</a>
+                    <a href="{{route('admin.addstudent')}}" class="dropdown-link">Add New Student</a>
                     <a href="#" class="dropdown-link">Fees</a>
                 </div>
             </div>
