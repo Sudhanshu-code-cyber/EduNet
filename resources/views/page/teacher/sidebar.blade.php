@@ -22,7 +22,7 @@
           <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Overview</p>
           <ul class="space-y-0.5">
             <li>
-              <a href="{{ route('/teacher') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+              <a href="{{ route('teacher.dashboard') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
                 <i class="fas fa-home w-4 text-center text-gray-500"></i>
                 Dashboard
               </a>

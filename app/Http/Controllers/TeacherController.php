@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
+    
+public function dashboard(){
+    return view('page.teacher.dashboard');
+}
+
     public function myclass(){
     $classes = [
         [

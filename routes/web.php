@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
+
 
 
 
@@ -33,18 +35,27 @@ Route::controller(AdminController::class)->group(function () {
 });
 
 
-Route::get('/teacher', function () {
-    return view('page.teacher.dashboard');
-})->name('/teacher');
+
+
+Route::controller(TeacherController::class)->prefix('teacher')->name('teacher.')->group(function(){
+    Route::get('/','dashboard')->name('dashboard');
+    Route::get('/myclass', 'myclass')->name('myclass');
+    Route::get('/timetable','timetable')->name('timetable');
+    Route::get('/studentlist','studentlist')->name('studentlist');
+    Route::get('/notice','noticeBoard')->name('notice');
+    Route::get('/homework','homework')->name('homework');
+    Route::get('/homework/submission','submission')->name('submission');
+});
+
+Route::controller(ExamController::class)->prefix('teacher')->name('teacher.')->group(function(){
+    Route::get('/exam','exam')->name('exam');
+    Route::get('/examschedule','examschedule')->name('examschedule');
+    Route::get('/marksentry','marksentry')->name('marksentry');
+});
+
+Route::prefix('admin')->name('admin.')->group(function(){
+    Route::get('/add-teacher',[AdminTeacherController::class,'create'])->name('add-teacher');
+
+});
 
 Route::get('teacher/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
-Route::get('/teacher/myclass', [TeacherController::class, 'myclass'])->name('teacher.myclass');
-Route::get('/teacher/timetable', [TeacherController::class, 'timetable'])->name('teacher.timetable');
-Route::get('/teacher/studentlist', [TeacherController::class, 'studentlist'])->name('teacher.studentlist');
-Route::get('/teacher/notice', [TeacherController::class, 'noticeBoard'])->name('teacher.notice');
-Route::get('/teacher/homework',[TeacherController::class, 'homework'])->name('teacher.homework');
-Route::get('/teacher/homework/submission',[TeacherController::class, 'submission'])->name('teacher.submission');
-
-Route::get('/teacher/exam',[ExamController::class,'exam'])->name('teacher.exam');
-Route::get('/teacher/examschedule',[ExamController::class,'examschedule'])->name('teacher.examschedule');
-Route::get('/teacher/marksentry',[ExamController::class,'marksentry'])->name('teacher.marksentry');
