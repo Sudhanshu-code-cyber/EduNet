@@ -8,7 +8,7 @@
         <h1 class="text-4xl font-bold text-blue-700 relative after:block after:w-24 after:h-1 after:bg-blue-500 after:mt-2">
             Teacher List
         </h1>
-        <a href="{{ route('teacher.store') }}"
+        <a href="{{ route('teacher.create') }}"
            class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg text-sm px-6 py-3 shadow-md hover:shadow-lg transition duration-300 flex items-center gap-2">
             <i class="fa-solid fa-plus"></i>Add Teacher
         </a>
