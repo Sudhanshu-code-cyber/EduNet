@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
 
 
@@ -34,11 +35,13 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
     Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
     Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
+
     Route::get('admin/allstudent/{id}', 'editstudentform')->name('allstudent.edit');
     Route::put('admin/allstudent/{id}', 'studentUpdateForm');
 Route::get('/admin/search-student', [AdminController::class, 'SearchRollName'])->name('searchStudent');
     
    
+
 });
 
 
@@ -68,7 +71,10 @@ Route::controller(AdminTeacherController::class)->prefix('admin/teacher')->name(
     Route::get('/{id}/show','show')->name('show');
     Route::delete('/{id}','destroy')->name('destroy');
     Route::put('/{id}','update')->name('update');
-
+    Route::get('/search','search')->name('search');
 });
 
 Route::get('teacher/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+
+Route::get('admin/notice/search', [NoticeController::class, 'search'])->name('notice.search');
+Route::resource('admin/notice', NoticeController::class);

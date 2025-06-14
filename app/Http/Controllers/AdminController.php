@@ -27,6 +27,7 @@ class AdminController extends Controller
         return view('page.admin.student.addstudent');
     }
 
+
     public function editstudentform(Student $allstudent){
     return view('page.admin.student.allstudent',compact("allstudent"));
 }
@@ -64,6 +65,7 @@ public function SearchRollName(Request $request)
 
     return view('page.admin.student.allstudent', compact('allstudent'));
 }
+
 
 
 

@@ -37,13 +37,13 @@ class TeacherController extends Controller
 
         Teacher::create($data);
 
-        return redirect()->back()->with('success', 'Teacher added successfully.');
+        return redirect()->route('teacher.index')->with('success', 'Teacher added successfully.');
     }
     
 
     public function index()
 {
-    $teachers = Teacher::all();
+    $teachers = Teacher::paginate(10);
     return view('page.admin.teacher-section.teachers-list',compact('teachers'));
 }
 
@@ -56,7 +56,7 @@ public function show($id)
 public function edit($id)
 {
 $teacher = Teacher::findOrFail($id);
-return view('page.admin.teacher-section.edit-teacher',compact('teacher'));    
+return view('page.admin.teacher-section.edit-teacher-modal',compact('teacher'));    
 }
 
 public function update(Request $request, $id)
@@ -80,14 +80,34 @@ if ($request->hasFile('photo')) {
 }
 
 $teacher->update($data);
-return redirect()->route('admin.teachers-list')->with('success','Teacher updated successfully!');
+return redirect()->route('teacher.index')->with('success','Teacher updated successfully!');
 }
 
 public function destroy($id)
 {
 $teacher = Teacher::findOrFail($id);
 $teacher->delete();
-return redirect()->route('admin.teachers-list')->with('error','Teacher deleted successfully!');
+return redirect()->route('teacher.index')->with('error','Teacher deleted successfully!');
+}
+
+public function search(Request $request)
+{
+    $search = $request->input('search');
+
+    $teachers = Teacher::query()
+        ->when($search, function ($query, $search) {
+            return $query->where(function ($q) use ($search) {
+                $q->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$search}%"])
+                  ->orWhere('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('id_no', 'like', "%{$search}%");
+            });
+        })
+        ->paginate(10)
+        ->appends(['search' => $search]);
+
+    return view('page.admin.teacher-section.teachers-list', compact('teachers', 'search'));
 }
 
 }
