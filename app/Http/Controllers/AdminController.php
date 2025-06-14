@@ -28,12 +28,13 @@ class AdminController extends Controller
     }
 
 
-    public function editstudentform(Student $allstudent){
-    return view('page.admin.student.allstudent',compact("allstudent"));
-}
+    public function editStudent(Student $student) {
+        return view('page.admin.student.edit-student', compact('student'));
+    }    
 
 
-public function studentUpdateForm(Request $req, $stud)
+
+public function studentUpdate(Request $req, $stud)
 {
     $student = Student::findOrFail($stud);
 
@@ -55,7 +56,7 @@ public function studentUpdateForm(Request $req, $stud)
 
 
 
-public function SearchRollName(Request $request)
+public function searchRollName(Request $request)
 {
     $search = $request->input('search');
 

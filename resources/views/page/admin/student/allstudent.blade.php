@@ -156,7 +156,7 @@
 
             <div class="p-5">
                 <!-- Search and Filters -->
-                <form action="{{ route('searchStudent') }}" method="GET">
+                <form action="{{ route('student.search') }}" method="GET">
                     <div class="flex flex-col md:flex-row justify-between gap-4 bg-white p-2 rounded-lg">
                         <!-- Search Input -->
                         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
@@ -232,10 +232,16 @@
                                                     class="text-blue-500 hover:text-blue-700 action-btn view-btn text-sm">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
-                                                <label for="modal-toggle"
-                                                    class="text-yellow-500 hover:text-yellow-700 action-btn edit-btn cursor-pointer text-sm">
+                                
+                                                <input type="checkbox" id="edit-modal-{{ $student->id }}" class="modal-toggle hidden peer">
+                                                <label for="edit-modal-{{ $student->id }}" class="cursor-pointer">
                                                     <i class="fas fa-edit"></i>
                                                 </label>
+                                                
+
+                                                @include('page.admin.student.edit-student', ['student' => $student])
+
+
                                                 <button
                                                     class="text-red-500 hover:text-red-700 action-btn delete-btn text-sm">
                                                     <i class="fas fa-trash"></i>
@@ -315,12 +321,5 @@
             </div>
         </div>
     </div>
-
-
-
-   @include('page.admin.student.edit-student')
-
-
-
 
 @endsection

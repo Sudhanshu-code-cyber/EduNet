@@ -35,12 +35,10 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
     Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
     Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
-
-    Route::get('admin/allstudent/{id}', 'editstudentform')->name('allstudent.edit');
-    Route::put('admin/allstudent/{id}', 'studentUpdateForm');
-Route::get('/admin/search-student', [AdminController::class, 'SearchRollName'])->name('searchStudent');
+    Route::get('admin/allstudent/{student}','editStudent')->name('student.edit');
+    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');    
+Route::get('admin/student/search','searchRollName')->name('student.search');
     
-   
 
 });
 

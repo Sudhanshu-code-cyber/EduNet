@@ -1,12 +1,12 @@
  <!-- Edit Modal -->
-    <div class="modal">
+    <div class="modal ">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="text-xl font-bold text-white">Edit Student Information</h3>
                 <label for="modal-toggle" class="close-btn">&times;</label>
             </div>
 
-            <form action="{{ route('allstudent.edit', $student->id) }}" method="POST">
+            <form action="{{ route('student.update', $student->id) }}" method="POST">
                 @csrf
                 @method('PUT') <!-- Use PUT for updating -->
 
