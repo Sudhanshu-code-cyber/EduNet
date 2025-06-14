@@ -53,8 +53,14 @@ Route::controller(ExamController::class)->prefix('teacher')->name('teacher.')->g
     Route::get('/marksentry','marksentry')->name('marksentry');
 });
 
-Route::prefix('admin')->name('admin.')->group(function(){
-    Route::get('/add-teacher',[AdminTeacherController::class,'create'])->name('add-teacher');
+Route::controller(AdminTeacherController::class)->prefix('admin/teacher')->name('teacher.')->group(function(){
+    Route::get('/create','create')->name('create');
+    Route::post('/store','store')->name('store');
+    Route::get('/','index')->name('index');
+    Route::get('/{id}/edit','edit')->name('edit');
+    Route::get('/{id}/show','show')->name('show');
+    Route::delete('/{id}','destroy')->name('destroy');
+    Route::put('/{id}','update')->name('update');
 
 });
 

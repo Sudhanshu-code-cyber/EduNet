@@ -343,7 +343,7 @@
                     <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
                 </a>
                 <div class="dropdown-content" id="teachersContent">
-                    <a href="#" class="dropdown-link">All Teacher</a>
+                    <a href="{{ route('admin.teachers-list') }}" class="dropdown-link">All Teacher</a>
                     <a href="{{ route('admin.add-teacher') }}" class="dropdown-link">Add New Teacher</a>
                     <a href="#" class="dropdown-link">Assign Classes</a>
                     <a href="#" class="dropdown-link">Payment</a>
