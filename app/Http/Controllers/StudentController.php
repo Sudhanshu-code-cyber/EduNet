@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -58,9 +59,49 @@ public function myresult(){
     }
 
 
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'full_name' => 'required|string|max:255',
+        'class' => 'required|string',
+        'section' => 'nullable|string',
+        'gender' => 'required|string',
+        'dob' => 'required|date',
+        'roll_no' => 'required|string|unique:students',
+        'admission_no' => 'required|string|unique:students',
+        'age' => 'required|string',
+        'blood_group' => 'nullable|string',
+        'religion' => 'nullable|string',
+        'email' => 'required|email|unique:students',
+        'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+        'father_name' => 'required|string',
+        'mother_name' => 'required|string',
+        'father_occupation' => 'nullable|string',
+        'contact' => 'required|string',
+        'nationality' => 'required|string',
+        'present_address' => 'nullable|string',
+        'permanent_address' => 'nullable|string',
+        'parents_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    // Upload student photo
+    if ($request->hasFile('photo')) {
+        $validated['photo'] = $request->file('photo')->store('students', 'public');
+    }
+
+    // Upload parents photo
+    if ($request->hasFile('parents_photo')) {
+        $validated['parents_photo'] = $request->file('parents_photo')->store('parents', 'public');
+    }
+
+    // Save student
+    Student::create($validated);
+
+    return redirect()->back()->with('success', 'Student added successfully!');
+}
 
 
- 
 
 
 }

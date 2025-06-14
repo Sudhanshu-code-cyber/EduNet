@@ -24,7 +24,7 @@
         <div class="w-10/12 sm:ml-64 ">
             @include('page.admin.header')
 
-            <div class="p-5">
+            <div class="p-2">
                 @section('content')
                 @show
             </div>

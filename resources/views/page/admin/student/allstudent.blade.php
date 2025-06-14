@@ -136,55 +136,56 @@
     </style>
     <input type="checkbox" id="modal-toggle" class="hidden">
 
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto text-[14px] leading-relaxed"> <!-- overall font size and line-height -->
         <!-- Header -->
-
-
-        <div class="card  rounded">
-            <div class="header-gradient px-6 py-3 ">
+        <div class="card rounded">
+            <div class="header-gradient px-6 py-3">
                 <div class="flex flex-col md:flex-row justify-between items-center">
-                    <h2 class="text-xl font-bold text-gray-900 flex items-center">
+                    <h2 class="text-xl font-bold text-gray-900 flex items-center leading-snug">
                         <i class="fas fa-user-graduate mr-3"></i>
                         Student Records
                     </h2>
-
                     <div class="mt-4 md:mt-0">
-                        <button class="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 flex items-center">
+                        <a href="{{ route('admin.addstudent') }}"
+                            class="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 flex items-center text-sm leading-tight">
                             <i class="fas fa-plus mr-2"></i> Add New Student
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
 
             <div class="p-5">
                 <!-- Search and Filters -->
-                <div class="flex flex-col md:flex-row justify-between gap-4  bg-white p-2 rounded-lg">
-                    <!-- Search Input -->
-                    <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                        <div class="relative w-full md:w-80">
-                            <input type="text" placeholder="Search by name & Roll No..."
-                                class="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm placeholder-gray-500">
-                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                <i class="fas fa-user"></i>
+                <form action="{{ route('searchStudent') }}" method="GET">
+                    <div class="flex flex-col md:flex-row justify-between gap-4 bg-white p-2 rounded-lg">
+                        <!-- Search Input -->
+                        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                            <div class="relative w-full md:w-80">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Search by name & Roll No..."
+                                    class="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm leading-tight placeholder-gray-500">
+                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                    <i class="fas fa-user"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Search Button -->
-                    <div class="flex gap-2 items-center">
-                        <button
-                            class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-5 py-2.5 rounded-lg shadow transition-all duration-300">
-                            <i class="fas fa-search"></i>
-                            <span>Search</span>
-                        </button>
+                        <!-- Search Button -->
+                        <div class="flex gap-2 items-center">
+                            <button type="submit"
+                                class="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-5 py-2.5 rounded-lg shadow transition-all duration-300 text-sm leading-tight">
+                                <i class="fas fa-search"></i>
+                                <span>Search</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
 
 
                 <!-- Table -->
                 <div class="overflow-x-auto responsive-table">
-                    <table class="min-w-full divide-y divide-gray-200 text-sm">
-                        <thead class="bg-blue-50 text-gray-700">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm leading-relaxed">
+                        <thead class="bg-blue-50 text-gray-700 text-sm leading-snug">
                             <tr>
                                 <th class="px-4 py-3 text-left font-semibold">Roll</th>
                                 <th class="px-4 py-3 font-semibold">Photo</th>
@@ -200,150 +201,122 @@
                                 <th class="px-4 py-3 font-semibold">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-medium">#2901</td>
-                                <td class="px-4 py-2">
-                                    <img class="w-10 h-10 rounded-full mx-auto student-photo"
-                                        src="https://i.pravatar.cc/40?img=1" alt="Richi Rozario">
-                                </td>
-                                <td class="px-4 py-3 font-medium">Richi Rozario</td>
-                                <td class="px-4 py-3">Female</td>
-                                <td class="px-4 py-3 hide-on-mobile">David Smith</td>
-                                <td class="px-4 py-3">1</td>
-                                <td class="px-4 py-3">A</td>
-                                <td class="px-4 py-3 hide-on-mobile">TA-110, North Sydney</td>
-                                <td class="px-4 py-3 hide-on-mobile">10/03/2010</td>
-                                <td class="px-4 py-3 hide-on-mobile">+8812 00 5098</td>
-                                <td class="px-4 py-3 hide-on-mobile">ndisons@gmail.com</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex gap-2 justify-center">
-                                        <button class="text-blue-500 hover:text-blue-700 action-btn view-btn">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <label for="modal-toggle"
-                                            class="text-yellow-500 hover:text-yellow-700 action-btn edit-btn cursor-pointer">
-                                            <i class="fas fa-edit"></i>
-                                        </label>
-                                        <button class="text-red-500 hover:text-red-700 action-btn delete-btn">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-medium">#2902</td>
-                                <td class="px-4 py-2">
-                                    <img class="w-10 h-10 rounded-full mx-auto student-photo"
-                                        src="https://i.pravatar.cc/40?img=5" alt="Alex Johnson">
-                                </td>
-                                <td class="px-4 py-3 font-medium">Alex Johnson</td>
-                                <td class="px-4 py-3">Male</td>
-                                <td class="px-4 py-3 hide-on-mobile">Michael Johnson</td>
-                                <td class="px-4 py-3">2</td>
-                                <td class="px-4 py-3">B</td>
-                                <td class="px-4 py-3 hide-on-mobile">45 Park Avenue, New York</td>
-                                <td class="px-4 py-3 hide-on-mobile">15/05/2009</td>
-                                <td class="px-4 py-3 hide-on-mobile">+1234 567 890</td>
-                                <td class="px-4 py-3 hide-on-mobile">alex.j@example.com</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex gap-2 justify-center">
-                                        <button class="text-blue-500 hover:text-blue-700 action-btn view-btn">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <label for="modal-toggle"
-                                            class="text-yellow-500 hover:text-yellow-700 action-btn edit-btn cursor-pointer">
-                                            <i class="fas fa-edit"></i>
-                                        </label>
-                                        <button class="text-red-500 hover:text-red-700 action-btn delete-btn">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-medium">#2903</td>
-                                <td class="px-4 py-2">
-                                    <img class="w-10 h-10 rounded-full mx-auto student-photo"
-                                        src="https://i.pravatar.cc/40?img=10" alt="Sophia Williams">
-                                </td>
-                                <td class="px-4 py-3 font-medium">Sophia Williams</td>
-                                <td class="px-4 py-3">Female</td>
-                                <td class="px-4 py-3 hide-on-mobile">Robert Williams</td>
-                                <td class="px-4 py-3">3</td>
-                                <td class="px-4 py-3">A</td>
-                                <td class="px-4 py-3 hide-on-mobile">22 Baker Street, London</td>
-                                <td class="px-4 py-3 hide-on-mobile">22/11/2010</td>
-                                <td class="px-4 py-3 hide-on-mobile">+4416 3290 8745</td>
-                                <td class="px-4 py-3 hide-on-mobile">sophia.w@example.com</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex gap-2 justify-center">
-                                        <button class="text-blue-500 hover:text-blue-700 action-btn view-btn">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <label for="modal-toggle"
-                                            class="text-yellow-500 hover:text-yellow-700 action-btn edit-btn cursor-pointer">
-                                            <i class="fas fa-edit"></i>
-                                        </label>
-                                        <button class="text-red-500 hover:text-red-700 action-btn delete-btn">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-3 font-medium">#2904</td>
-                                <td class="px-4 py-2">
-                                    <img class="w-10 h-10 rounded-full mx-auto student-photo"
-                                        src="https://i.pravatar.cc/40?img=7" alt="James Brown">
-                                </td>
-                                <td class="px-4 py-3 font-medium">James Brown</td>
-                                <td class="px-4 py-3">Male</td>
-                                <td class="px-4 py-3 hide-on-mobile">Thomas Brown</td>
-                                <td class="px-4 py-3">1</td>
-                                <td class="px-4 py-3">C</td>
-                                <td class="px-4 py-3 hide-on-mobile">78 Sunset Blvd, Los Angeles</td>
-                                <td class="px-4 py-3 hide-on-mobile">30/07/2010</td>
-                                <td class="px-4 py-3 hide-on-mobile">+1555 123 4567</td>
-                                <td class="px-4 py-3 hide-on-mobile">james.b@example.com</td>
-                                <td class="px-4 py-3">
-                                    <div class="flex gap-1 justify-center">
-                                        <button class="text-blue-500 hover:text-blue-700 action-btn view-btn">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <label for="modal-toggle"
-                                            class="text-yellow-500 hover:text-yellow-700 action-btn edit-btn cursor-pointer">
-                                            <i class="fas fa-edit"></i>
-                                        </label>
-                                        <button class="text-red-500 hover:text-red-700 action-btn delete-btn">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tbody class="bg-white divide-y divide-gray-200 text-sm leading-snug">
+                            @if ($allstudent->count())
+                                @foreach ($allstudent as $student)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-3 font-medium">{{ $student->roll_no }}</td>
+                                        <td class="px-4 py-2">
+                                            <img class="w-10 h-10 rounded-full mx-auto student-photo"
+                                                src="{{ $student->photo ? asset('storage/' . $student->photo) : 'https://i.pravatar.cc/40?img=1' }}"
+                                                alt="{{ $student->full_name }}">
+                                        </td>
+                                        <td class="px-4 py-3 font-medium">{{ $student->full_name }}</td>
+                                        <td class="px-4 py-3">{{ $student->gender }}</td>
+                                        <td class="px-4 py-3 hide-on-mobile">{{ $student->father_name }}</td>
+                                        <td class="px-4 py-3">{{ $student->class }}</td>
+                                        <td class="px-4 py-3">{{ $student->section }}</td>
+                                        <td class="px-4 py-3 hide-on-mobile">
+                                            <div class="w-32 truncate overflow-hidden text-ellipsis whitespace-nowrap">
+                                                {{ $student->present_address }}
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 hide-on-mobile">
+                                            {{ \Carbon\Carbon::parse($student->dob)->format('d/m/Y') }}
+                                        </td>
+                                        <td class="px-4 py-3 hide-on-mobile">{{ $student->contact }}</td>
+                                        <td class="px-4 py-3 hide-on-mobile">{{ $student->email }}</td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex gap-2 justify-center">
+                                                <button
+                                                    class="text-blue-500 hover:text-blue-700 action-btn view-btn text-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <label for="modal-toggle"
+                                                    class="text-yellow-500 hover:text-yellow-700 action-btn edit-btn cursor-pointer text-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </label>
+                                                <button
+                                                    class="text-red-500 hover:text-red-700 action-btn delete-btn text-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="12" class="text-center px-4 py-6 text-gray-500 text-sm">
+                                        No students found.
+                                    </td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
-                </div>
 
-                <!-- Pagination -->
-                <div class="flex flex-col md:flex-row justify-between items-center mt-6 pt-6 border-t border-gray-200">
-                    <p class="text-sm text-gray-600 mb-4 md:mb-0">Showing 1 to 4 of 50 entries</p>
-                    <div class="flex space-x-1">
-                        <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 pagination-btn">&laquo;</button>
-                        <button class="px-3 py-1 bg-blue-600 text-white rounded active pagination-btn">1</button>
-                        <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 pagination-btn">2</button>
-                        <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 pagination-btn">3</button>
-                        <button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 pagination-btn">&raquo;</button>
+                    <!-- Pagination -->
+                    <div class="flex justify-end mt-6 text-sm leading-tight">
+                        <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+                            {{-- Prev --}}
+                            @if ($allstudent->onFirstPage())
+                                <span
+                                    class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-l-md cursor-not-allowed">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                    Prev
+                                </span>
+                            @else
+                                <a href="{{ $allstudent->previousPageUrl() }}"
+                                    class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-100">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                    Prev
+                                </a>
+                            @endif
+
+                            {{-- Pages --}}
+                            @foreach ($allstudent->getUrlRange(1, $allstudent->lastPage()) as $page => $url)
+                                @if ($page == $allstudent->currentPage())
+                                    <span
+                                        class="px-3 py-2 border-t border-b border-gray-300 text-sm text-white bg-gray-600">{{ $page }}</span>
+                                @else
+                                    <a href="{{ $url }}"
+                                        class="px-3 py-2 border-t border-b border-gray-300 text-sm text-gray-700 bg-white hover:bg-gray-100">{{ $page }}</a>
+                                @endif
+                            @endforeach
+
+                            {{-- Next --}}
+                            @if ($allstudent->hasMorePages())
+                                <a href="{{ $allstudent->nextPageUrl() }}"
+                                    class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-100">
+                                    Next
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            @else
+                                <span
+                                    class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-white border border-gray-300 rounded-r-md cursor-not-allowed">
+                                    Next
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </span>
+                            @endif
+                        </nav>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
+
+
 
     <!-- Edit Modal -->
     <div class="modal">
@@ -353,71 +326,80 @@
                 <label for="modal-toggle" class="close-btn">&times;</label>
             </div>
 
-            <div class="p-6">
-                <form class="space-y-4">
+            <form action="{{ route('allstudent.edit', $student->id) }}" method="POST">
+                @csrf
+                @method('PUT') <!-- Use PUT for updating -->
+
+                <div class="p-6 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium mb-1">Full Name</label>
-                            <input type="text" class="w-full px-3 py-2 border rounded-md" value="Richi Rozario">
+                            <input type="text" name="full_name" class="w-full px-3 py-2 border rounded-md"
+                                value="{{ $student->full_name }}">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Roll Number</label>
-                            <input type="text" class="w-full px-3 py-2 border rounded-md bg-gray-100" value="#2901"
-                                readonly>
+                            <input type="text" name="roll_no" class="w-full px-3 py-2 border rounded-md bg-gray-100"
+                                value="{{ $student->roll_no }}" readonly>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Gender</label>
-                            <select class="w-full px-3 py-2 border rounded-md">
-                                <option value="Female" selected>Female</option>
-                                <option value="Male">Male</option>
-                                <option value="Other">Other</option>
+                            <select name="gender" class="w-full px-3 py-2 border rounded-md">
+                                <option value="Female" {{ $student->gender === 'Female' ? 'selected' : '' }}>Female
+                                </option>
+                                <option value="Male" {{ $student->gender === 'Male' ? 'selected' : '' }}>Male</option>
+                                <option value="Other" {{ $student->gender === 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Date of Birth</label>
-                            <input type="date" class="w-full px-3 py-2 border rounded-md" value="2010-03-10">
+                            <input type="date" name="dob" class="w-full px-3 py-2 border rounded-md"
+                                value="{{ $student->dob }}">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Parent/Guardian</label>
-                            <input type="text" class="w-full px-3 py-2 border rounded-md" value="David Smith">
+                            <input type="text" name="father_name" class="w-full px-3 py-2 border rounded-md"
+                                value="{{ $student->father_name }}">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Contact Number</label>
-                            <input type="tel" class="w-full px-3 py-2 border rounded-md" value="+8812 00 5098">
+                            <input type="tel" name="contact" class="w-full px-3 py-2 border rounded-md"
+                                value="{{ $student->contact }}">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Class</label>
-                            <select class="w-full px-3 py-2 border rounded-md">
-                                <option value="1" selected>Class 1</option>
-                                <option value="2">Class 2</option>
-                                <option value="3">Class 3</option>
+                            <select name="class" class="w-full px-3 py-2 border rounded-md">
+                                <option value="1" {{ $student->class == 1 ? 'selected' : '' }}>Class 1</option>
+                                <option value="2" {{ $student->class == 2 ? 'selected' : '' }}>Class 2</option>
+                                <option value="3" {{ $student->class == 3 ? 'selected' : '' }}>Class 3</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium mb-1">Section</label>
-                            <select class="w-full px-3 py-2 border rounded-md">
-                                <option value="A" selected>Section A</option>
-                                <option value="B">Section B</option>
-                                <option value="C">Section C</option>
+                            <select name="section" class="w-full px-3 py-2 border rounded-md">
+                                <option value="A" {{ $student->section == 'A' ? 'selected' : '' }}>Section A</option>
+                                <option value="B" {{ $student->section == 'B' ? 'selected' : '' }}>Section B</option>
+                                <option value="C" {{ $student->section == 'C' ? 'selected' : '' }}>Section C</option>
                             </select>
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-1">Email Address</label>
-                        <input type="email" class="w-full px-3 py-2 border rounded-md" value="ndisons@gmail.com">
+                        <input type="email" name="email" class="w-full px-3 py-2 border rounded-md"
+                            value="{{ $student->email }}">
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium mb-1">Address</label>
-                        <textarea class="w-full px-3 py-2 border rounded-md" rows="2">TA-110, North Sydney</textarea>
+                        <textarea name="present_address" class="w-full px-3 py-2 border rounded-md" rows="2">{{ $student->present_address }}</textarea>
                     </div>
 
                     <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200">
@@ -425,12 +407,16 @@
                             class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer">
                             Cancel
                         </label>
-                        <button class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                             Save Changes
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+
+
+
+
 @endsection

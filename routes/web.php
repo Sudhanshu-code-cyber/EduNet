@@ -21,6 +21,7 @@ Route::controller(StudentController::class)->group(function () {
     Route::get('/student/marksheet', 'marksheet')->name('student.marksheet');
     Route::get('/student/myfee', 'myfee')->name('student.myfee');
     Route::get('/student/notice', 'notice')->name('student.notice');
+    Route::post('/student/insert', 'store')->name('students.store');
 
 });
 
@@ -33,6 +34,10 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
     Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
     Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
+    Route::get('admin/allstudent/{id}', 'editstudentform')->name('allstudent.edit');
+    Route::put('admin/allstudent/{id}', 'studentUpdateForm');
+Route::get('/admin/search-student', [AdminController::class, 'SearchRollName'])->name('searchStudent');
+    
    
 });
 

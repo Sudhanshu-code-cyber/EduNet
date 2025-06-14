@@ -316,7 +316,7 @@
         
         <nav class="nav">
             <div class="nav-item">
-                <a href="#" class="nav-link active">
+                <a href="{{route('/admin')}}" class="nav-link active">
                     <i class="fas fa-tachometer-alt nav-icon"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>
