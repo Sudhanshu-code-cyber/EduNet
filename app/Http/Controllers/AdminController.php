@@ -17,4 +17,5 @@ class AdminController extends Controller
      public function addstudent(){
         return view('page.admin.student.addstudent');
     }
+
 }

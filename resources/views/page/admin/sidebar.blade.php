@@ -377,7 +377,7 @@
 
             
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('notice.index') }}" class="nav-link">
                     <i class="fas fa-file-alt nav-icon"></i>
                     <span class="nav-text">Notice</span>
                 </a>
