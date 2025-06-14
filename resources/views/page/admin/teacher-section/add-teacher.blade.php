@@ -4,7 +4,7 @@
 <div class="w-full px-8 py-10 bg-white rounded-lg shadow-lg min-h-screen">
     <h1 class="text-4xl font-bold mb-8 text-blue-800 text-center mt-8">Add New Teacher</h1>
     
-    <form action="{{ route('admin.teacher.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8 w-[1300px] pl-8">
+    <form action="{{ route('teacher.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8 w-[1300px] pl-8">
         @csrf
 
         <div class="flex flex-wrap gap-6">
