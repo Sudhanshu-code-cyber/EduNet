@@ -108,7 +108,6 @@
                 <label class="block text-sm font-medium text-gray-700">Assignment Title</label>
                 <input type="text" placeholder="Enter Assignment Title" class="w-full border rounded px-3 py-2">
             </div>
-
             <div>
                 <label class="block text-sm font-medium text-gray-700">Upload Your File</label>
                 <input type="file" class="w-full border rounded px-3 py-2">
