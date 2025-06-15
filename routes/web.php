@@ -36,10 +36,17 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
     Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
     Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
-    Route::get('admin/allstudent/{student}','editStudent')->name('student.edit');
-    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');    
-Route::get('admin/student/search','searchRollName')->name('student.search');
-    
+    Route::get('admin/allstudent/{student}', 'editStudent')->name('student.edit');
+    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');
+    Route::get('admin/student/search', 'searchRollName')->name('student.search');
+    Route::get('/admin/class', 'class')->name('admin.class');
+    Route::post('/admin/class/store', 'storeSection')->name('admin.storeSection');
+    Route::delete('/class/{id}', 'destroy')->name('class.destroy');
+    Route::get('/admin/student/{id}', 'showStudent')->name('student.show');
+    Route::post('/admin/student', 'store')->name('student.store');
+
+
+
 
 });
 
@@ -79,7 +86,7 @@ Route::get('admin/notice/search', [NoticeController::class, 'search'])->name('no
 Route::resource('admin/notice', NoticeController::class);
 
 
-Route::get('admin/transport',[TransportController::class,'index'])->name('admin.transport');
-Route::post('admin/sport',[TransportController::class,'store'])->name('admin.store');
-Route::delete('admin/transport/{id}',[TransportController::class,'deletetransport'])->name('transport.delete');
-Route::get('admin/transport/search',[TransportController::class,'search'])->name('transport.search');
+Route::get('admin/transport', [TransportController::class, 'index'])->name('admin.transport');
+Route::post('admin/sport', [TransportController::class, 'store'])->name('admin.store');
+Route::delete('admin/transport/{id}', [TransportController::class, 'deletetransport'])->name('transport.delete');
+Route::get('admin/transport/search', [TransportController::class, 'search'])->name('transport.search');
