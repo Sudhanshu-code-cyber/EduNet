@@ -24,6 +24,7 @@ Route::controller(StudentController::class)->group(function () {
     Route::get('/student/myfee', 'myfee')->name('student.myfee');
     Route::get('/student/notice', 'notice')->name('student.notice');
     Route::post('/student/insert', 'store')->name('students.store');
+    
 
 });
 
