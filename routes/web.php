@@ -35,44 +35,41 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
     Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
     Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
-    Route::get('admin/student/search','searchRollName')->name('student.search');
-    Route::get('admin/allstudent/{student}/edit','editStudent')->name('student.edit');
-    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');
-    Route::delete('admin/student/{student}','destroy')->name('student.destroy');
-    Route::get('admin/student/{id}/show','showStudent')->name('student.show');
-    Route::post('admin/addstudent', 'store')->name('student.store');
-
+    Route::get('admin/allstudent/{student}','editStudent')->name('student.edit');
+    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');    
+Route::get('admin/student/search','searchRollName')->name('student.search');
+    
 
 });
 
 
 
 
-Route::controller(TeacherController::class)->prefix('teacher')->name('teacher.')->group(function(){
-    Route::get('/','dashboard')->name('dashboard');
+Route::controller(TeacherController::class)->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/', 'dashboard')->name('dashboard');
     Route::get('/myclass', 'myclass')->name('myclass');
-    Route::get('/timetable','timetable')->name('timetable');
-    Route::get('/studentlist','studentlist')->name('studentlist');
-    Route::get('/notice','noticeBoard')->name('notice');
-    Route::get('/homework','homework')->name('homework');
-    Route::get('/homework/submission','submission')->name('submission');
+    Route::get('/timetable', 'timetable')->name('timetable');
+    Route::get('/studentlist', 'studentlist')->name('studentlist');
+    Route::get('/notice', 'noticeBoard')->name('notice');
+    Route::get('/homework', 'homework')->name('homework');
+    Route::get('/homework/submission', 'submission')->name('submission');
 });
 
-Route::controller(ExamController::class)->prefix('teacher')->name('teacher.')->group(function(){
-    Route::get('/exam','exam')->name('exam');
-    Route::get('/examschedule','examschedule')->name('examschedule');
-    Route::get('/marksentry','marksentry')->name('marksentry');
+Route::controller(ExamController::class)->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/exam', 'exam')->name('exam');
+    Route::get('/examschedule', 'examschedule')->name('examschedule');
+    Route::get('/marksentry', 'marksentry')->name('marksentry');
 });
 
-Route::controller(AdminTeacherController::class)->prefix('admin/teacher')->name('teacher.')->group(function(){
-    Route::get('/create','create')->name('create');
-    Route::post('/store','store')->name('store');
-    Route::get('/','index')->name('index');
-    Route::get('/{id}/edit','edit')->name('edit');
-    Route::get('/{id}/show','show')->name('show');
-    Route::delete('/{id}','destroy')->name('destroy');
-    Route::put('/{id}','update')->name('update');
-    Route::get('/search','search')->name('search');
+Route::controller(AdminTeacherController::class)->prefix('admin/teacher')->name('teacher.')->group(function () {
+    Route::get('/create', 'create')->name('create');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/', 'index')->name('index');
+    Route::get('/{id}/edit', 'edit')->name('edit');
+    Route::get('/{id}/show', 'show')->name('show');
+    Route::delete('/{id}', 'destroy')->name('destroy');
+    Route::put('/{id}', 'update')->name('update');
+    Route::get('/search', 'search')->name('search');
 });
 
 Route::get('teacher/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
