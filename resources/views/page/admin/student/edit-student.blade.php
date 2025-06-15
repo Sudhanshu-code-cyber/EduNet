@@ -1,97 +1,107 @@
- <!-- Edit Modal -->
-    <div class="modal ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="text-xl font-bold text-white">Edit Student Information</h3>
-                <label for="modal-toggle" class="close-btn">&times;</label>
-            </div>
+<!-- Edit Modal Trigger -->
+<input type="checkbox" id="edit-modal-{{ $student->id }}" class="modal-toggle hidden peer">
 
-            <form action="{{ route('student.update', $student->id) }}" method="POST">
-                @csrf
-                @method('PUT') <!-- Use PUT for updating -->
+<!-- Edit Modal -->
+<div class="modal fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 peer-checked:flex">
+    <div class="modal-content relative bg-white p-6 rounded-lg shadow-md max-w-3xl w-full overflow-y-auto max-h-[90vh]">
+        <!-- Close Button -->
+        <label for="edit-modal-{{ $student->id }}" class="absolute top-3 right-3 text-gray-500 cursor-pointer text-xl">&times;</label>
 
-                <div class="p-6 space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Full Name</label>
-                            <input type="text" name="full_name" class="w-full px-3 py-2 border rounded-md"
-                                value="{{ $student->full_name }}">
-                        </div>
+        <h2 class="text-lg font-semibold mb-4">Edit Student Information</h2>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Roll Number</label>
-                            <input type="text" name="roll_no" class="w-full px-3 py-2 border rounded-md bg-gray-100"
-                                value="{{ $student->roll_no }}" readonly>
-                        </div>
+        <!-- Update Form -->
+        <form action="{{ route('student.update', $student->id) }}" method="POST" enctype="multipart/form-data">
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Gender</label>
-                            <select name="gender" class="w-full px-3 py-2 border rounded-md">
-                                <option value="Female" {{ $student->gender === 'Female' ? 'selected' : '' }}>Female
-                                </option>
-                                <option value="Male" {{ $student->gender === 'Male' ? 'selected' : '' }}>Male</option>
-                                <option value="Other" {{ $student->gender === 'Other' ? 'selected' : '' }}>Other</option>
-                            </select>
-                        </div>
+            @csrf
+        
+            @method('PUT')
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Date of Birth</label>
-                            <input type="date" name="dob" class="w-full px-3 py-2 border rounded-md"
-                                value="{{ $student->dob }}">
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <!-- Full Name -->
+                <div>
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" value="{{ $student->full_name }}" class="w-full border rounded p-2" required>
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Parent/Guardian</label>
-                            <input type="text" name="father_name" class="w-full px-3 py-2 border rounded-md"
-                                value="{{ $student->father_name }}">
-                        </div>
+                <!-- Roll Number -->
+                <div>
+                    <label for="roll_no">Roll Number</label>
+                    <input type="text" id="roll_no" name="roll_no" value="{{ $student->roll_no }}" class="w-full border rounded p-2" required>
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Contact Number</label>
-                            <input type="tel" name="contact" class="w-full px-3 py-2 border rounded-md"
-                                value="{{ $student->contact }}">
-                        </div>
+                <!-- Gender -->
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" class="w-full border rounded p-2" required>
+                        <option value="Male" {{ $student->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                        <option value="Female" {{ $student->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                    </select>
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Class</label>
-                            <select name="class" class="w-full px-3 py-2 border rounded-md">
-                                <option value="1" {{ $student->class == 1 ? 'selected' : '' }}>Class 1</option>
-                                <option value="2" {{ $student->class == 2 ? 'selected' : '' }}>Class 2</option>
-                                <option value="3" {{ $student->class == 3 ? 'selected' : '' }}>Class 3</option>
-                            </select>
-                        </div>
+                <!-- Date of Birth -->
+                <div>
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" value="{{ $student->dob }}" class="w-full border rounded p-2" required>
+                </div>
 
-                        <div>
-                            <label class="block text-sm font-medium mb-1">Section</label>
-                            <select name="section" class="w-full px-3 py-2 border rounded-md">
-                                <option value="A" {{ $student->section == 'A' ? 'selected' : '' }}>Section A</option>
-                                <option value="B" {{ $student->section == 'B' ? 'selected' : '' }}>Section B</option>
-                                <option value="C" {{ $student->section == 'C' ? 'selected' : '' }}>Section C</option>
-                            </select>
-                        </div>
-                    </div>
+                <!-- Parent/Guardian -->
+                <div>
+                    <label for="father_name">Parent/Guardian Name</label>
+                    <input type="text" id="father_name" name="father_name" value="{{ $student->father_name }}" class="w-full border rounded p-2" required>
+                </div>
 
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Email Address</label>
-                        <input type="email" name="email" class="w-full px-3 py-2 border rounded-md"
-                            value="{{ $student->email }}">
-                    </div>
+                <!-- Contact -->
+                <div>
+                    <label for="contact">Contact Number</label>
+                    <input type="text" id="contact" name="contact" value="{{ $student->contact }}" class="w-full border rounded p-2" required>
+                </div>
 
-                    <div>
-                        <label class="block text-sm font-medium mb-1">Address</label>
-                        <textarea name="present_address" class="w-full px-3 py-2 border rounded-md" rows="2">{{ $student->present_address }}</textarea>
-                    </div>
+                <!-- Class -->
+                <div>
+                    <label for="class">Class</label>
+                    <input type="text" id="class" name="class" value="{{ $student->class }}" class="w-full border rounded p-2" required>
+                </div>
 
-                    <div class="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200">
-                        <label for="modal-toggle"
-                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer">
-                            Cancel
-                        </label>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                            Save Changes
-                        </button>
+                <!-- Section -->
+                <div>
+                    <label for="section">Section</label>
+                    <input type="text" id="section" name="section" value="{{ $student->section }}" class="w-full border rounded p-2">
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ $student->email }}" class="w-full border rounded p-2" required>
+                </div>
+
+                <!-- Present Address -->
+                <div class="md:col-span-2">
+                    <label for="present_address">Address</label>
+                    <textarea id="present_address" name="present_address" class="w-full border rounded p-2" rows="2">{{ $student->present_address }}</textarea>
+                </div>
+
+                <!-- Current Photo -->
+                @if($student->photo)
+                <div>
+                    <label>Current Photo</label>
+                    <div class="mt-2">
+                        <img src="{{ asset('uploads/students/' . $student->photo) }}" alt="Student Photo" class="w-20 h-20 object-cover rounded">
                     </div>
                 </div>
-            </form>
-        </div>
+                @endif
+
+                <!-- Upload New Photo -->
+                <div>
+                    <label for="photo">Change Photo</label>
+                    <input type="file" id="photo" name="photo" accept="image/*" class="w-full border rounded p-2">
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="mt-6 flex justify-end gap-3">
+                <button type="button" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm" onclick="document.getElementById('edit-modal-{{ $student->id }}').checked = false;">Cancel</button>
+                <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 text-sm">Save</button>
+            </div>
+        </form>
     </div>
+</div>

@@ -45,8 +45,8 @@
         <section class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-semibold mb-6 text-blue-700">Notices</h2>
 
-            @forelse($notices as $notice )
             <ul class="divide-y divide-gray-200">
+            @forelse($notices as $notice )
                 <li class="py-4 hover:bg-gray-100 transition flex justify-between items-center">
                     <div>
                         <h3 class="text-xl font-bold text-blue-600 mb-1">{{$notice->title}}</h3>
@@ -76,10 +76,11 @@
                         
                     </div>
                 </li>
-            </ul>
             @empty
             <p class="text-gray-500">No notices found.</p>
 @endforelse
+</ul>
+
 
 <div class="mt-6">
     <p class="text-sm text-gray-500 mt-4">Total Notices: {{ $notices->count() }}</p>
