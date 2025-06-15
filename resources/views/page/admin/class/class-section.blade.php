@@ -45,7 +45,7 @@
                                         <option value="E">E</option>
                                     </select>
                                 </div>
-
+ 
                                 <!-- Class Code -->
                                 <div>
                                     <label for="class_code" class="block text-sm font-medium mb-1">Class Code</label>
