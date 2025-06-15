@@ -24,7 +24,6 @@ Route::controller(StudentController::class)->group(function () {
     Route::get('/student/myfee', 'myfee')->name('student.myfee');
     Route::get('/student/notice', 'notice')->name('student.notice');
     Route::post('/student/insert', 'store')->name('students.store');
-    
 
 });
 
@@ -41,10 +40,10 @@ Route::controller(AdminController::class)->group(function () {
     Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');
     Route::get('admin/student/search', 'searchRollName')->name('student.search');
     Route::get('/admin/class', 'class')->name('admin.class');
-    Route::post('/admin/class/store', 'storeSection')->name('admin.storeSection');
-    Route::delete('/class/{id}', 'destroy')->name('class.destroy');
-    Route::get('/admin/student/{id}', 'showStudent')->name('student.show');
-    Route::post('/admin/student', 'store')->name('student.store');
+Route::post('/admin/class/store',  'storeSection')->name('admin.storeSection');
+Route::delete('/class/{id}',  'destroy')->name('class.destroy');
+Route::get('/admin/student/{id}',  'showStudent')->name('student.show');
+Route::post('/admin/student', 'store')->name('student.store');
 
 
 
