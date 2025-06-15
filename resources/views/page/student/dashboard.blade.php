@@ -96,23 +96,22 @@
                 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
                 <!-- Single Notice -->
-                <div class="flex flex-col gap-4" x-data="{ showModal: false, selectedNotice: '' }">
+                @forelse ($notice as  $note)
+                     <div class="flex flex-col gap-4" x-data="{ showModal: false, selectedNotice: '' }">
 
                     <!-- Notice Item -->
                     <div>
-                        <p class="text-sm text-gray-500">📅 16 May, 2025</p>
-                        <h3 class="text-lg font-medium text-blue-700">Sudhanshu Kumar</h3>
+                        <p class="text-sm text-gray-500">📅 {{$note->date}}</p>
+                        <h3 class="text-lg font-medium text-blue-700">{{$note->posted_by}}</h3>
 
                         <!-- Truncated content -->
                         <p class="text-gray-700 line-clamp-2">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod, quos reprehenderit! Eum cum
-                            dolorem voluptate fugiat voluptatem, molestiae dolor inventore corrupti aliquid ad maiores
-                            expedita dolore doloribus hic aut placeat?
+                           {{$note->title}}
                         </p>
 
                         <!-- Read More Button -->
                         <button
-                            @click="showModal = true; selectedNotice = `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod, quos reprehenderit! Eum cum dolorem voluptate fugiat voluptatem, molestiae dolor inventore corrupti aliquid ad maiores expedita dolore doloribus hic aut placeat?`"
+                            @click="showModal = true; selectedNotice = `{{$note->title}}`"
                             class="text-sm text-blue-600 hover:underline mt-1">
                             Read More
                         </button>
@@ -129,6 +128,12 @@
                         </div>
                     </div>
                 </div>
+                @empty
+                    <div>
+                        not found
+                    </div>
+                @endforelse
+               
 
 
 

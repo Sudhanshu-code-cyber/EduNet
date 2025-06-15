@@ -162,11 +162,12 @@
                                             </td>
                                             <td class="p-3">
                                                 <div class="flex justify-center gap-3">
-                                                    <button
+                                                    <label
+                                                     for="edit-modal"
                                                         class="bg-amber-100 hover:bg-amber-200 p-2 rounded-lg text-amber-600"
                                                         title="Edit">
                                                         <i class="fas fa-edit"></i>
-                                                    </button>
+                                                    </label>
 
                                                     <form action="{{ route('transport.delete', $tran->id) }}"
                                                         method="POST" onsubmit="return confirm('Are you sure?')">

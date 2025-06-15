@@ -1,6 +1,5 @@
 <!-- Edit Modal Trigger -->
 <input type="checkbox" id="edit-modal-{{ $student->id }}" class="modal-toggle hidden peer">
-
 <!-- Edit Modal -->
 <div class="modal fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 peer-checked:flex">
     <div class="modal-content relative bg-white p-6 rounded-lg shadow-md max-w-3xl w-full overflow-y-auto max-h-[90vh]">
