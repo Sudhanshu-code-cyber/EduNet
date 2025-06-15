@@ -129,7 +129,7 @@
                                         <td class="py-2 px-4 font-medium">{{ $student->roll_no }}</td>
                                         <td class="py-2 px-4">
                                             <img class="w-10 h-10 rounded-full mx-auto student-photo"
-                                                 src="{{ $student->photo ? asset('storage/' . $student->photo) : 'https://i.pravatar.cc/40?img=1' }}"
+                                            src="{{ $student->photo ? asset('uploads/students/' . $student->photo) : 'https://i.pravatar.cc/40?img=1' }}"
                                                  alt="{{ $student->full_name }}">
                                         </td>
                                         <td class="py-2 px-4 font-medium">{{ $student->full_name }}</td>
@@ -157,6 +157,14 @@
                                                 <label for="edit-modal-{{ $student->id }}" class="text-blue-600 hover:underline cursor-pointer">
                                                     Edit
                                                 </label>
+                                                <form action="{{ route('student.destroy', $student->id) }}" method="POST"
+                                                    onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                                  @csrf
+                                                  @method('DELETE')
+                                                  <button type="submit" class="text-red-500 hover:text-red-700 action-btn delete-btn text-sm" title="Delete">
+                                                      <i class="fas fa-trash"></i>
+                                                  </button>
+                                              </form>
                                             </div>
                                         </td>
                                     </tr>

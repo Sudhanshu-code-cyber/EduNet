@@ -8,8 +8,8 @@
         {{-- PHOTO SECTION --}}
         <div class="flex justify-center mb-6">
             @if($student->photo)
-                <img src="{{ asset('storage/' . $student->photo) }}" alt="Student Photo"
-                     class="w-32 h-32 object-cover rounded-full shadow-md border border-gray-300">
+            <img src="{{ asset('uploads/students/' . $student->photo) }}" alt="Student Photo"
+            class="w-32 h-32 object-cover rounded-full shadow-md border border-gray-300">       
             @else
                 <div class="w-32 h-32 flex items-center justify-center bg-gray-200 text-gray-500 rounded-full">
                     No Photo

@@ -42,10 +42,9 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/class', 'class')->name('admin.class');
 Route::post('/admin/class/store',  'storeSection')->name('admin.storeSection');
 Route::delete('/class/{id}',  'destroy')->name('class.destroy');
-Route::get('/admin/student/{id}',  'showStudent')->name('student.show');
 Route::post('/admin/student', 'store')->name('student.store');
 Route::get('/admin/student/{id}/show', 'showStudent')->name('student.show');
-
+Route::delete('admin/student/{id}', 'deleteStudent')->name('student.destroy');
 
 
 });

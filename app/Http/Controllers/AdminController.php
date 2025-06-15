@@ -19,28 +19,45 @@ class AdminController extends Controller
         $data = $request->validate([
             'full_name' => 'required|string|max:255',
             'roll_no' => 'required|string|max:20|unique:students,roll_no',
+            'admission_no' => 'required|string|max:50|unique:students,admission_no',
             'class' => 'required|string|max:20',
             'section' => 'nullable|string|max:10',
             'gender' => 'required|string',
             'dob' => 'required|date',
+            'age' => 'required|string|max:10',
+            'blood_group' => 'nullable|string|max:10',
+            'religion' => 'nullable|string|max:50',
             'email' => 'required|email|unique:students,email',
             'father_name' => 'required|string|max:255',
+            'mother_name' => 'required|string|max:255',
+            'father_occupation' => 'nullable|string|max:255',
             'contact' => 'required|string|max:15',
+            'nationality' => 'required|string|max:100',
             'present_address' => 'nullable|string|max:500',
+            'permanent_address' => 'nullable|string|max:500',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'parents_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/students'), $filename);
             $data['photo'] = $filename;
         }
-
+    
+        if ($request->hasFile('parents_photo')) {
+            $file = $request->file('parents_photo');
+            $filename = 'parents_' . time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/students'), $filename);
+            $data['parents_photo'] = $filename;
+        }
+    
         Student::create($data);
-
+    
         return redirect()->route('admin.allstudent')->with('success', 'Student added successfully!');
     }
+    
 
     public function allstudent()
     {
@@ -88,9 +105,9 @@ class AdminController extends Controller
         return redirect()->route('admin.allstudent')->with('success', 'Student updated successfully!');
     }
 
-    public function deleteStudent($stud)
+    public function deleteStudent($id)
     {
-        $student = Student::findOrFail($stud);
+        $student = Student::findOrFail($id);
         $student->delete();
         return redirect()->route('admin.allstudent')->with('error', 'Student deleted successfully!');
     }
