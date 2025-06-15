@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TeacherController;
@@ -76,3 +77,9 @@ Route::get('teacher/attendance', [AttendanceController::class, 'index'])->name('
 
 Route::get('admin/notice/search', [NoticeController::class, 'search'])->name('notice.search');
 Route::resource('admin/notice', NoticeController::class);
+
+
+Route::get('admin/transport',[TransportController::class,'index'])->name('admin.transport');
+Route::post('admin/sport',[TransportController::class,'store'])->name('admin.store');
+Route::delete('admin/transport/{id}',[TransportController::class,'deletetransport'])->name('transport.delete');
+Route::get('admin/transport/search',[TransportController::class,'search'])->name('transport.search');
