@@ -7,6 +7,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6 z-10 w-11/12 sm:w-1/2 relative max-h-screen overflow-y-auto">
         <h2 class="text-2xl font-semibold mb-4 text-blue-700">Edit Notice</h2>
 
+        @if(isset($notice))
         <form id="editNoticeForm" method="POST" action="{{route('notice.update',$notice->id)}}">
             @csrf
             @method('PUT')
@@ -52,6 +53,7 @@
                 </button>
             </div>
         </form>
+        @endif
     </div>
 </div>
 

@@ -88,7 +88,7 @@ $notice->update([
         $notice = Notice::findOrFail($id);
         $notice->delete(); 
 
-        return redirect()->route('notice.index',compact('notice'))->with('error','Notice deleted successfully!');
+        return redirect()->route('notice.index')->with('error','Notice deleted successfully!');
     }
 
 public function search(Request $request)

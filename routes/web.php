@@ -35,17 +35,12 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
     Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
     Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
-    Route::get('admin/allstudent/{student}', 'editStudent')->name('student.edit');
-    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');
-    Route::get('admin/student/search', 'searchRollName')->name('student.search');
-    Route::get('admin/class-section', 'class')->name('admin.class');
-    Route::post('/admin/store-section', 'storeSection')->name('admin.storeSection');
-Route::delete('/admin/{id}',  'destroy')->name('class.destroy');
-
-
+    Route::get('admin/allstudent/{student}','editStudent')->name('student.edit');
+    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');    
+Route::get('admin/student/search','searchRollName')->name('student.search');
+    
 
 });
-
 
 
 
