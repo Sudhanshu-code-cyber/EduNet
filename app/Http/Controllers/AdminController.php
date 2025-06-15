@@ -112,6 +112,11 @@ class AdminController extends Controller
         return view('page.admin.class.class-section', compact('class_section'));
     }
 
+public function showStudent($id){
+$student = Student::findOrFail($id);
+return view('page.admin.student.view-student',compact('student'));
+}
+
     public function storeSection(Request $request)
     {
         $request->validate([
@@ -130,3 +135,20 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Class Section Deleted!');
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
