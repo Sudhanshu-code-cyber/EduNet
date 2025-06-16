@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notice;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
     public function dashboard(){
-        return view('page.student.dashboard');
+        $notice=Notice::all();
+        return view('page.student.dashboard',compact('notice'));
     }
 
      public function myclass(){
@@ -100,6 +102,7 @@ public function store(Request $request)
 
     return redirect()->back()->with('success', 'Student added successfully!');
 }
+
 
 
 

@@ -75,36 +75,36 @@ class AdminController extends Controller
         return view('page.admin.student.edit-student', compact('student'));
     }
 
-    public function studentUpdate(Request $req, $stud)
-    {
-        $student = Student::findOrFail($stud);
+   public function studentupdate(Request $request, $id)
+{
+    $request->validate([
+        'full_name' => 'required|string|max:255',
+        'roll_no' => 'nullable|string|max:50',
+        'gender' => 'nullable|in:Male,Female',
+        'dob' => 'nullable|date',
+        'class' => 'nullable|string|max:100',
+        'section' => 'nullable|string|max:100',
+        'contact' => 'nullable|string|max:20',
+        'email' => 'nullable|email|max:255',
+        'address' => 'nullable|string|max:500',
+    ]);
 
-        $data = $req->validate([
-            'full_name' => 'required|string|max:255',
-            'roll_no' => 'required|string|max:20',
-            'class' => 'required|string|max:20',
-            'section' => 'nullable|string|max:10',
-            'gender' => 'required|string',
-            'dob' => 'required|date',
-            'email' => 'required|email|unique:students,email,' . $student->id,
-            'father_name' => 'required|string|max:255',
-            'contact' => 'required|string|max:15',
-            'present_address' => 'nullable|string|max:500',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+    $student = Student::findOrFail($id);
 
-        if ($req->hasFile('photo')) {
-            $file = $req->file('photo');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/students'), $filename);
-            $data['photo'] = $filename;
-        }
+    $student->full_name = $request->full_name;
+    $student->roll_no = $request->roll_no;
+    $student->gender = $request->gender;
+    $student->dob = $request->dob;
+    $student->class = $request->class;
+    $student->section = $request->section;
+    $student->contact = $request->contact;
+    $student->email = $request->email;
+    $student->present_address = $request->address;
 
-        $student->update($data);
+    $student->save();
 
-        return redirect()->route('admin.allstudent')->with('success', 'Student updated successfully!');
-    }
-
+    return redirect()->back()->with('success', 'Student updated successfully.');
+}
     public function deleteStudent($id)
     {
         $student = Student::findOrFail($id);

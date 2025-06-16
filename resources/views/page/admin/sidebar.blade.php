@@ -352,15 +352,15 @@
             </div>
             
             <div class="nav-item">
-                <a href="{{route('admin.class')}}" class="nav-link">
+                <a href="{{route('classes.index')}}" class="nav-link">
                     <i class="fas fa-book nav-icon"></i>
-                    <span class="nav-text">Class & Section</span>
+                    <span class="nav-text">Classes</span>
                 </a>
             </div>
             
            
  <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('subjects.index')}}" class="nav-link">
                     <i class="fas fa-book nav-icon"></i>
                     <span class="nav-text">Subject Management</span>
                 </a>

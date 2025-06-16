@@ -77,14 +77,15 @@
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
-                            <select name="class" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
-                                <option value="">Select Class</option>
-                                <option>Class 1</option>
-                                <option>Class 2</option>
-                                <option>Class 3</option>
-                                <option>Class 4</option>
-                            </select>
+                            <select name="class"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                        <option value="" disabled selected>Select class</option>
+                        <option>Nursery</option>
+                        <option>LKG</option>
+                        <option>UKG</option>
+                        <option>1</option>
+                        <option>2</option>
+                    </select>
                         </div>
 
                         <div>
@@ -92,9 +93,10 @@
                             <select name="section"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                                 <option value="">Select Section</option>
-                                <option>Section A</option>
-                                <option>Section B</option>
-                                <option>Section C</option>
+                                <option> A</option>
+                                <option> B</option>
+                                <option> C</option>
+                                <option> D</option>
                             </select>
                         </div>
 
@@ -131,14 +133,32 @@
                         <!-- Row 3 -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Religion</label>
-                            <input type="text" name="religion"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                            <select name="religion"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                        <option value="" disabled selected>Select religion</option>
+                        <option>Hindu</option>
+                        <option>Muslim</option>
+                        <option>Christian</option>
+                        <option>Sikh</option>
+                        <option>Other</option>
+                    </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Blood Group</label>
-                            <input type="text" name="blood_group"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                            <select name="blood_group"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                            <option value="" disabled selected>Select blood group</option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>O+</option>
+                            <option>O-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                        </select>
+                            
                         </div>
 
                         <div>
@@ -156,7 +176,7 @@
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Upload Student Photo</label>
                             <input type="file" name="photo" accept="image/*"
-                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                         </div>
                     </div>
                 </div>
@@ -215,7 +235,7 @@
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Upload Parents Photo</label>
                             <input type="file" name="parents_photo" accept="image/*"
-                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer bg-gray-50 focus:outline-none">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                         </div>
                     </div>
                 </div>
