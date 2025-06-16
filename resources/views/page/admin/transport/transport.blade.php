@@ -14,6 +14,8 @@
             }
         }
     </script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+
     </head>
 
     <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-4 md:p-6">
@@ -141,7 +143,7 @@
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                     @forelse ($transport as $tran)
-                                        <tr class="hover:bg-gray-50 transition duration-150">
+                                        <tr class="hover:bg-gray-50 transition duration-150" x-data="{ open: false }">
                                             <td class="p-3 font-medium">{{ $tran->id }}</td>
                                             <td class="p-3">
                                                 <div class="font-medium">{{ $tran->route_name }}</div>
@@ -157,18 +159,17 @@
                                             </td>
                                             <td class="p-3 font-medium">{{ $tran->driver_name }}</td>
                                             <td class="p-3 font-mono text-sm">{{ $tran->license_number }}</td>
-                                            <td class="p-3">
-                                                <div>{{ $tran->phone_number }}</div>
-                                            </td>
+                                            <td class="p-3">{{ $tran->phone_number }}</td>
                                             <td class="p-3">
                                                 <div class="flex justify-center gap-3">
-                                                    <label
-                                                     for="edit-modal"
+                                                    <!-- Open Modal -->
+                                                    <button @click="open = true"
                                                         class="bg-amber-100 hover:bg-amber-200 p-2 rounded-lg text-amber-600"
                                                         title="Edit">
                                                         <i class="fas fa-edit"></i>
-                                                    </label>
+                                                    </button>
 
+                                                    <!-- Delete -->
                                                     <form action="{{ route('transport.delete', $tran->id) }}"
                                                         method="POST" onsubmit="return confirm('Are you sure?')">
                                                         @csrf
@@ -180,6 +181,8 @@
                                                         </button>
                                                     </form>
                                                 </div>
+
+                                                @include('page.admin.transport.edit-transport')
                                             </td>
                                         </tr>
                                     @empty
@@ -190,8 +193,9 @@
                                             </td>
                                         </tr>
                                     @endforelse
-
                                 </tbody>
+
+
                             </table>
 
                         </div>

@@ -49,4 +49,18 @@ class TransportController extends Controller
         ->with('info', 'Search results for: ' . $search);
 }
 
+public function update(Request $request, $id)
+{
+    $transport = Transport::findOrFail($id);
+
+    $transport->update($request->only([
+        'route_name', 'pickup_time', 'drop_time',
+        'vehicle_number', 'vehicle_capacity',
+        'driver_name', 'license_number', 'phone_number'
+    ]));
+
+    return redirect()->back()->with('success', 'Transport updated successfully.');
+}
+
+
 }

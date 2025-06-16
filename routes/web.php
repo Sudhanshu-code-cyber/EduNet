@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
@@ -92,3 +94,23 @@ Route::prefix('admin')->group(function () {
     Route::delete('/transport/{id}', [TransportController::class, 'deletetransport'])->name('transport.delete');
     Route::get('/transport/search', [TransportController::class, 'search'])->name('transport.search');
 });
+Route::put('/transport/update/{id}', [TransportController::class, 'update'])->name('transport.update');
+
+
+Route::get('/admin/classes/', [ClassController::class, 'index'])->name('classes.index');
+Route::post('/admin/store/', [ClassController::class, 'store'])->name('classes.store');
+Route::put('/admin/update/{id}', [ClassController::class, 'update'])->name('classes.update');
+Route::delete('/admin/destory/{id}', [ClassController::class, 'destroy'])->name('classes.destroy');
+
+
+
+// Subject Routes
+Route::get('/admin/subjects', [SubjectController::class, 'index'])->name('subjects.index');
+Route::post('/admin/subjects', [SubjectController::class, 'store'])->name('subjects.store');
+Route::put('/admin/subjects/{id}', [SubjectController::class, 'update'])->name('subjects.update');
+Route::delete('/admin/subjects/{id}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
+// routes/web.php
+Route::get('/admin/subjects/by-class/{id}', [SubjectController::class, 'getByClass']);
+
+
+Route::get('/admin/subjects/filter/{class_id?}', [SubjectController::class, 'filter'])->name('subjects.filter');
