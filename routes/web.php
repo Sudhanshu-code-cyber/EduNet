@@ -32,12 +32,13 @@ Route::controller(StudentController::class)->group(function () {
 Route::get('/parent', function () {
     return view('page.admin.parent');
 })->name('/parent');
+
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('/admin');
     Route::get('admin/allstudent', 'allstudent')->name('admin.allstudent');
     Route::get('admin/addstudent', 'addstudent')->name('admin.addstudent');
     Route::get('admin/allstudent/{student}', 'editStudent')->name('student.edit');
-    Route::put('admin/allstudent/{student}', 'studentUpdate')->name('student.update');
+    Route::put('/students/{id}', 'studentUpdate')->name('student.update');
     Route::get('admin/student/search', 'searchRollName')->name('student.search');
     Route::get('/admin/class', 'class')->name('admin.class');
 Route::post('/admin/class/store',  'storeSection')->name('admin.storeSection');
@@ -89,3 +90,4 @@ Route::get('admin/transport', [TransportController::class, 'index'])->name('admi
 Route::post('admin/sport', [TransportController::class, 'store'])->name('admin.store');
 Route::delete('admin/transport/{id}', [TransportController::class, 'deletetransport'])->name('transport.delete');
 Route::get('admin/transport/search', [TransportController::class, 'search'])->name('transport.search');
+
