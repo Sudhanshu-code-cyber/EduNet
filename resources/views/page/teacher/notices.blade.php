@@ -17,7 +17,7 @@
         <section class="bg-white rounded-lg shadow-lg p-6 mb-8">
             <h2 class="text-2xl font-semibold mb-6 text-blue-700">Search Notices</h2>
 
-            <form method="GET" action="" class="flex flex-col sm:flex-row gap-4 items-center">
+            <form method="GET" action="{{ route('teacher.notice.search') }}">
                 <div class="flex-1">
                     <label for="search_title" class="block text-gray-700 font-medium mb-1">Title</label>
                     <input type="text" name="search_title" id="search_title"
@@ -45,70 +45,33 @@
         <section class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-2xl font-semibold mb-6 text-blue-700">Notices</h2>
 
-            <ul class="divide-y divide-gray-200">
-                <li class="py-4 hover:bg-gray-100 transition flex justify-between items-center">
-                    <div>
-                        <h3 class="text-xl font-bold text-blue-600 mb-1">PTM Schedule Released</h3>
-                        <p class="text-gray-800 mb-2 whitespace-pre-line">
-                            The parent-teacher meeting for classes 6–10 will be held on June 15, 2025.
-                        </p>
-                        <div class="text-sm text-gray-500 flex flex-wrap gap-4">
-                            <span><strong>Posted By:</strong> Principal Office</span>
-                            <span><strong>Date:</strong> Jun 10, 2025</span>
-                        </div>
+            @foreach($notices as $notice)
+            <li class="py-4 hover:bg-gray-100 transition flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold text-blue-600 mb-1">{{ $notice->title }}</h3>
+                    <p class="text-gray-800 mb-2 whitespace-pre-line">{{ $notice->details }}</p>
+                    <div class="text-sm text-gray-500 flex flex-wrap gap-4">
+                        <span><strong>Posted By:</strong> {{ $notice->posted_by }}</span>
+                        <span><strong>Date:</strong> {{ \Carbon\Carbon::parse($notice->date)->format('M d, Y') }}</span>
                     </div>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-1 rounded-md transition" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="bg-red-600 text-white hover:bg-red-700 px-3 py-1 rounded-md transition" title="Delete">
+                </div>
+                <div class="flex gap-2">
+                    <a href="javascript:void(0)" onclick="openEditModal('{{ $notice->id }}', '{{ $notice->title }}', '{{ $notice->posted_by }}', `{{ $notice->details }}`, '{{ $notice->date }}')"
+                        class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    
+                    <form action="{{ route('teacher.notice.destroy', $notice->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="bg-red-600 text-white hover:bg-red-700 px-3 py-1 rounded-md transition">
                             <i class="fas fa-trash"></i>
                         </button>
-                    </div>
-                </li>
-
-                <li class="py-4 hover:bg-gray-100 transition flex justify-between items-center">
-                    <div>
-                        <h3 class="text-xl font-bold text-blue-600 mb-1">Holiday Notice</h3>
-                        <p class="text-gray-800 mb-2 whitespace-pre-line">
-                            The school will remain closed on June 13, 2025, for Eid celebrations.
-                        </p>
-                        <div class="text-sm text-gray-500 flex flex-wrap gap-4">
-                            <span><strong>Posted By:</strong> Admin Department</span>
-                            <span><strong>Date:</strong> Jun 11, 2025</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-1 rounded-md transition" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="bg-red-600 text-white hover:bg-red-700 px-3 py-1 rounded-md transition" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </li>
-
-                <li class="py-4 hover:bg-gray-100 transition flex justify-between items-center">
-                    <div>
-                        <h3 class="text-xl font-bold text-blue-600 mb-1">New Library Timings</h3>
-                        <p class="text-gray-800 mb-2 whitespace-pre-line">
-                            The library will now be open from 8 AM to 3 PM on all working days.
-                        </p>
-                        <div class="text-sm text-gray-500 flex flex-wrap gap-4">
-                            <span><strong>Posted By:</strong> Librarian</span>
-                            <span><strong>Date:</strong> Jun 9, 2025</span>
-                        </div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-1 rounded-md transition" title="Edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="bg-red-600 text-white hover:bg-red-700 px-3 py-1 rounded-md transition" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </li>
-            </ul>
+                    </form>
+                </div>
+            </li>
+        @endforeach
+        
 
             <div class="mt-6">
                 <p class="text-sm text-gray-500 mt-4">Total Notices: 3</p>
@@ -124,7 +87,7 @@
             <div class="bg-white rounded-lg shadow-lg p-6 z-10 w-11/12 sm:w-1/2 relative max-h-screen overflow-y-auto">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Create Notice</h2>
 
-                <form method="POST" action="" class="space-y-4" novalidate>
+                <form method="POST" action="{{ route('teacher.notice.store') }}" class="space-y-4" novalidate>
                     @csrf
 
                     <div class="flex flex-col sm:flex-row gap-4">

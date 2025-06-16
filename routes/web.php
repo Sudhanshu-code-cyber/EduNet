@@ -9,6 +9,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
+use App\Http\Controllers\Teacher\TeacherNoticeController;
 
 
 
@@ -83,6 +84,16 @@ Route::get('teacher/attendance', [AttendanceController::class, 'index'])->name('
 
 Route::get('admin/notice/search', [NoticeController::class, 'search'])->name('notice.search');
 Route::resource('admin/notice', NoticeController::class);
+
+Route::controller(TeacherNoticeController::class)->prefix('teacher')->name('teacher.notice.')->group(function () {
+    Route::get('/notice','index')->name('index');
+    Route::get('/notice/search', 'search')->name('search');
+    Route::get('/create','create')->name('create');
+    Route::post('/','store')->name('store');
+    Route::get('/{id}/edit','edit')->name('edit');
+    Route::put('/{id}', 'update')->name('update');
+    Route::delete('/{id}', 'destroy')->name('destroy');
+});
 
 
 Route::get('admin/transport', [TransportController::class, 'index'])->name('admin.transport');
