@@ -12,6 +12,8 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
 use App\Http\Controllers\Teacher\TeacherNoticeController;
+use App\Http\Controllers\FeeTypeController;
+use App\Http\Controllers\FeeStructureController;
 
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
@@ -50,6 +52,11 @@ Route::controller(AdminController::class)->prefix('admin')->group(function () {
     Route::post('/class/store', 'storeSection')->name('admin.storeSection');
     Route::delete('/class/{id}', 'destroy')->name('class.destroy');
 });
+
+
+
+
+
 
 // Teacher Routes (User Side)
 Route::controller(TeacherController::class)->prefix('teacher')->name('teacher.')->group(function () {
@@ -98,6 +105,28 @@ Route::controller(TeacherNoticeController::class)->prefix('teacher')->name('teac
     Route::put('/{id}', 'update')->name('update');
     Route::delete('/{id}', 'destroy')->name('destroy');
 });
+
+// Fee Type
+Route::get('admin/student/fee-types', [FeeTypeController::class, 'index'])->name('fee-types.index');
+Route::post('admin/student/', [FeeTypeController::class, 'store'])->name('fee-types.store');
+Route::get('/fee-types/{id}/edit', [FeeTypeController::class, 'edit'])->name('fee-types.edit');
+Route::put('/fee-types/{id}', [FeeTypeController::class, 'update'])->name('fee-types.update');
+Route::delete('/fee-types/{id}', [FeeTypeController::class, 'destroy'])->name('fee-types.destroy');
+
+
+// Fee Structure
+Route::get('admin/student/fee-structure/create', [FeeStructureController::class, 'create'])->name('fee-structure.create');
+Route::post('admin/student/fee-structure', [FeeStructureController::class, 'store'])->name('fee-structure.store');
+Route::delete('/fee-structure/{id}', [FeeStructureController::class, 'destroy'])->name('fee-structure.destroy');
+
+
+
+
+
+
+
+
+
 
 // Transport Routes
 Route::prefix('admin')->group(function () {

@@ -13,4 +13,14 @@ class ClassModel extends Model
     {
         return $this->hasMany(Subject::class);
     }
+
+    public function feeStructures()
+    {
+        return $this->hasMany(FeeStructure::class, 'class_id');
+    }
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'class_id');
+    }
 }
