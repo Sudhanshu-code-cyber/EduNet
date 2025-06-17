@@ -27,7 +27,8 @@
                <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
             </div>
             <div>
-               <p class="font-medium text-sm">Badal Kumar</p>
+               <p class="font-medium text-sm">{{ Auth::user()->name }}
+</p>
                <p class="text-xs text-gray-500">Student</p>
             </div>
          </div>

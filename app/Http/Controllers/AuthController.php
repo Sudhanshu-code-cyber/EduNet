@@ -30,7 +30,7 @@ class AuthController extends Controller
            'password' => $request->password,
 
         ]);
-        return redirect()->back();
+        return redirect()->route('home.login');
 
     }
   public function Userlogin(Request $request)
@@ -59,6 +59,12 @@ class AuthController extends Controller
     }
 
     return view('auth.login'); // ✅ show login form on GET request
+}
+
+public function logout(){
+     Auth::logout();
+
+        return redirect()->route("home.login");
 }
 
 }

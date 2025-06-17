@@ -44,7 +44,7 @@ Route::controller(AdminController::class)->prefix('admin')->group(function () {
     Route::get('/addstudent', 'addstudent')->name('admin.addstudent');
     Route::get('/allstudent/{student}', 'editStudent')->name('student.edit');
     Route::put('/students/{id}', 'studentUpdate')->name('student.update');
-    Route::post('/student', 'store')->name('student.store');
+    Route::post('/student/store', 'store')->name('student.store');
     Route::get('/student/{id}/show', 'showStudent')->name('student.show');
     Route::delete('/student/{id}', 'deleteStudent')->name('student.destroy');
     Route::get('/student/search', 'searchRollName')->name('student.search');
@@ -164,9 +164,20 @@ Route::get('/admin/subjects/filter/{class_id?}', [SubjectController::class, 'fil
 
 Route::get('/', function () {
     return view('home');
-})->name('home');
+})->name('home.login');
 
 
 Route::get('/register',[AuthController::class,'register'])->name('register');
 Route::post('/register',[AuthController::class,'userRegister'])->name('userRegister');
 Route::post('/',[AuthController::class,'Userlogin'])->name('Userlogin');
+Route::get('/logout',[AuthController::class,'logout'])->name('user.logout');
+
+use App\Http\Controllers\EventController;
+
+Route::get('/admin/calendar', [EventController::class, 'index'])->name('admin.calendar');
+Route::get('/calendar/events', [EventController::class, 'fetch']);
+Route::post('/calendar/events', [EventController::class, 'store']);
+Route::put('/calendar/events/{id}', [EventController::class, 'update']);
+Route::delete('/calendar/events/{id}', [EventController::class, 'destroy']);
+
+

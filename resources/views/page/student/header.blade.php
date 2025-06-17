@@ -35,10 +35,10 @@
                                     <div class="relative">
                                         <div
                                             class="profile-img w-9 h-9 rounded-full flex items-center justify-center text-white font-bold">
-                                            BG
+                                            
                                         </div>
                                     </div>
-                                    <span class="ml-2 hidden md:inline">Bonnie Green</span>
+                                    <span class="ml-2 hidden md:inline">{{ Auth::user()->name }}</span>
                                     <svg class="w-4 h-4 ml-1 hidden md:inline" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,13 +52,10 @@
                                     <div
                                         class="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
                                         <div class="flex items-center">
-                                            <div
-                                                class="profile-img w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                                                BG
-                                            </div>
+                                            
                                             <div class="ml-3">
-                                                <p class="font-semibold text-gray-800">Bonnie Green</p>
-                                                <p class="text-sm text-gray-600">Computer Science</p>
+                                                <p class="font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                                                <p class="text-sm text-gray-600">{{ Auth::user()->email }}</p>
                                                 <div class="mt-1">
                                                     <span
                                                         class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Pro
@@ -109,7 +106,7 @@
 
                                     <!-- Sign Out -->
                                     <div class="border-t border-gray-100 pt-2 bg-gray-50">
-                                        <a href="#"
+                                        <a href="{{route('user.logout')}}"
                                             class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
                                             <i class="fas fa-sign-out-alt mr-3 text-gray-500 w-5"></i>
                                             <span>Sign Out</span>

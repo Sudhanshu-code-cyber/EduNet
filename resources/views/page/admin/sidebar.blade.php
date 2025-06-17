@@ -304,7 +304,7 @@
             }
         }
     </style>
- <div class="sidebar" id="sidebar">
+ <div class="sidebar h-screen overflow-y-auto" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo">
                 <i class="fas fa-graduation-cap logo-icon"></i>
@@ -408,7 +408,7 @@
             
 
              <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('admin.calendar')}}" class="nav-link">
                     <i class="fas fa-calendar-alt nav-icon"></i>
                     <span class="nav-text">Calender </span>
                 </a>
