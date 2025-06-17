@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
@@ -114,3 +116,14 @@ Route::get('/admin/subjects/by-class/{id}', [SubjectController::class, 'getByCla
 
 
 Route::get('/admin/subjects/filter/{class_id?}', [SubjectController::class, 'filter'])->name('subjects.filter');
+
+
+
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+
+Route::get('/register',[AuthController::class,'register'])->name('register');
+Route::post('/register',[AuthController::class,'userRegister'])->name('userRegister');
+Route::post('/',[AuthController::class,'Userlogin'])->name('Userlogin');
