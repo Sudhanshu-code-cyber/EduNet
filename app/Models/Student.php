@@ -11,8 +11,8 @@ class Student extends Model
 
     protected $fillable = [
         'full_name',
-        'class',
-        'section',
+        'class_id',
+        'section_id',
         'gender',
         'dob',
         'roll_no',
@@ -31,5 +31,20 @@ class Student extends Model
         'permanent_address',
         'parents_photo',
     ];
+
+    public function feePayments() {
+        return $this->hasMany(FeePayment::class);
+    }
+    
+    
+    public function class()
+    {
+        return $this->belongsTo(ClassModel::class, 'class_id');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
 
 }

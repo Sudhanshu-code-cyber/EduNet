@@ -75,30 +75,32 @@
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
-                            <select name="class"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
-                        <option value="" disabled selected>Select class</option>
-                        <option>Nursery</option>
-                        <option>LKG</option>
-                        <option>UKG</option>
-                        <option>1</option>
-                        <option>2</option>
-                    </select>
-                        </div>
+                       <!-- Class Dropdown -->
+<!-- Class Dropdown -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
+    <select name="class_id"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" required>
+        <option value="" disabled selected>Select class</option>
+        @foreach ($classes as $class)
+            <option value="{{ $class->id }}">{{ $class->name }}</option>
+        @endforeach
+    </select>
+</div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
-                            <select name="section"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
-                                <option value="">Select Section</option>
-                                <option> A</option>
-                                <option> B</option>
-                                <option> C</option>
-                                <option> D</option>
-                            </select>
-                        </div>
+<!-- Section Dropdown -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+    <select name="section_id"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" required>
+        <option value="" disabled selected>Select section</option>
+        @foreach ($sections as $section)
+            <option value="{{ $section->id }}">{{ $section->name }}</option>
+        @endforeach
+    </select>
+</div>
+
+
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gender*</label>

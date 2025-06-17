@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\TeacherController as AdminTeacherController;
 use App\Http\Controllers\Teacher\TeacherNoticeController;
 use App\Http\Controllers\FeeTypeController;
 use App\Http\Controllers\FeeStructureController;
+use App\Http\Controllers\FeePaymentController;
+
 
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
@@ -48,6 +50,7 @@ Route::controller(AdminController::class)->prefix('admin')->group(function () {
     Route::get('/student/{id}/show', 'showStudent')->name('student.show');
     Route::delete('/student/{id}', 'deleteStudent')->name('student.destroy');
     Route::get('/student/search', 'searchRollName')->name('student.search');
+    Route::get('/student/create', 'create')->name('student.create');
 
     // Class Section
     Route::get('/class', 'class')->name('admin.class');
@@ -122,6 +125,10 @@ Route::get('admin/student/fee-structure/index', [FeeStructureController::class, 
 Route::post('admin/student/fee-structure', [FeeStructureController::class, 'store'])->name('fee-structure.store');
 Route::delete('/fee-structure/{id}', [FeeStructureController::class, 'destroy'])->name('fee-structure.destroy');
 
+// Fee Payment
+Route::post('admin/student/fee-payment/search', [FeePaymentController::class, 'search'])->name('fee-payment.search');
+Route::post('admin/student/fee-payment/', [FeePaymentController::class, 'store'])->name('fee-payment.store');
+Route::get('admin/student/fee-payment/create', [FeePaymentController::class, 'create'])->name('fee-payment.create');
 
 
 

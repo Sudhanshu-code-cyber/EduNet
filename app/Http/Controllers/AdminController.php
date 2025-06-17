@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ClassSection;
 use App\Models\Event;
 use App\Models\Student;
+use App\Models\ClassModel;
+use App\Models\Section;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -16,14 +18,23 @@ class AdminController extends Controller
         return view('page.admin.dashboard', compact('countstudent','events'));
     }
 
+
+    public function create()
+    {
+        $classes = ClassModel::all();   
+        $sections = Section::all();
+    
+        return view('page.admin.student.addstudent', compact('classes', 'sections'));
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
             'full_name' => 'required|string|max:255',
             'roll_no' => 'required|string|max:20|unique:students,roll_no',
             'admission_no' => 'required|string|max:50|unique:students,admission_no',
-            'class' => 'required|string|max:20',
-            'section' => 'nullable|string|max:10',
+            'class_id' => 'required|string|max:20',
+            'section_id' => 'nullable|string|max:10',
             'gender' => 'required|string',
             'dob' => 'required|date',
             'age' => 'required|string|max:10',
@@ -99,8 +110,8 @@ class AdminController extends Controller
     $student->roll_no = $request->roll_no;
     $student->gender = $request->gender;
     $student->dob = $request->dob;
-    $student->class = $request->class;
-    $student->section = $request->section;
+    $student->class_id = $request->class_id;
+    $student->section_id = $request->section_id;
     $student->contact = $request->contact;
     $student->email = $request->email;
     $student->present_address = $request->address;

@@ -65,8 +65,8 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'full_name' => 'required|string|max:255',
-        'class' => 'required|string',
-        'section' => 'nullable|string',
+      'class_id' => 'required|exists:classes,id',
+        'section_id' => 'nullable|string',
         'gender' => 'required|string',
         'dob' => 'required|date',
         'roll_no' => 'required|string|unique:students',
@@ -102,9 +102,5 @@ public function store(Request $request)
 
     return redirect()->back()->with('success', 'Student added successfully!');
 }
-
-
-
-
 
 }
