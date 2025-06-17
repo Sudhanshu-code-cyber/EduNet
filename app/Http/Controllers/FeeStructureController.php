@@ -46,4 +46,22 @@ class FeeStructureController extends Controller
         return back()->with('success', 'Fee Structure deleted successfully.');
     }
     
+    public function index(Request $request)
+{
+    $classes = ClassModel::all();
+    $feeTypes = FeeType::all();
+
+    $feeStructures = FeeStructure::with(['class', 'feeType'])
+        ->when($request->search_class, function ($query, $classId) {
+            $query->where('class_id', $classId);
+        })
+        ->when($request->search_fee_type, function ($query, $typeId) {
+            $query->where('fee_type_id', $typeId);
+        })
+        ->get();
+
+        return view('page.admin.fee.fee-structure', compact('feeStructures', 'classes', 'feeTypes'));
+
+}
+
 }

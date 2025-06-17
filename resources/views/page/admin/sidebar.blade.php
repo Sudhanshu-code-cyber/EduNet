@@ -374,7 +374,22 @@
                 </a>
             </div>
 
-
+            <div class="nav-item">
+                <a href="#" class="nav-link dropdown-toggle" id="financeDropdown">
+                    <i class="fas fa-money-bill-wave nav-icon"></i>
+                    <span class="nav-text">Finance Management</span>
+                    <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
+                </a>
+                <div class="dropdown-content" id="financeContent">
+                    <a href="{{ route('fee-types.index') }}" class="dropdown-link">Fee Types</a>
+                    <a href="{{ route('fee-structure.create') }}" class="dropdown-link">Fee Structure</a>
+                    <a href="" class="dropdown-link">Student Fee</a>
+            
+                    <a href="" class="dropdown-link">Staff Salary</a>
+                </div>
+            </div>
+            
+            
             
             <div class="nav-item">
                 <a href="{{ route('notice.index') }}" class="nav-link">

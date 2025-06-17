@@ -118,6 +118,7 @@ Route::delete('/fee-types/{id}', [FeeTypeController::class, 'destroy'])->name('f
 
 // Fee Structure
 Route::get('admin/student/fee-structure/create', [FeeStructureController::class, 'create'])->name('fee-structure.create');
+Route::get('admin/student/fee-structure/index', [FeeStructureController::class, 'index'])->name('fee-structure.index');
 Route::post('admin/student/fee-structure', [FeeStructureController::class, 'store'])->name('fee-structure.store');
 Route::delete('/fee-structure/{id}', [FeeStructureController::class, 'destroy'])->name('fee-structure.destroy');
 
