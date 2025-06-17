@@ -72,10 +72,10 @@
                         </div>
                         <div>
                             <h3 class="text-gray-500 text-sm font-medium">Total Students</h3>
-                            <p class="text-2xl font-bold text-dark">{{$countstudent}}</p>
+                            <p class="text-2xl font-bold text-dark">{{ $countstudent }}</p>
                         </div>
                     </div>
-                   
+
                 </div>
 
                 <div class="card-hover bg-white p-6 rounded-xl shadow-sm border-l-4 border-warning">
@@ -85,10 +85,10 @@
                         </div>
                         <div>
                             <h3 class="text-gray-500 text-sm font-medium">Total Teachers</h3>
-                            <p class="text-2xl font-bold text-dark">42</p>
+                            <p class="text-2xl font-bold text-dark">{{ $countTeacher }}</p>
                         </div>
                     </div>
-                   
+
                 </div>
 
                 <div class="card-hover bg-white p-6 rounded-xl shadow-sm border-l-4 border-success">
@@ -98,7 +98,7 @@
                         </div>
                         <div>
                             <h3 class="text-gray-500 text-sm font-medium">Classes</h3>
-                            <p class="text-2xl font-bold text-dark">28</p>
+                            <p class="text-2xl font-bold text-dark">{{ $countClass }}</p>
                         </div>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                         </div>
                     </div>
 
-                
+
                 </div>
             </div>
 
@@ -125,66 +125,97 @@
 
 
             <!-- Recent Activity and Upcoming Events -->
-            <div class="grid grid-cols-1  gap-6">
+            <div class="grid grid-cols-1 gap-6">
 
                 <!-- Upcoming Events -->
-                <div class="bg-white p-6 rounded-xl shadow-sm">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                    <!-- Header -->
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-lg font-semibold text-dark">Upcoming Events</h3>
-                        <button class="text-primary flex items-center hover:text-secondary">
-                            <a href="{{route('admin.calendar')}}">View Calendar</a>
-                            <i class="fas fa-chevron-right ml-2 text-sm"></i>
-                        </button>
-                    </div>
-                    @forelse ($events as $event )
-                        <div class="space-y-4">
-                        <div class="p-4 border-l-4 border-primary bg-blue-50 rounded-lg hover:bg-blue-100 cursor-pointer">
-                            <div class="flex justify-between">
-                                <h4 class="font-medium">{{$event->title}}</h4>
-                                <span class="text-xs text-gray-500">{{$event->start}}</span>
-                                <span class="text-xs text-gray-500">{{$event->end}}</span>
-                            </div>
-                            <p class="text-sm text-gray-600 mt-1">{{$event->description}}</p>
-                            <div class="flex items-center mt-2 text-xs">
-                                <span class="bg-primary text-white px-2 py-1 rounded">All Students</span>
-                                <span class="ml-2 text-gray-500">Today</span>
-                            </div>
-                        </div>
-
-                
-                    </div>
-                    @empty
-                        
-                    @endforelse
-                    
-
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-dark mb-4">Quick Actions</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <a href="{{ route('admin.addstudent') }}"
-                                class="py-3 bg-primary text-white rounded-lg flex flex-col items-center justify-center hover:bg-secondary transition">
-                                <i class="fas fa-plus text-xl mb-2"></i>
-                                <span>Add Student</span>
-                            </a>
-                            <button
-                                class="py-3 bg-success text-white rounded-lg flex flex-col items-center justify-center hover:bg-green-600 transition">
-                                <i class="fas fa-file-export text-xl mb-2"></i>
-                                <span>Generate Report</span>
-                            </button>
-                            <button
-                                class="py-3 bg-warning text-white rounded-lg flex flex-col items-center justify-center hover:bg-pink-600 transition">
-                                <i class="fas fa-bell text-xl mb-2"></i>
-                                <span>Send Notice</span>
-                            </button>
-                            <a href="{{route('admin.calendar')}}"
-                                class="py-3 bg-info text-white rounded-lg flex flex-col items-center justify-center hover:bg-blue-600 transition">
-                                <i class="fas fa-calendar-alt text-xl mb-2"></i>
-                                <span>Create Event</span>
+                        <h3 class="text-xl font-bold text-gray-800">📅 Upcoming Events</h3>
+                        <a href="{{ route('admin.calendar') }}"
+                            class="text-blue-600 hover:text-blue-800 text-sm flex items-center font-medium">
+                            View Calendar
+                            <i class="fas fa-chevron-right ml-2 text-xs"></i>
                         </a>
+                    </div>
+
+                    <!-- Events List -->
+                    <div class="space-y-4 max-h-72 overflow-y-auto pr-2">
+                        @forelse ($events as $event)
+                            <div
+                                class="p-5 bg-blue-50 border-l-4 border-blue-600 rounded-2xl shadow-sm hover:shadow-md hover:bg-blue-100 transition-all duration-300 cursor-pointer group">
+                                <!-- Title and Date -->
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-semibold text-lg text-blue-800 group-hover:text-blue-900">
+                                        {{ $event->title }}</h4>
+                                    <div class="text-right text-xs text-gray-500 leading-5">
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-clock text-blue-500"></i>
+                                            <span>{{ \Carbon\Carbon::parse($event->start)->format('M d, Y h:i A') }}</span>
+                                        </div>
+                                        <div class="flex items-center gap-1">
+                                            <i class="fas fa-hourglass-end text-blue-400"></i>
+                                            <span>{{ \Carbon\Carbon::parse($event->end)->format('M d, Y h:i A') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <p class="text-sm text-gray-700 mt-1 leading-relaxed">
+                                    {{ $event->description }}
+                                </p>
+
+                               
+                            </div>
+
+                        @empty
+                            <div class="text-center py-6 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                                <p class="text-sm text-gray-600 italic flex items-center justify-center gap-2">
+                                    <i class="fas fa-calendar-times text-red-500 text-base"></i>
+                                    No upcoming events scheduled
+                                </p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="mt-10">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">⚡ Quick Actions</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <a href="{{ route('admin.addstudent') }}"
+                                class="bg-blue-600 text-white p-4 rounded-xl flex flex-col items-center justify-center hover:bg-blue-700 transition">
+                                <i class="fas fa-user-plus text-2xl mb-1"></i>
+                                <span class="text-sm font-medium">Add Student</span>
+                            </a>
+                            <a href="{{ route('teacher.create') }}"
+                                class="group bg-green-600 text-white px-5 py-4 rounded-2xl shadow-sm flex flex-col items-center justify-center hover:bg-green-700 transition duration-300">
+
+                                <!-- Icon -->
+                                <div
+                                    class="bg-white text-green-600 rounded-full p-3 mb-2 group-hover:bg-green-100 transition">
+                                    <i class="fas fa-user-plus text-xl"></i>
+                                </div>
+
+                                <!-- Label -->
+                                <span class="text-sm font-semibold tracking-wide">Add Teacher</span>
+                            </a>
+
+                            <a href="{{ route('notice.index') }}"
+                                class="bg-yellow-500 text-white p-4 rounded-xl flex flex-col items-center justify-center hover:bg-yellow-600 transition">
+                                <i class="fas fa-bell text-2xl mb-1"></i>
+                                <span class="text-sm font-medium">Send Notice</span>
+                            </a>
+                            <a href="{{ route('admin.calendar') }}"
+                                class="bg-indigo-500 text-white p-4 rounded-xl flex flex-col items-center justify-center hover:bg-indigo-600 transition">
+                                <i class="fas fa-calendar-plus text-2xl mb-1"></i>
+                                <span class="text-sm font-medium">Create Event</span>
+                            </a>
                         </div>
                     </div>
                 </div>
+
             </div>
+
         </main>
     </div>
 @endsection
