@@ -306,7 +306,7 @@
     </style>
  <div class="sidebar h-screen overflow-y-auto" id="sidebar">
         <div class="sidebar-header">
-            <a href="#" class="logo">
+            <a href="{{route('/admin')}}" class="logo">
                 <i class="fas fa-graduation-cap logo-icon"></i>
                 <div>
                     <div class="logo-text">EduNet</div>

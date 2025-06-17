@@ -1,190 +1,170 @@
 @extends('page.admin.parent')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 p-6">
-    <div class="max-w-7xl mx-auto">
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
+        <div class="max-w-7xl mx-auto">
 
-        <div class="flex items-center justify-between mb-8">
-            <h1 class="text-4xl font-bold text-blue-800">Notice Board</h1>
-            <!-- Add New Notice Button -->
-            <button onclick="openModal()"
-                class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
-                Add New Notice
-            </button>
-        </div>
+            <div class="flex items-center justify-between mb-10">
+                <h1 class="text-4xl font-extrabold text-blue-800 tracking-tight">📢 Notice Board</h1>
+                <button onclick="openModal()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg transition duration-300 ease-in-out">
+                    + Add New Notice
+                </button>
+            </div>
 
-        <!-- Search Notice Board -->
-        <section class="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h2 class="text-2xl font-semibold mb-6 text-blue-700">Search Notices</h2>
-
-            <form method="GET" action="{{ route('notice.search') }}" class="flex flex-col sm:flex-row gap-4 items-center">
-                <div class="flex-1">
-                    <label for="search_title" class="block text-gray-700 font-medium mb-1">Title</label>
-                    <input type="text" name="search_title" id="search_title"
-                        class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Search by title" value="{{ request('search_title') }}">
-                </div>
-
-                <div>
-                    <label for="search_date" class="block text-gray-700 font-medium mb-1">Date</label>
-                    <input type="date" name="search_date" id="search_date"
-                        class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ request('search_date') }}">
-                </div>
-
-                <div class="mt-6 sm:mt-0">
-                    <button type="submit"
-                        class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
-                        Search
-                    </button>
-                </div>
-            </form>
-        </section>
-
-        <!-- Notices List -->
-        <section class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-2xl font-semibold mb-6 text-blue-700">Notices</h2>
-
-            <ul class="divide-y divide-gray-200">
-            @forelse($notices as $notice )
-                <li class="py-4 hover:bg-gray-100 transition flex justify-between items-center">
+            <!-- Search Section -->
+            <section class="bg-white rounded-2xl shadow-xl p-8 mb-10">
+                <h2 class="text-2xl font-bold text-blue-700 mb-6">🔍 Search Notices</h2>
+                <form method="GET" action="{{ route('notice.search') }}"
+                    class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                     <div>
-                        <h3 class="text-xl font-bold text-blue-600 mb-1">{{$notice->title}}</h3>
-                        <p class="text-gray-800 mb-2 whitespace-pre-line">
-                            {{$notice->details}}
-                        </p>
-                        <div class="text-sm text-gray-500 flex flex-wrap gap-4">
-                            <span><strong>Posted By:</strong>{{$notice->posted_by}}</span>
-                            <span><strong>Date:</strong> {{$notice->date}}</span>
-                        </div>
+                        <label for="search_title" class="block text-gray-700 font-medium mb-2">Title</label>
+                        <input type="text" name="search_title" id="search_title" value="{{ request('search_title') }}"
+                            placeholder="Search by title"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
-                    <div class="flex gap-2">
-                        <button type="button"
-                        class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-1 rounded-md transition"
-                        title="Edit"
-                        onclick="openEditModal({{ $notice->id }}, '{{ addslashes($notice->title) }}', '{{ addslashes($notice->posted_by) }}', '{{ addslashes($notice->details) }}', '{{ $notice->date }}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    
-                        <form action="{{ route('notice.destroy', $notice->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded-md">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                        
+                    <div>
+                        <label for="search_date" class="block text-gray-700 font-medium mb-2">Date</label>
+                        <input type="date" name="search_date" id="search_date" value="{{ request('search_date') }}"
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
-                </li>
-            @empty
-            <p class="text-gray-500">No notices found.</p>
-@endforelse
-</ul>
-
-
-<div class="mt-6">
-    <p class="text-sm text-gray-500 mt-4">Total Notices: {{ $notices->count() }}</p>
-</div>
-
-<div class="mt-4">
-    {{ $notices->links() }}
-</div>
-        </section>
-
-        <!-- Modal for Create Notice -->
-        <div id="noticeModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-            <!-- Overlay -->
-            <div class="fixed inset-0 bg-black bg-opacity-50" onclick="closeModal()"></div>
-
-            <!-- Modal Content -->
-            <div class="bg-white rounded-lg shadow-lg p-6 z-10 w-11/12 sm:w-1/2 relative max-h-screen overflow-y-auto">
-                <h2 class="text-2xl font-semibold mb-4 text-blue-700">Create Notice</h2>
-
-                <form method="POST" action="{{ route('notice.store') }}" class="space-y-4" novalidate>
-                    @csrf
-
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <div class="w-full sm:w-1/2">
-                            <label for="title" class="block text-gray-700 font-medium mb-1">Title</label>
-                            <input type="text" name="title" id="title" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Notice title" value="{{ old('title') }}">
-                                @error('title')
-    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-@enderror
-
-                        </div>
-
-                        <div class="w-full sm:w-1/2">
-                            <label for="posted_by" class="block text-gray-700 font-medium mb-1">Posted By</label>
-                            <input type="text" name="posted_by" id="posted_by" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Your name" value="{{ old('posted_by') }}">
-                                @error('title')
-    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-@enderror
-
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <div class="w-full sm:w-2/3">
-                            <label for="details" class="block text-gray-700 font-medium mb-1">Details</label>
-                            <textarea name="details" id="details" rows="3" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Write notice details here...">{{ old('details') }}</textarea>
-                                @error('title')
-    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-@enderror
-
-                        </div>
-
-                        <div class="w-full sm:w-1/3">
-                            <label for="date" class="block text-gray-700 font-medium mb-1">Date</label>
-                            <input type="date" name="date" id="date" required
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value="{{ old('date', \Carbon\Carbon::now()->format('Y-m-d')) }}">
-                                @error('title')
-    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-@enderror
-
-                        </div>
-                    </div>
-
-                    <div class="flex gap-4 mt-4">
+                    <div>
                         <button type="submit"
-                            class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            Save
-                        </button>
-                        <button type="reset"
-                            class="bg-gray-300 text-gray-700 font-semibold px-5 py-2 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400">
-                            Reset
-                        </button>
-                        <button type="button" onclick="closeModal()"
-                            class="ml-auto text-red-600 hover:underline font-semibold">
-                            Cancel
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition duration-300 ease-in-out">
+                            Search
                         </button>
                     </div>
                 </form>
+            </section>
+
+            <!-- Notices List -->
+            <section class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-blue-700 mb-6">📄 Notices</h2>
+
+                <ul class="divide-y divide-gray-200">
+                    @forelse($notices as $notice)
+                        <li
+                            class="py-6 px-4 hover:bg-gray-50 rounded-lg transition flex flex-col md:flex-row justify-between items-start md:items-center">
+                            <div class="flex-1 space-y-2">
+                                <h3 class="text-xl font-semibold text-blue-700">{{ $notice->title }}</h3>
+                                <p class="text-gray-800 whitespace-pre-line">{{ $notice->details }}</p>
+                                <div class="text-sm text-gray-500 space-x-4">
+                                    <span><strong>Posted By:</strong> {{ $notice->posted_by }}</span>
+                                    <span><strong>Date:</strong> {{ $notice->date }}</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3 mt-4 md:mt-0 md:ml-6">
+                                <button
+                                    onclick="openEditModal({{ $notice->id }}, '{{ addslashes($notice->title) }}', '{{ addslashes($notice->posted_by) }}', '{{ addslashes($notice->details) }}', '{{ $notice->date }}')"
+                                    title="Edit"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md transition">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <form method="POST" action="{{ route('notice.destroy', $notice->id) }}"
+                                    onsubmit="return confirm('Are you sure?');">
+                                    @csrf @method('DELETE')
+                                    <button type="submit"
+                                        class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md transition">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    @empty
+                        <li
+                            class="flex items-center justify-center py-10 bg-blue-50 text-blue-600 font-medium rounded-lg shadow-inner">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            No notices found.
+                        </li>
+                    @endforelse
+                </ul>
+
+                <div class="text-sm text-gray-600 mt-6">Total Notices: {{ $notices->count() }}</div>
+
+                <div class="mt-4">
+                    {{ $notices->links() }}
+                </div>
+            </section>
+
+            <!-- Modal for Create Notice -->
+            <div id="noticeModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+                <div class="fixed inset-0 bg-black bg-opacity-50" onclick="closeModal()"></div>
+                <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-xl mx-auto z-50 overflow-y-auto max-h-[90vh]">
+                    <h2 class="text-2xl font-bold text-blue-700 mb-6">📝 Create Notice</h2>
+
+                    <form method="POST" action="{{ route('notice.store') }}" class="space-y-5">
+                        @csrf
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="title" class="text-gray-700 font-medium">Title</label>
+                                <input type="text" name="title" id="title" value="{{ old('title') }}" required
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                                @error('title')
+                                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="posted_by" class="text-gray-700 font-medium">Posted By</label>
+                                <input type="text" name="posted_by" id="posted_by" value="{{ old('posted_by') }}"
+                                    required
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                                @error('posted_by')
+                                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div class="col-span-2">
+                                <label for="details" class="text-gray-700 font-medium">Details</label>
+                                <textarea name="details" id="details" rows="4" required
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">{{ old('details') }}</textarea>
+                                @error('details')
+                                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="date" class="text-gray-700 font-medium">Date</label>
+                                <input type="date" name="date" id="date"
+                                    value="{{ old('date', \Carbon\Carbon::now()->format('Y-m-d')) }}" required
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                                @error('date')
+                                    <p class="text-red-600 text-sm">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-4 pt-4">
+                            <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition">Save</button>
+                            <button type="reset"
+                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg">Reset</button>
+                            <button type="button" onclick="closeModal()"
+                                class="text-red-600 hover:underline font-semibold">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
+
         </div>
-
     </div>
-</div>
 
-<script>
-    function openModal() {
-        document.getElementById('noticeModal').classList.remove('hidden');
-    }
+    <script>
+        function openModal() {
+            document.getElementById('noticeModal').classList.remove('hidden');
+            document.getElementById('noticeModal').classList.add('flex');
+        }
 
-    function closeModal() {
-        document.getElementById('noticeModal').classList.add('hidden');
-    }
-</script>
+        function closeModal() {
+            document.getElementById('noticeModal').classList.add('hidden');
+            document.getElementById('noticeModal').classList.remove('flex');
+        }
+    </script>
 
-<!-- Include Font Awesome for icons -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-@include('page.admin.notice-edit-modal')
-
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    @include('page.admin.notice-edit-modal')
 @endsection
