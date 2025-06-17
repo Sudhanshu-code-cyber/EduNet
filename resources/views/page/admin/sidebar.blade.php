@@ -408,7 +408,7 @@
             
 
              <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{route('admin.calendar')}}" class="nav-link">
                     <i class="fas fa-calendar-alt nav-icon"></i>
                     <span class="nav-text">Calender </span>
                 </a>

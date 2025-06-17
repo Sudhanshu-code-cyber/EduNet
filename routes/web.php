@@ -172,3 +172,12 @@ Route::post('/register',[AuthController::class,'userRegister'])->name('userRegis
 Route::post('/',[AuthController::class,'Userlogin'])->name('Userlogin');
 Route::get('/logout',[AuthController::class,'logout'])->name('user.logout');
 
+use App\Http\Controllers\EventController;
+
+Route::get('/admin/calendar', [EventController::class, 'index'])->name('admin.calendar');
+Route::get('/calendar/events', [EventController::class, 'fetch']);
+Route::post('/calendar/events', [EventController::class, 'store']);
+Route::put('/calendar/events/{id}', [EventController::class, 'update']);
+Route::delete('/calendar/events/{id}', [EventController::class, 'destroy']);
+
+

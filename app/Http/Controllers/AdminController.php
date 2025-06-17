@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassSection;
+use App\Models\Event;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,8 @@ class AdminController extends Controller
     public function index()
     {
         $countstudent = Student::count();
-        return view('page.admin.dashboard', compact('countstudent'));
+        $events= Event::all();
+        return view('page.admin.dashboard', compact('countstudent','events'));
     }
 
     public function store(Request $request)

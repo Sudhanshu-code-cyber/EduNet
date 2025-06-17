@@ -132,61 +132,31 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-semibold text-dark">Upcoming Events</h3>
                         <button class="text-primary flex items-center hover:text-secondary">
-                            <span>View Calendar</span>
+                            <a href="{{route('admin.calendar')}}">View Calendar</a>
                             <i class="fas fa-chevron-right ml-2 text-sm"></i>
                         </button>
                     </div>
-
-                    <div class="space-y-4">
+                    @forelse ($events as $event )
+                        <div class="space-y-4">
                         <div class="p-4 border-l-4 border-primary bg-blue-50 rounded-lg hover:bg-blue-100 cursor-pointer">
                             <div class="flex justify-between">
-                                <h4 class="font-medium">Science Fair</h4>
-                                <span class="text-xs text-gray-500">10:00 AM</span>
+                                <h4 class="font-medium">{{$event->title}}</h4>
+                                <span class="text-xs text-gray-500">{{$event->start}}</span>
+                                <span class="text-xs text-gray-500">{{$event->end}}</span>
                             </div>
-                            <p class="text-sm text-gray-600 mt-1">Main Auditorium</p>
+                            <p class="text-sm text-gray-600 mt-1">{{$event->description}}</p>
                             <div class="flex items-center mt-2 text-xs">
                                 <span class="bg-primary text-white px-2 py-1 rounded">All Students</span>
                                 <span class="ml-2 text-gray-500">Today</span>
                             </div>
                         </div>
 
-                        <div class="p-4 border-l-4 border-success bg-green-50 rounded-lg hover:bg-green-100 cursor-pointer">
-                            <div class="flex justify-between">
-                                <h4 class="font-medium">Faculty Meeting</h4>
-                                <span class="text-xs text-gray-500">2:30 PM</span>
-                            </div>
-                            <p class="text-sm text-gray-600 mt-1">Conference Room A</p>
-                            <div class="flex items-center mt-2 text-xs">
-                                <span class="bg-success text-white px-2 py-1 rounded">Teachers</span>
-                                <span class="ml-2 text-gray-500">Tomorrow</span>
-                            </div>
-                        </div>
-
-                        <div
-                            class="p-4 border-l-4 border-warning bg-yellow-50 rounded-lg hover:bg-yellow-100 cursor-pointer">
-                            <div class="flex justify-between">
-                                <h4 class="font-medium">Parent-Teacher Conference</h4>
-                                <span class="text-xs text-gray-500">9:00 AM</span>
-                            </div>
-                            <p class="text-sm text-gray-600 mt-1">Classroom Building</p>
-                            <div class="flex items-center mt-2 text-xs">
-                                <span class="bg-warning text-white px-2 py-1 rounded">Important</span>
-                                <span class="ml-2 text-gray-500">June 18</span>
-                            </div>
-                        </div>
-
-                        <div class="p-4 border-l-4 border-info bg-cyan-50 rounded-lg hover:bg-cyan-100 cursor-pointer">
-                            <div class="flex justify-between">
-                                <h4 class="font-medium">Final Exams Begin</h4>
-                                <span class="text-xs text-gray-500">All Day</span>
-                            </div>
-                            <p class="text-sm text-gray-600 mt-1">All Campuses</p>
-                            <div class="flex items-center mt-2 text-xs">
-                                <span class="bg-info text-white px-2 py-1 rounded">Academic</span>
-                                <span class="ml-2 text-gray-500">June 25</span>
-                            </div>
-                        </div>
+                
                     </div>
+                    @empty
+                        
+                    @endforelse
+                    
 
                     <div class="mt-8">
                         <h3 class="text-lg font-semibold text-dark mb-4">Quick Actions</h3>
@@ -206,11 +176,11 @@
                                 <i class="fas fa-bell text-xl mb-2"></i>
                                 <span>Send Notice</span>
                             </button>
-                            <button
+                            <a href="{{route('admin.calendar')}}"
                                 class="py-3 bg-info text-white rounded-lg flex flex-col items-center justify-center hover:bg-blue-600 transition">
                                 <i class="fas fa-calendar-alt text-xl mb-2"></i>
                                 <span>Create Event</span>
-                            </button>
+                        </a>
                         </div>
                     </div>
                 </div>
