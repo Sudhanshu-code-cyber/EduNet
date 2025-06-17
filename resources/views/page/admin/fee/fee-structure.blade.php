@@ -107,8 +107,9 @@
 
 {{-- Fee Structure List --}}
 <div class="max-w-6xl mx-auto mt-12">
+   <div class="flex flex-1 justify-between items-center">
     <h3 class="text-xl font-semibold text-gray-800 mb-4">Existing Fee Structures</h3>
-    <form method="GET" action="{{ route('fee-structure.index') }}" class="flex flex-wrap gap-4 justify-between items-center mb-4">
+    <form method="GET" action="{{ route('fee-structure.index') }}" class="flex flex-wrap gap-4 justify-end items-center mb-4">
         <div class="flex gap-2">
             <select name="search_class" class="border border-gray-300 rounded px-3 py-2">
                 <option value="">All Classes</option>
@@ -131,6 +132,7 @@
     
         <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Search</button>
     </form>
+   </div>
 
     <div class="overflow-x-auto">
         <table class="w-full bg-white shadow-md rounded-md overflow-hidden">

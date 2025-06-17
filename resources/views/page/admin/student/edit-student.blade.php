@@ -46,6 +46,14 @@
                                 <label class="font-medium">Address</label>
                                 <textarea name="address" rows="2" class="w-full border rounded p-2">{{ $student->present_address }}</textarea>
                             </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="uses_transport" class="form-checkbox"
+                                           {{ $student->uses_transport ? 'checked' : '' }}>
+                                    <span class="ml-2">Uses Transport</span>
+                                </label>
+                            </div>
+                            
 
                             <div class="md:col-span-2 flex justify-end gap-3 pt-2">
                                 <button type="button" @click="open = false" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>

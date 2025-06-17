@@ -53,6 +53,8 @@ class AdminController extends Controller
             $data['parents_photo'] = $filename;
         }
     
+        $data['uses_transport'] = $request->has('uses_transport');
+
         Student::create($data);
     
         return redirect()->route('admin.allstudent')->with('success', 'Student added successfully!');
@@ -79,13 +81,13 @@ class AdminController extends Controller
 {
     $request->validate([
         'full_name' => 'required|string|max:255',
-        'roll_no' => 'nullable|string|max:50',
+        'roll_no' => 'nullable|string|max:50|unique:students,roll_no,' . $id,
+    'email' => 'nullable|email|max:255|unique:students,email,' . $id,
         'gender' => 'nullable|in:Male,Female',
         'dob' => 'nullable|date',
         'class' => 'nullable|string|max:100',
         'section' => 'nullable|string|max:100',
         'contact' => 'nullable|string|max:20',
-        'email' => 'nullable|email|max:255',
         'address' => 'nullable|string|max:500',
     ]);
 
@@ -100,6 +102,8 @@ class AdminController extends Controller
     $student->contact = $request->contact;
     $student->email = $request->email;
     $student->present_address = $request->address;
+    $student->uses_transport = $request->has('uses_transport');
+
 
     $student->save();
 

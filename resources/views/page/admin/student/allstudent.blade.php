@@ -46,7 +46,9 @@
                     <th class="px-4 py-3 hidden lg:table-cell">DOB</th>
                     <th class="px-4 py-3 hidden lg:table-cell">Mobile</th>
                     <th class="px-4 py-3 hidden lg:table-cell">Email</th>
+                    <th class="px-4 py-3 hidden lg:table-cell">Uses Transport</th>
                     <th class="px-4 py-3">Actions</th>
+                    
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -67,6 +69,14 @@
             <td class="px-4 py-2 hidden lg:table-cell">{{ \Carbon\Carbon::parse($student->dob)->format('d/m/Y') }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ $student->contact }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ $student->email }}</td>
+            <td class="px-4 py-2 hidden lg:table-cell">
+                @if($student->uses_transport)
+                    <span class="text-green-600 font-semibold">Yes</span>
+                @else
+                    <span class="text-red-500 font-medium">No</span>
+                @endif
+            </td>
+            
             <td class="px-4 py-2 text-center">
                 <div class="flex items-center justify-center gap-3">
                     <!-- View -->

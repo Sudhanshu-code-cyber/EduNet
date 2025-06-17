@@ -63,7 +63,7 @@
                 </h2>
             </div>
 
-            <form action="{{ route('student.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="p-6">
@@ -124,6 +124,13 @@
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                         </div>
 
+<!--  Transport Checkbox (NEW) -->
+<div class="flex items-center mt-8">
+    <input type="checkbox" id="uses_transport" name="uses_transport"
+        class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+    <label for="uses_transport" class="ml-2 text-sm text-gray-700">Uses Transport Facility?</label>
+</div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Admission No</label>
                             <input type="text" name="admission_no" required
@@ -172,6 +179,7 @@
                             <input type="email" name="email" required
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                         </div>
+
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Upload Student Photo</label>

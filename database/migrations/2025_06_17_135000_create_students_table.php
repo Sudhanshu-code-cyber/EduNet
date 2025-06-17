@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('full_name');
-            $table->string('class');
-            $table->string('section')->nullable();
+            $table->unsignedBigInteger('class_id');
+            $table->unsignedBigInteger('section_id')->nullable();
+            $table->boolean('uses_transport')->default(false);        
             $table->string('gender');
             $table->date('dob');
             $table->string('roll_no')->unique();
@@ -34,6 +35,10 @@ return new class extends Migration
             $table->text('permanent_address')->nullable();
             $table->string('parents_photo')->nullable();
             $table->timestamps();
+
+
+            $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('set null');
         });
     }
 
