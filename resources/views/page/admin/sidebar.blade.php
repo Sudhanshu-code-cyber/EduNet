@@ -304,7 +304,7 @@
             }
         }
     </style>
- <div class="sidebar" id="sidebar">
+ <div class="sidebar h-screen overflow-y-auto" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo">
                 <i class="fas fa-graduation-cap logo-icon"></i>
