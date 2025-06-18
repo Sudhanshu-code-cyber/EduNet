@@ -22,25 +22,35 @@ class FeePaymentController extends Controller
 
 
     public function search(Request $request)
-{
-
-    $student = Student::where([
-        ['class_id', $request->class_id],
-        ['section_id', $request->section_id],
-        ['roll_no', $request->roll],
-    ])->first();
-
-    if (!$student) {
-        return back()->with('error', 'Student not found.');
+    {
+        // Validate input
+            $request->validate([
+                'class_id' => 'required|exists:classes,id',
+            'section_id' => 'required|exists:sections,id',
+            'roll_no' => 'required'
+        ]);
+    
+        $student = Student::where([
+            ['class_id', $request->class_id],
+            ['section_id', $request->section_id],
+            ['roll_no', $request->roll_no],
+        ])->first();
+    
+        if (!$student) {
+            return back()->with('error', 'Student not found.')
+                         ->withInput(); // to retain old input values
+        }
+    
+        $fees = FeeStructure::with('feeType')
+                    ->where('class_id', $student->class_id)
+                    ->get();
+    
+        $classes = ClassModel::all(); // needed for re-rendering the form
+        $sections = Section::all();
+    
+        return view('page.admin.fee.fee-payment', compact('student', 'fees', 'classes', 'sections'));
     }
-
-    $fees = FeeStructure::with('feeType')
-                ->where('class_id', $student->class_id)
-                ->get();
-
-return view('page.admin.fee.fee-payment', compact('student', 'fees'));
-
-}
+    
 
 public function store(Request $request)
 {

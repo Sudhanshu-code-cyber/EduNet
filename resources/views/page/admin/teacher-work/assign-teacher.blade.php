@@ -15,15 +15,12 @@
 @endif
 
 
-    {{-- Error Display --}}
-    @if ($errors->any())
-    <div id="error-alert" class="relative bg-red-100 text-red-800 px-4 py-3 mb-6 rounded-lg border border-red-300">
-        <ul class="list-disc list-inside mr-6">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-        <button type="button" onclick="document.getElementById('error-alert').remove();" class="absolute top-2 right-3 text-red-800 hover:text-red-900 text-lg font-bold focus:outline-none">
+{{-- Flash error --}}
+@if (session('error'))
+    <div id="errorAlert" class="relative bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+        <span>{{ session('error') }}</span>
+        <button onclick="document.getElementById('errorAlert').remove()" 
+                class="absolute top-2 right-2 text-red-600 hover:text-red-800 text-lg font-bold">
             &times;
         </button>
     </div>
