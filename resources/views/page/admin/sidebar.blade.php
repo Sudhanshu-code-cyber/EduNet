@@ -345,7 +345,7 @@
                 <div class="dropdown-content" id="teachersContent">
                     <a href="{{ route('teacher.index') }}" class="dropdown-link">All Teacher</a>
                     <a href="{{ route('teacher.create') }}" class="dropdown-link">Add New Teacher</a>
-                    <a href="#" class="dropdown-link">Assign Classes</a>
+                    <a href="{{ route('assign.teacher.index') }}" class="dropdown-link">Assign Classes</a>
                     <a href="#" class="dropdown-link">Payment</a>
 
                 </div>

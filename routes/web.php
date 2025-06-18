@@ -127,7 +127,7 @@ Route::delete('/fee-structure/{id}', [FeeStructureController::class, 'destroy'])
 
 // Fee Payment
 Route::post('admin/student/fee-payment/search', [FeePaymentController::class, 'search'])->name('fee-payment.search');
-Route::post('admin/student/fee-payment/', [FeePaymentController::class, 'store'])->name('fee-payment.store');
+Route::post('admin/student/fee-payment/submit', [FeePaymentController::class, 'store'])->name('fee-payment.store');
 Route::get('admin/student/fee-payment', [FeePaymentController::class, 'create'])->name('fee-payment.create');
 
 //Assign Subject to teachers
