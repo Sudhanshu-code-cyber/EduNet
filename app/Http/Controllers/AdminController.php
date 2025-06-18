@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\ClassSection;
 use App\Models\Event;
 use App\Models\Student;
 use App\Models\ClassModel;
 use App\Models\Section;
 use App\Models\Teacher;
+
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -84,6 +86,12 @@ class AdminController extends Controller
         return view('page.admin.student.allstudent', compact('allstudent','classes', 'sections'));
     }
 
+    public function addstudent()
+    {
+         $classes = ClassModel::all();   
+        return view('page.admin.student.addstudent',compact('classes'));
+    }
+
     public function editStudent(Student $student)
     {
         return view('page.admin.student.edit-student', compact('student'));
@@ -141,7 +149,7 @@ class AdminController extends Controller
 
     public function class()
     {
-        $class_section = ClassSection::all();
+        $class_section = ClassModel::all();
         return view('page.admin.class.class-section', compact('class_section'));
     }
 
@@ -158,13 +166,13 @@ return view('page.admin.student.view-student',compact('student'));
             'class_code' => 'required|unique:class_sections',
         ]);
 
-        ClassSection::create($request->all());
+        ClassModel::create($request->all());
         return redirect()->back()->with('success', 'Class Section Added!');
     }
 
     public function destroy($id)
     {
-        ClassSection::findOrFail($id)->delete();
+        ClassModel::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Class Section Deleted!');
     }
 }
