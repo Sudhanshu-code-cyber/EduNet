@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassModel;
-use App\Models\ClassSection;
 use App\Models\Event;
 use App\Models\Student;
-<<<<<<< HEAD
-use App\Models\ClassModel;
+
 use App\Models\Section;
-=======
+
 use App\Models\Teacher;
->>>>>>> d72ebedde678df3f3e9dfc72c466dbb90d6f1584
+
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -89,7 +87,8 @@ class AdminController extends Controller
 
     public function addstudent()
     {
-        return view('page.admin.student.addstudent');
+         $classes = ClassModel::all();   
+        return view('page.admin.student.addstudent',compact('classes'));
     }
 
     public function editStudent(Student $student)
@@ -149,7 +148,7 @@ class AdminController extends Controller
 
     public function class()
     {
-        $class_section = ClassSection::all();
+        $class_section = ClassModel::all();
         return view('page.admin.class.class-section', compact('class_section'));
     }
 
@@ -166,13 +165,13 @@ return view('page.admin.student.view-student',compact('student'));
             'class_code' => 'required|unique:class_sections',
         ]);
 
-        ClassSection::create($request->all());
+        ClassModel::create($request->all());
         return redirect()->back()->with('success', 'Class Section Added!');
     }
 
     public function destroy($id)
     {
-        ClassSection::findOrFail($id)->delete();
+        ClassModel::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Class Section Deleted!');
     }
 }

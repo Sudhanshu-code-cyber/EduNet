@@ -350,6 +350,18 @@
 
                 </div>
             </div>
+
+            <div class="nav-item">
+                <a href="#" class="nav-link dropdown-toggle" id="teachersDropdown">
+                    <i class="fas fa-chalkboard-teacher nav-icon"></i>
+                    <span class="nav-text">Section Management</span>
+                    <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
+                </a>
+                <div class="dropdown-content" id="teachersContent">
+                    <a href="{{route('create.section')}}" class="dropdown-link">Assign Sections to Classes</a>
+                   
+                </div>
+            </div>   
             
             <div class="nav-item">
                 <a href="{{route('classes.index')}}" class="nav-link">

@@ -23,4 +23,10 @@ class ClassModel extends Model
     {
         return $this->hasMany(Student::class, 'class_id');
     }
+
+    public function sections()
+{
+    return $this->hasMany(Section::class);
+}
+
 }

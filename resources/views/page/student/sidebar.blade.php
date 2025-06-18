@@ -121,7 +121,7 @@
 
          <!-- Logout -->
          <div>
-            <a href=""
+            <a href="{{route('user.logout')}}"
                class="flex items-center gap-2 px-3 py-2 rounded text-red-600 hover:bg-red-50 transition">
                ⏻ <span>Logout</span>
             </a>

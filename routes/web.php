@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SectionContoller;
 use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
@@ -132,12 +133,6 @@ Route::get('admin/student/fee-payment/create', [FeePaymentController::class, 'cr
 
 
 
-
-
-
-
-
-
 // Transport Routes
 Route::prefix('admin')->group(function () {
     Route::get('/transport', [TransportController::class, 'index'])->name('admin.transport');
@@ -150,7 +145,7 @@ Route::put('/transport/update/{id}', [TransportController::class, 'update'])->na
 
 
 Route::get('/admin/classes/', [ClassController::class, 'index'])->name('classes.index');
-Route::post('/admin/store/', [ClassController::class, 'store'])->name('classes.store');
+Route::post('/admin/classes', [ClassController::class, 'store'])->name('classes.store');
 Route::put('/admin/update/{id}', [ClassController::class, 'update'])->name('classes.update');
 Route::delete('/admin/destory/{id}', [ClassController::class, 'destroy'])->name('classes.destroy');
 
@@ -186,5 +181,9 @@ Route::get('/calendar/events', [EventController::class, 'fetch']);
 Route::post('/calendar/events', [EventController::class, 'store']);
 Route::put('/calendar/events/{id}', [EventController::class, 'update']);
 Route::delete('/calendar/events/{id}', [EventController::class, 'destroy']);
+
+
+Route::get('/admin/create-section',[SectionContoller::class,'index'])->name('create.section');
+Route::post('/admin/store',[SectionContoller::class,'storeSections'])->name('store.section');
 
 

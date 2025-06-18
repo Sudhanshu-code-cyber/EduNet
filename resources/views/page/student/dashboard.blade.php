@@ -97,43 +97,49 @@
 
                 <!-- Single Notice -->
                 @forelse ($notice as  $note)
-                     <div class="flex flex-col gap-4" x-data="{ showModal: false, selectedNotice: '' }">
+                    <div class="flex flex-col gap-4" x-data="{ showModal: false, selectedNotice: '' }">
 
-                    <!-- Notice Item -->
-                    <div>
-                        <p class="text-sm text-gray-500">📅 {{$note->date}}</p>
-                        <h3 class="text-lg font-medium text-blue-700">{{$note->posted_by}}</h3>
+                        <!-- Notice Item -->
+                        <div>
+                            <p class="text-sm text-gray-500">📅 {{ $note->date }}</p>
+                            <h3 class="text-lg font-medium text-blue-700">{{ $note->posted_by }}</h3>
 
-                        <!-- Truncated content -->
-                        <p class="text-gray-700 line-clamp-2">
-                           {{$note->title}}
-                        </p>
+                            <!-- Truncated content -->
+                            <p class="text-gray-700 line-clamp-2">
+                                {{ $note->title }}
+                            </p>
 
-                        <!-- Read More Button -->
-                        <button
-                            @click="showModal = true; selectedNotice = `{{$note->title}}`"
-                            class="text-sm text-blue-600 hover:underline mt-1">
-                            Read More
-                        </button>
-                    </div>
+                            <!-- Read More Button -->
+                            <button @click="showModal = true; selectedNotice = `{{ $note->title }}`"
+                                class="text-sm text-blue-600 hover:underline mt-1">
+                                Read More
+                            </button>
+                        </div>
 
-                    <!-- Modal -->
-                    <div x-show="showModal" x-cloak
-                        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div class="bg-white p-6 rounded-lg max-w-lg w-full relative">
-                            <button @click="showModal = false"
-                                class="absolute top-2 right-2 text-gray-500 hover:text-black">&times;</button>
-                            <h3 class="text-lg font-semibold text-blue-700 mb-2">Full Notice</h3>
-                            <p class="text-gray-700" x-text="selectedNotice"></p>
+                        <!-- Modal -->
+                        <div x-show="showModal" x-cloak
+                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div class="bg-white p-6 rounded-lg max-w-lg w-full relative">
+                                <button @click="showModal = false"
+                                    class="absolute top-2 right-2 text-gray-500 hover:text-black">&times;</button>
+                                <h3 class="text-lg font-semibold text-blue-700 mb-2">Full Notice</h3>
+                                <p class="text-gray-700" x-text="selectedNotice"></p>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @empty
-                    <div>
-                        not found
+                    <div
+                        class="flex flex-col items-center justify-center text-center p-6 bg-gray-50 border border-dashed border-gray-300 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-4" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12A9 9 0 113 12a9 9 0 0118 0z" />
+                        </svg>
+                        <h2 class="text-lg font-semibold text-gray-700">Not Found</h2>
+                        <p class="text-sm text-gray-500 mt-1">We couldn't find what you were looking for.</p>
                     </div>
                 @endforelse
-               
+
 
 
 
@@ -141,7 +147,7 @@
 
 
         </div>
-        
+
 
     </div>
 @endsection
