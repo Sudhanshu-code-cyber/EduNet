@@ -57,18 +57,22 @@
 
 
 <script>
-    function openEditModal(id, title, posted_by, details, date) {
-        document.getElementById('edit_id').value = id;
-        document.getElementById('edit_title').value = title;
-        document.getElementById('edit_posted_by').value = posted_by;
-        document.getElementById('edit_details').value = details;
-        document.getElementById('edit_date').value = date;
+  function openEditModal(id, title, posted_by, details, date) {
+    document.getElementById('editNoticeModal').classList.remove('hidden');
+    document.getElementById('edit_id').value = id;
+    document.getElementById('edit_title').value = title;
+    document.getElementById('edit_posted_by').value = posted_by;
+    document.getElementById('edit_details').value = details;
+    document.getElementById('edit_date').value = date;
+    const form = document.getElementById('editNoticeForm');
+    form.action = `/teacher/notice/${id}`;
+}
+
+</script>
+
     
-        // Fix this line (use Laravel route helper)
-        const updateUrl = `{{ route('teacher.notice.update', ':id') }}`.replace(':id', id);
-        document.getElementById('editNoticeForm').action = updateUrl;
-    
-        document.getElementById('editNoticeModal').classList.remove('hidden');
+<script>
+    function closeEditModal() {
+        document.getElementById('editNoticeModal').classList.add('hidden');
     }
-    </script>
-    
+</script>

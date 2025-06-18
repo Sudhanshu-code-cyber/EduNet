@@ -7,7 +7,7 @@
         <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
             <i class="fas fa-user-graduate text-blue-600"></i> Student Records
         </h1>
-        <a href="{{ route('admin.addstudent') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow text-sm flex items-center gap-2">
+        <a href="{{ route('student.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow text-sm flex items-center gap-2">
             <i class="fas fa-plus"></i> Add Student
         </a>
     </div>

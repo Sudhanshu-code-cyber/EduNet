@@ -59,7 +59,7 @@
                     <a href="javascript:void(0)" onclick="openEditModal('{{ $notice->id }}', '{{ $notice->title }}', '{{ $notice->posted_by }}', `{{ $notice->details }}`, '{{ $notice->date }}')"
                         class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 transition">
                         <i class="fas fa-edit"></i>
-                    </a>
+                     </a>
                     
                     <form action="{{ route('teacher.notice.destroy', $notice->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                         @csrf
@@ -87,7 +87,7 @@
             <div class="bg-white rounded-lg shadow-lg p-6 z-10 w-11/12 sm:w-1/2 relative max-h-screen overflow-y-auto">
                 <h2 class="text-2xl font-semibold mb-4 text-blue-700">Create Notice</h2>
 
-                <form method="POST" action="{{ route('teacher.notice.store') }}" class="space-y-4" novalidate>
+                <form method="POST" action="{{ route('teacher.notice.store') }}" id="noticeForm" class="space-y-4" novalidate>
                     @csrf
 
                     <div class="flex flex-col sm:flex-row gap-4">

@@ -182,7 +182,7 @@
                     <div class="mt-10">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">⚡ Quick Actions</h3>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            <a href="{{ route('admin.addstudent') }}"
+                            <a href="{{ route('student.create') }}"
                                 class="bg-blue-600 text-white p-4 rounded-xl flex flex-col items-center justify-center hover:bg-blue-700 transition">
                                 <i class="fas fa-user-plus text-2xl mb-1"></i>
                                 <span class="text-sm font-medium">Add Student</span>

@@ -88,7 +88,7 @@ $notice->update([
     'date' => $request->date,
 ]);
 
-        return redirect()->route('notice.index')->with('success','Notice updated successfully!');
+        return redirect()->route('teacher.notice.index')->with('success','Notice updated successfully!');
     }
 
     /**
@@ -99,7 +99,7 @@ $notice->update([
         $notice = Notice::findOrFail($id);
         $notice->delete(); 
 
-        return redirect()->route('notice.index')->with('error','Notice deleted successfully!');
+        return redirect()->route('teacher.notice.index')->with('error','Notice deleted successfully!');
     }
 
 public function search(Request $request)

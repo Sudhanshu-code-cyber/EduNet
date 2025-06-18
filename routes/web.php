@@ -43,10 +43,9 @@ Route::controller(AdminController::class)->prefix('admin')->group(function () {
 
     // Student Management
     Route::get('/allstudent', 'allstudent')->name('admin.allstudent');
-    Route::get('/addstudent', 'addstudent')->name('admin.addstudent');
     Route::get('/allstudent/{student}', 'editStudent')->name('student.edit');
     Route::put('/students/{id}', 'studentUpdate')->name('student.update');
-    Route::post('/student/store', 'store')->name('student.store');
+    Route::post('/student/store', 'store')->name('students.store');
     Route::get('/student/{id}/show', 'showStudent')->name('student.show');
     Route::delete('/student/{id}', 'deleteStudent')->name('student.destroy');
     Route::get('/student/search', 'searchRollName')->name('student.search');
@@ -107,7 +106,7 @@ Route::controller(TeacherNoticeController::class)->prefix('teacher')->name('teac
     Route::get('/create','create')->name('create');
     Route::post('/','store')->name('store');
     Route::get('/{id}/edit','edit')->name('edit');
-    Route::put('/{id}', 'update')->name('update');
+    Route::put('/notice/{id}','update')->name('update');
     Route::delete('/{id}', 'destroy')->name('destroy');
 });
 
@@ -141,7 +140,7 @@ Route::get('admin/student/fee-payment/create', [FeePaymentController::class, 'cr
 // Transport Routes
 Route::prefix('admin')->group(function () {
     Route::get('/transport', [TransportController::class, 'index'])->name('admin.transport');
-    Route::post('/sport', [TransportController::class, 'store'])->name('admin.store');
+    Route::post('/transport/submit', [TransportController::class, 'store'])->name('admin.store');
     Route::delete('/transport/{id}', [TransportController::class, 'deletetransport'])->name('transport.delete');
     Route::get('/transport/search', [TransportController::class, 'search'])->name('transport.search');
 });

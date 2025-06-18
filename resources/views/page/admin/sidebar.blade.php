@@ -331,7 +331,7 @@
                 <div class="dropdown-content" id="studentsContent">
                     <a href="{{route('admin.allstudent')}}" class="dropdown-link">Total Students</a>
                     <a href="#" class="dropdown-link">Student Details</a>
-                    <a href="{{route('admin.addstudent')}}" class="dropdown-link">Add New Student</a>
+                    <a href="{{route('student.create')}}" class="dropdown-link">Add New Student</a>
                     <a href="#" class="dropdown-link">Fees</a>
                 </div>
             </div>

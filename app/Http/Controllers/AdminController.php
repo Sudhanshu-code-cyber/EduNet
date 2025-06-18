@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassModel;
 use App\Models\ClassSection;
 use App\Models\Event;
 use App\Models\Student;
-<<<<<<< HEAD
 use App\Models\ClassModel;
 use App\Models\Section;
-=======
 use App\Models\Teacher;
->>>>>>> d72ebedde678df3f3e9dfc72c466dbb90d6f1584
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -30,7 +26,6 @@ class AdminController extends Controller
     {
         $classes = ClassModel::all();   
         $sections = Section::all();
-    
         return view('page.admin.student.addstudent', compact('classes', 'sections'));
     }
 
@@ -83,13 +78,10 @@ class AdminController extends Controller
 
     public function allstudent()
     {
+        $classes = ClassModel::all();   
+        $sections = Section::all();
         $allstudent = Student::orderBy('created_at', 'desc')->paginate(10);
-        return view('page.admin.student.allstudent', compact('allstudent'));
-    }
-
-    public function addstudent()
-    {
-        return view('page.admin.student.addstudent');
+        return view('page.admin.student.allstudent', compact('allstudent','classes', 'sections'));
     }
 
     public function editStudent(Student $student)
@@ -105,8 +97,8 @@ class AdminController extends Controller
     'email' => 'nullable|email|max:255|unique:students,email,' . $id,
         'gender' => 'nullable|in:Male,Female',
         'dob' => 'nullable|date',
-        'class' => 'nullable|string|max:100',
-        'section' => 'nullable|string|max:100',
+        'class_id' => 'nullable|string|max:100',
+        'section_id' => 'nullable|string|max:100',
         'contact' => 'nullable|string|max:20',
         'address' => 'nullable|string|max:500',
     ]);
