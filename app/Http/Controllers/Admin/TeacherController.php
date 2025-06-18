@@ -9,6 +9,7 @@ use App\Models\Teacher;
 class TeacherController extends Controller
 {
     public function create(){
+
         return view('page.admin.teacher-section.add-teacher');
     }
 

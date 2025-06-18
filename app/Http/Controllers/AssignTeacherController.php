@@ -30,22 +30,47 @@ class AssignTeacherController extends Controller
 
     public function store(Request $request)
     {
-        foreach ($request->subjects as $subjectId => $teacherId) {
-            AssignedTeacher::updateOrCreate([
-                'class_id' => $request->class_id,
-                'section_id' => $request->section_id,
-                'subject_id' => $subjectId
-            ], [
-                'teacher_id' => $teacherId
-            ]);
+        // Validate inputs
+        $request->validate([
+            'class_id' => 'required|exists:classes,id',
+            'section_id' => 'required|exists:sections,id',
+            'subjects_selected' => 'required|array',
+            'subjects' => 'required|array'
+        ]);
+    
+        // Debugging: Check the incoming request data
+        \Log::info('Request Data:', $request->all());
+    
+        $selectedSubjects = $request->input('subjects_selected', []);
+        $subjectTeacherMap = $request->input('subjects', []);
+    
+        foreach ($selectedSubjects as $subjectId) {
+            $teacherId = $subjectTeacherMap[$subjectId] ?? null;
+    
+            if ($teacherId) {
+                AssignedTeacher::updateOrCreate(
+                    [
+                        'class_id' => $request->class_id,
+                        'section_id' => $request->section_id,
+                        'subject_id' => $subjectId
+                    ],
+                    [
+                        'teacher_id' => $teacherId
+                    ]
+                );
+            }
         }
-
-        return back()->with('success', 'Teachers assigned successfully!');
+    
+        return redirect()->route('assign.teacher.index')->with('success', 'Teachers assigned successfully!');
     }
+    
+    
+
+    
 
     public function destroy($id)
     {
         AssignedTeacher::findOrFail($id)->delete();
-        return back()->with('success', 'Assignment deleted.');
+        return back()->with('error', 'Assignment deleted.');
     }
 }

@@ -345,29 +345,22 @@
                 <div class="dropdown-content" id="teachersContent">
                     <a href="{{ route('teacher.index') }}" class="dropdown-link">All Teacher</a>
                     <a href="{{ route('teacher.create') }}" class="dropdown-link">Add New Teacher</a>
-                    <a href="{{ route('assign.teacher.index') }}" class="dropdown-link">Assign Classes</a>
+                    <a href="{{ route('assign.teacher.index') }}" class="dropdown-link">Assign Subjects</a>
                     <a href="#" class="dropdown-link">Payment</a>
 
                 </div>
             </div>
-
-            <div class="nav-item">
-                <a href="#" class="nav-link dropdown-toggle" id="teachersDropdown">
-                    <i class="fas fa-chalkboard-teacher nav-icon"></i>
-                    <span class="nav-text">Section Management</span>
-                    <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
-                </a>
-                <div class="dropdown-content" id="teachersContent">
-                    <a href="{{route('create.section')}}" class="dropdown-link">Assign Sections to Classes</a>
-                   
-                </div>
-            </div>   
             
             <div class="nav-item">
-                <a href="{{route('classes.index')}}" class="nav-link">
-                    <i class="fas fa-book nav-icon"></i>
-                    <span class="nav-text">Classes</span>
+                <a href="#" class="nav-link dropdown-toggle" id="classSectionDropdown">
+                    <i class="fas fa-layer-group nav-icon"></i>
+                    <span class="nav-text">Class & Section Management</span>
+                    <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
                 </a>
+                <div class="dropdown-content" id="classSectionContent">
+                    <a href="{{ route('classes.index') }}" class="dropdown-link">Manage Classes</a>
+                    <a href="{{ route('create.section') }}" class="dropdown-link">Assign Sections to Classes</a>
+                </div>
             </div>
             
            

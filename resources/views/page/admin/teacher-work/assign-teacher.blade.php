@@ -2,43 +2,61 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto p-8 bg-white rounded-2xl shadow-lg mt-10 border border-gray-200">
-    <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">Assign Teachers to Subjects</h2>
+    <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b pb-2">Assign Teachers to Subjects</h2>
 
     {{-- Flash Success Message --}}
-    @if (session('success'))
-        <div class="bg-green-100 text-green-800 px-4 py-3 mb-6 rounded-lg border border-green-300 shadow-sm">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    {{-- Class & Section Selection --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-        <div>
-            <label for="class_id" class="block font-semibold text-gray-700 mb-1">Select Class</label>
-            <select id="class_id" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">-- Choose Class --</option>
-                @foreach ($classes as $class)
-                    <option value="{{ $class->id }}">{{ $class->name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <label for="section_id" class="block font-semibold text-gray-700 mb-1">Select Section</label>
-            <select id="section_id" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">-- Choose Section --</option>
-                @foreach ($sections as $section)
-                    <option value="{{ $section->id }}">{{ $section->name }}</option>
-                @endforeach
-            </select>
-        </div>
+  @if (session('success'))
+    <div id="successAlert" class="bg-green-100 text-green-800 px-4 py-3 mb-6 rounded-lg border border-green-300 shadow-sm relative">
+        <span>{{ session('success') }}</span>
+        <button onclick="document.getElementById('successAlert').remove()" class="absolute top-2 right-2 text-green-600 hover:text-green-800 text-lg font-bold">
+            &times;
+        </button>
     </div>
+@endif
+
+
+    {{-- Error Display --}}
+    @if ($errors->any())
+    <div id="error-alert" class="relative bg-red-100 text-red-800 px-4 py-3 mb-6 rounded-lg border border-red-300">
+        <ul class="list-disc list-inside mr-6">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" onclick="document.getElementById('error-alert').remove();" class="absolute top-2 right-3 text-red-800 hover:text-red-900 text-lg font-bold focus:outline-none">
+            &times;
+        </button>
+    </div>
+@endif
+
 
     {{-- Assignment Form --}}
     <form method="POST" action="{{ route('assign.teacher.store') }}">
         @csrf
-        <input type="hidden" name="class_id" id="hidden_class_id">
-        <input type="hidden" name="section_id" id="hidden_section_id">
 
+        {{-- Class & Section Selection --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+            <div>
+                <label for="class_id" class="block font-semibold text-gray-700 mb-1">Select Class</label>
+                <select id="class_id" name="class_id" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <option value="">-- Choose Class --</option>
+                    @foreach ($classes as $class)
+                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label for="section_id" class="block font-semibold text-gray-700 mb-1">Select Section</label>
+                <select id="section_id" name="section_id" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    <option value="">-- Choose Section --</option>
+                    @foreach ($sections as $section)
+                        <option value="{{ $section->id }}">{{ $section->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        {{-- Subjects & Teacher Mapping --}}
         <div class="space-y-4">
             @foreach ($subjects as $subject)
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -50,7 +68,7 @@
                     <select name="subjects[{{ $subject->id }}]" class="w-full sm:w-1/2 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">-- Select Teacher --</option>
                         @foreach ($teachers as $teacher)
-                            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                            <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -72,6 +90,7 @@
                     <th class="border px-3 py-2 text-left">Class</th>
                     <th class="border px-3 py-2 text-left">Section</th>
                     <th class="border px-3 py-2 text-left">Subject</th>
+                    <th class="border px-3 py-2 text-left">Teacher ID</th>
                     <th class="border px-3 py-2 text-left">Teacher</th>
                     <th class="border px-3 py-2 text-left">Photo</th>
                     <th class="border px-3 py-2 text-left">Actions</th>
@@ -83,7 +102,8 @@
                         <td class="border px-3 py-2">{{ $item->class->name }}</td>
                         <td class="border px-3 py-2">{{ $item->section->name }}</td>
                         <td class="border px-3 py-2">{{ $item->subject->name }}</td>
-                        <td class="border px-3 py-2">{{ $item->teacher->name }}</td>
+                        <td class="border px-3 py-2">{{ $item->teacher->id_no }}</td>
+                        <td class="border px-3 py-2">{{ $item->teacher->first_name }} {{ $item->teacher->last_name }}</td>
                         <td class="border px-3 py-2">
                             <img src="{{ $item->teacher->photo_url ? asset('storage/' . $item->teacher->photo_url) : asset('default.png') }}" class="w-10 h-10 object-cover rounded-full border">
                         </td>
@@ -104,27 +124,23 @@
 {{-- Scripts --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $('#class_id').change(function () {
-        const classId = $(this).val();
-        $('#hidden_class_id').val(classId);
+    // Load sections based on class selection
+    $(document).ready(function () {
+        $('#class_id').change(function () {
+            const classId = $(this).val();
+            $('#section_id').html('<option value="">Loading...</option>');
 
-        $('#section_id').html('<option value="">Loading...</option>');
-
-        $.ajax({
-            url: '/get-sections-by-class/' + classId,
-            type: 'GET',
-            success: function (data) {
-                $('#section_id').html('<option value="">-- Choose Section --</option>');
-                $.each(data, function (index, section) {
-                    $('#section_id').append('<option value="' + section.id + '">' + section.name + '</option>');
-                });
-            }
+            $.ajax({
+                url: '/get-sections-by-class/' + classId,
+                type: 'GET',
+                success: function (data) {
+                    $('#section_id').html('<option value="">-- Choose Section --</option>');
+                    $.each(data, function (index, section) {
+                        $('#section_id').append('<option value="' + section.id + '">' + section.name + '</option>');
+                    });
+                }
+            });
         });
-    });
-
-    $('#section_id').change(function () {
-        const sectionId = $(this).val();
-        $('#hidden_section_id').val(sectionId);
     });
 </script>
 @endsection
