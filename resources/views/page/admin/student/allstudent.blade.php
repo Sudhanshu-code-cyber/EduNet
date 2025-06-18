@@ -63,8 +63,8 @@
             <td class="px-4 py-2 font-medium">{{ $student->full_name }}</td>
             <td class="px-4 py-2">{{ $student->gender }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ $student->father_name }}</td>
-            <td class="px-4 py-2">{{ $student->class }}</td>
-            <td class="px-4 py-2">{{ $student->section }}</td>
+            <td class="px-4 py-2">{{ $student->class->name }}</td>
+            <td class="px-4 py-2">{{ $student->section->name }}</td>
             <td class="px-4 py-2 hidden lg:table-cell truncate w-32">{{ $student->present_address }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ \Carbon\Carbon::parse($student->dob)->format('d/m/Y') }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ $student->contact }}</td>

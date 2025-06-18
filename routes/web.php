@@ -18,7 +18,7 @@ use App\Http\Controllers\Teacher\TeacherNoticeController;
 use App\Http\Controllers\FeeTypeController;
 use App\Http\Controllers\FeeStructureController;
 use App\Http\Controllers\FeePaymentController;
-
+use App\Http\Controllers\AssignTeacherController;
 
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
@@ -128,7 +128,19 @@ Route::delete('/fee-structure/{id}', [FeeStructureController::class, 'destroy'])
 // Fee Payment
 Route::post('admin/student/fee-payment/search', [FeePaymentController::class, 'search'])->name('fee-payment.search');
 Route::post('admin/student/fee-payment/', [FeePaymentController::class, 'store'])->name('fee-payment.store');
-Route::get('admin/student/fee-payment/create', [FeePaymentController::class, 'create'])->name('fee-payment.create');
+Route::get('admin/student/fee-payment', [FeePaymentController::class, 'create'])->name('fee-payment.create');
+
+//Assign Subject to teachers
+Route::get('admin/assign-teacher', [AssignTeacherController::class, 'index'])->name('assign.teacher.index');
+Route::post('admin/assign-teacher/submit', [AssignTeacherController::class, 'store'])->name('assign.teacher.store');
+Route::delete('/assigned-subjects/{id}', [AssignTeacherController::class, 'destroy'])->name('assign.teacher.delete');
+Route::get('/get-sections-by-class/{id}', [AssignTeacherController::class, 'getSectionsByClass']);
+
+
+
+
+
+
 
 
 

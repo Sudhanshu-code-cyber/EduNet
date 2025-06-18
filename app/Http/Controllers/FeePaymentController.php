@@ -27,7 +27,7 @@ class FeePaymentController extends Controller
     $student = Student::where([
         ['class_id', $request->class_id],
         ['section_id', $request->section_id],
-        ['roll', $request->roll],
+        ['roll_no', $request->roll],
     ])->first();
 
     if (!$student) {
@@ -38,12 +38,20 @@ class FeePaymentController extends Controller
                 ->where('class_id', $student->class_id)
                 ->get();
 
-    return view('fee_structure.payment', compact('student', 'fees'));
+return view('page.admin.fee.fee-payment', compact('student', 'fees'));
+
 }
 
 public function store(Request $request)
 {
+    $request->validate([
+        'fees' => 'required|array',
+        'student_id' => 'required|exists:students,id',
+        'payment_method' => 'required|string',
+    ]);
+
     $totalPaid = 0;
+
     foreach ($request->fees as $fee) {
         if (isset($fee['selected'])) {
             FeePayment::create([
@@ -62,11 +70,12 @@ public function store(Request $request)
     $student = Student::find($request->student_id);
     $requiredFees = FeeStructure::where('class_id', $student->class_id)->count();
     $paidFees = FeePayment::where('student_id', $student->id)->distinct('fee_type_id')->count('fee_type_id');
-    
+
     $student->status = ($paidFees >= $requiredFees) ? 'Active' : 'Inactive';
     $student->save();
 
     return back()->with('success', 'Payment recorded. Total Paid: ₹' . $totalPaid);
 }
+
 
 }

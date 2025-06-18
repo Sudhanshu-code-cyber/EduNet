@@ -45,11 +45,11 @@
             </div>
             <div>
                 <label class="font-semibold text-gray-600">Class:</label>
-                <div class="text-gray-900">{{ $student->class }}</div>
+                <div class="text-gray-900">{{ $student->class->name }}</div>
             </div>
             <div>
                 <label class="font-semibold text-gray-600">Section:</label>
-                <div class="text-gray-900">{{ $student->section }}</div>
+                <div class="text-gray-900">{{ $student->section->name }}</div>
             </div>
             <div class="md:col-span-2">
                 <label class="font-semibold text-gray-600">Email:</label>

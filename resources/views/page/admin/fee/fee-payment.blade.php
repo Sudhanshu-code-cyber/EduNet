@@ -16,13 +16,14 @@
     @endif
 
     {{-- Step 1: Search student --}}
-    <form method="POST" action="{{ route('fee-payment.store') }}" class="space-y-6">
+    <form method="POST" action="{{ route('fee-payment.search') }}" class="space-y-6">
         @csrf
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <label for="class_id" class="block font-medium text-gray-700">Class</label>
                 <select name="class_id" id="class_id" class="w-full border rounded px-4 py-2" required>
+                    <option value="">-- Select Class --</option>
                     @foreach($classes as $class)
                         <option value="{{ $class->id }}">{{ $class->name }}</option>
                     @endforeach
@@ -32,6 +33,7 @@
             <div>
                 <label for="section_id" class="block font-medium text-gray-700">Section</label>
                 <select name="section_id" id="section_id" class="w-full border rounded px-4 py-2">
+                    <option value="">-- Select Section --</option>
                     @foreach($sections as $section)
                         <option value="{{ $section->id }}">{{ $section->name }}</option>
                     @endforeach
@@ -39,8 +41,8 @@
             </div>
 
             <div>
-                <label for="roll" class="block font-medium text-gray-700">Roll Number</label>
-                <input type="text" name="roll" id="roll" placeholder="Enter Roll No" class="w-full border rounded px-4 py-2">
+                <label for="roll_no" class="block font-medium text-gray-700">Roll Number</label>
+                <input type="text" name="roll_no" id="roll_no" placeholder="Enter Roll No" class="w-full border rounded px-4 py-2">
             </div>
         </div>
 
