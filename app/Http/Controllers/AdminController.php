@@ -19,14 +19,14 @@ class AdminController extends Controller
         $countstudent = Student::count();
         $countClass = ClassModel::count();
         $countTeacher = Teacher::count();
-        $events= Event::all();
-        return view('page.admin.dashboard', compact('countstudent','events','countClass','countTeacher'));
+        $events = Event::all();
+        return view('page.admin.dashboard', compact('countstudent', 'events', 'countClass', 'countTeacher'));
     }
 
 
     public function create()
     {
-        $classes = ClassModel::all();   
+        $classes = ClassModel::all();
         $sections = Section::all();
         return view('page.admin.student.addstudent', compact('classes', 'sections'));
     }
@@ -55,41 +55,41 @@ class AdminController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'parents_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/students'), $filename);
             $data['photo'] = $filename;
         }
-    
+
         if ($request->hasFile('parents_photo')) {
             $file = $request->file('parents_photo');
             $filename = 'parents_' . time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/students'), $filename);
             $data['parents_photo'] = $filename;
         }
-    
+
         $data['uses_transport'] = $request->has('uses_transport');
 
         Student::create($data);
-    
+
         return redirect()->route('admin.allstudent')->with('success', 'Student added successfully!');
     }
-    
+
 
     public function allstudent()
     {
-        $classes = ClassModel::all();   
+        $classes = ClassModel::all();
         $sections = Section::all();
         $allstudent = Student::orderBy('created_at', 'desc')->paginate(10);
-        return view('page.admin.student.allstudent', compact('allstudent','classes', 'sections'));
+        return view('page.admin.student.allstudent', compact('allstudent', 'classes', 'sections'));
     }
 
     public function addstudent()
     {
-         $classes = ClassModel::all();   
-        return view('page.admin.student.addstudent',compact('classes'));
+        $classes = ClassModel::all();
+        return view('page.admin.student.addstudent', compact('classes'));
     }
 
     public function editStudent(Student $student)
@@ -97,38 +97,38 @@ class AdminController extends Controller
         return view('page.admin.student.edit-student', compact('student'));
     }
 
-   public function studentupdate(Request $request, $id)
-{
-    $request->validate([
-        'full_name' => 'required|string|max:255',
-        'roll_no' => 'nullable|string|max:50|unique:students,roll_no,' . $id,
-    'email' => 'nullable|email|max:255|unique:students,email,' . $id,
-        'gender' => 'nullable|in:Male,Female',
-        'dob' => 'nullable|date',
-        'class_id' => 'nullable|string|max:100',
-        'section_id' => 'nullable|string|max:100',
-        'contact' => 'nullable|string|max:20',
-        'address' => 'nullable|string|max:500',
-    ]);
+    public function studentupdate(Request $request, $id)
+    {
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'roll_no' => 'nullable|string|max:50|unique:students,roll_no,' . $id,
+            'email' => 'nullable|email|max:255|unique:students,email,' . $id,
+            'gender' => 'nullable|in:Male,Female',
+            'dob' => 'nullable|date',
+            'class_id' => 'nullable|string|max:100',
+            'section_id' => 'nullable|string|max:100',
+            'contact' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+        ]);
 
-    $student = Student::findOrFail($id);
+        $student = Student::findOrFail($id);
 
-    $student->full_name = $request->full_name;
-    $student->roll_no = $request->roll_no;
-    $student->gender = $request->gender;
-    $student->dob = $request->dob;
-    $student->class_id = $request->class_id;
-    $student->section_id = $request->section_id;
-    $student->contact = $request->contact;
-    $student->email = $request->email;
-    $student->present_address = $request->address;
-    $student->uses_transport = $request->has('uses_transport');
+        $student->full_name = $request->full_name;
+        $student->roll_no = $request->roll_no;
+        $student->gender = $request->gender;
+        $student->dob = $request->dob;
+        $student->class_id = $request->class_id;
+        $student->section_id = $request->section_id;
+        $student->contact = $request->contact;
+        $student->email = $request->email;
+        $student->present_address = $request->address;
+        $student->uses_transport = $request->has('uses_transport');
 
 
-    $student->save();
+        $student->save();
 
-    return redirect()->back()->with('success', 'Student updated successfully.');
-}
+        return redirect()->back()->with('success', 'Student updated successfully.');
+    }
     public function deleteStudent($id)
     {
         $student = Student::findOrFail($id);
@@ -153,10 +153,11 @@ class AdminController extends Controller
         return view('page.admin.class.class-section', compact('class_section'));
     }
 
-public function showStudent($id){
-$student = Student::findOrFail($id);
-return view('page.admin.student.view-student',compact('student'));
-}
+    public function showStudent($id)
+    {
+        $student = Student::findOrFail($id);
+        return view('page.admin.student.view-student', compact('student'));
+    }
 
     public function storeSection(Request $request)
     {

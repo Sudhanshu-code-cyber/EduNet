@@ -76,7 +76,7 @@
                             <td class="px-4 py-3 space-x-2">
                                 <a href=""
                                     class="text-indigo-600 hover:text-indigo-800 font-medium text-sm">✏️ Edit</a>
-                                <form action="" method="POST"
+                                <form action="{{route('delete.section',$section->class_id)}}" method="POST"
                                     class="inline-block"
                                     onsubmit="return confirm('Are you sure you want to delete this class\'s sections?')">
                                     @csrf

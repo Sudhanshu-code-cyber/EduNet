@@ -17,7 +17,6 @@ class AssignTeacherController extends Controller
         $subjects = Subject::all();
         $teachers = Teacher::all();
         $assignments = AssignedTeacher::with([ 'class','section', 'subject', 'teacher'])->get();
-        dd($assignments);
 
         return view('page.admin.teacher-work.assign-teacher', compact('classes', 'sections','subjects', 'teachers','assignments'));
     }

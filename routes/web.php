@@ -127,7 +127,7 @@ Route::delete('/fee-structure/{id}', [FeeStructureController::class, 'destroy'])
 
 // Fee Payment
 Route::post('admin/student/fee-payment/search', [FeePaymentController::class, 'search'])->name('fee-payment.search');
-Route::post('admin/student/fee-payment/submit', [FeePaymentController::class, 'store'])->name('fee-payment.store');
+Route::post('admin/student/fee-payment/', [FeePaymentController::class, 'store'])->name('fee-payment.store');
 Route::get('admin/student/fee-payment', [FeePaymentController::class, 'create'])->name('fee-payment.create');
 
 //Assign Subject to teachers
@@ -196,5 +196,5 @@ Route::delete('/calendar/events/{id}', [EventController::class, 'destroy']);
 
 Route::get('/admin/create-section',[SectionContoller::class,'index'])->name('create.section');
 Route::post('/admin/store',[SectionContoller::class,'storeSections'])->name('store.section');
-
+Route::delete('/admin/delete{id}',[SectionContoller::class,'delete'])->name('delete.section');
 
