@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Teacher;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class TeacherController extends Controller
 {
@@ -22,7 +24,7 @@ class TeacherController extends Controller
             'id_no' => 'nullable|string|max:50',
             'blood_group' => 'nullable|string',
             'religion' => 'nullable|string',
-            'email' => 'email|unique:teachers,email',
+            'email' => 'email|unique:teachers,email|unique:users,email',
             'class' => 'nullable|string',
             'section' => 'nullable|string',
             'phone' => 'required|string|max:15',
@@ -30,14 +32,28 @@ class TeacherController extends Controller
             'address' => 'required|string',
             'short_bio' => 'required|string',
         ]);
-
+    
+        // Step 1: Create user for login
+        $user = User::create([
+            'name' => $data['first_name'] . ' ' . $data['last_name'],
+            'email' => $data['email'],
+            'contact' => $data['phone'],
+            'password' => Hash::make('password'), // default password
+            'role' => 'teacher'
+        ]);
+    
+        // Step 2: Assign user_id to teacher
+        $data['user_id'] = $user->id;
+    
+        // Step 3: Upload photo if present
         if ($req->hasFile('photo')) {
             $photoPath = $req->file('photo')->store('teachers/photos', 'public');
             $data['photo'] = $photoPath;
         }
-
+    
+        // Step 4: Save teacher
         Teacher::create($data);
-
+    
         return redirect()->route('teacher.index')->with('success', 'Teacher added successfully.');
     }
     

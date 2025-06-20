@@ -26,7 +26,12 @@ class AssignTeacherController extends Controller
         return Section::where('class_id', $id)->get();
     }
     
-
+    public function getSubjectsByClass($classId)
+    {
+        $subjects = Subject::where('class_id', $classId)->get(); // Assuming your Subject model has class_id
+        return response()->json($subjects);
+    }
+    
 
     public function store(Request $request)
     {

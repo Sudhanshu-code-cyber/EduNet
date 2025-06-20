@@ -19,6 +19,8 @@ use App\Http\Controllers\FeeTypeController;
 use App\Http\Controllers\FeeStructureController;
 use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\AssignTeacherController;
+use App\Http\Controllers\StudentListController;
+
 
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
@@ -135,8 +137,12 @@ Route::get('admin/assign-teacher', [AssignTeacherController::class, 'index'])->n
 Route::post('admin/assign-teacher/submit', [AssignTeacherController::class, 'store'])->name('assign.teacher.store');
 Route::delete('/assigned-subjects/{id}', [AssignTeacherController::class, 'destroy'])->name('assign.teacher.delete');
 Route::get('/get-sections-by-class/{id}', [AssignTeacherController::class, 'getSectionsByClass']);
+Route::get('/get-subjects-by-class/{class_id}', [AssignTeacherController::class, 'getSubjectsByClass']);
 
 
+Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/student-list', [StudentListController::class, 'index'])->name('student-list.index');
+});
 
 
 

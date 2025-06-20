@@ -41,7 +41,7 @@
               </a>
             </li>
             <li>
-              <a href="{{ route('teacher.studentlist') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+              <a href="{{ route('teacher.student-list.index') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
                 <i class="fas fa-users w-4 text-center text-gray-500"></i>
                 Student List
               </a>
