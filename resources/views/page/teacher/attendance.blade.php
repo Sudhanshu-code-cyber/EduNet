@@ -1,128 +1,65 @@
 @extends('page.teacher.parent')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-8 pt-16 pb-20 bg-white min-h-screen">
-  <!-- Page Header -->
-  <header class="mb-14 text-center max-w-3xl mx-auto">
-    <h1 class="text-[3rem] font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
-      Student Attendance
-    </h1>
-    <p class="text-lg text-gray-500 max-w-xl mx-auto">
-      Manage and track attendance effectively by selecting class, section, month, and year.
-    </p>
-  </header>
-
-  <!-- Filter Form -->
-  <section class="bg-gray-50 p-8 rounded-2xl shadow-lg max-w-5xl mx-auto mb-16">
-    <form method="GET" action="#" class="grid grid-cols-1 md:grid-cols-5 gap-6">
-      <div>
-        <label for="class" class="block text-sm font-semibold text-gray-700 mb-2">Class</label>
-        <select id="class" name="class" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-          <option value="" selected disabled>Select Class</option>
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <!-- Add more options as needed -->
-        </select>
-      </div>
-      <div>
-        <label for="section" class="block text-sm font-semibold text-gray-700 mb-2">Section</label>
-        <select id="section" name="section" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-          <option value="" selected disabled>Select Section</option>
-          <option>A</option>
-          <option>B</option>
-          <option>C</option>
-          <!-- Add more options as needed -->
-        </select>
-      </div>
-      <div>
-        <label for="month" class="block text-sm font-semibold text-gray-700 mb-2">Month</label>
-        <select id="month" name="month" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-          <option value="" selected disabled>Select Month</option>
-          <option value="1">January</option>
-          <option value="2">February</option>
-          <option value="3">March</option>
-          <option value="4">April</option>
-          <option value="5">May</option>
-          <option value="6">June</option>
-          <option value="7">July</option>
-          <option value="8">August</option>
-          <option value="9">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
-        </select>
-      </div>
-      <div>
-        <label for="year" class="block text-sm font-semibold text-gray-700 mb-2">Year</label>
-        <select id="year" name="year" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-          <option value="" selected disabled>Select Year</option>
-          <option>2023</option>
-          <option>2024</option>
-          <option>2025</option>
-          <!-- Add more options as needed -->
-        </select>
-      </div>
-      <div class="flex items-end">
-        <button type="submit" class="w-full bg-indigo-700 hover:bg-indigo-800 text-white font-semibold py-3 rounded-lg shadow transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-          Search
-        </button>
-      </div>
-    </form>
-  </section>
-
-  <!-- Attendance Table -->
-  <section class="overflow-x-auto max-w-full mx-auto rounded-2xl shadow-lg bg-white p-8">
-    <h2 class="text-2xl font-semibold text-gray-500 mb-8 text-center md:text-left">
-      Attendance Sheet - Class 1, Section A - March 2024
+<div class="max-w-5xl mx-auto px-6 py-8 bg-white rounded-xl shadow-lg">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-3 flex items-center gap-2">
+        📋 <span>Mark Student Attendance</span>
     </h2>
-    <table class="min-w-max w-full border-collapse border border-gray-200 text-gray-700 select-none">
-      <thead>
-        <tr class="bg-gray-100">
-          <th class="sticky left-0 bg-gray-100 z-20 border border-gray-200 text-left text-sm font-semibold px-6 py-4 rounded-l-2xl">
-            Student Name
-          </th>
-          @for ($day = 1; $day <= 31; $day++)
-          <th class="border border-gray-200 text-center text-xs font-semibold px-2 py-3 text-gray-600">
-            {{ $day }}
-          </th>
-          @endfor
-        </tr>
-      </thead>
-      <tbody>
-        {{-- Example student row --}}
-        <tr class="hover:bg-indigo-50 transition-colors">
-          <td class="sticky left-0 bg-white z-10 border border-gray-200 font-medium text-gray-900 px-6 py-3 rounded-l-2xl whitespace-nowrap">
-            John Doe
-          </td>
-          @for ($day = 1; $day <= 31; $day++)
-          <td class="border border-gray-200 px-2 py-1 text-center align-middle">
-            <label class="relative inline-flex cursor-pointer select-none">
-              <input type="checkbox" class="sr-only peer" checked />
-              <span class="w-8 h-4 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-indigo-400 peer-checked:bg-indigo-600 transition-colors"></span>
-              <span class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full shadow peer-checked:translate-x-4 transition-transform"></span>
-            </label>
-          </td>
-          @endfor
-        </tr>
-        <tr class="hover:bg-indigo-50 transition-colors bg-white">
-          <td class="sticky left-0 bg-white z-10 border border-gray-200 font-medium text-gray-900 px-6 py-3 rounded-l-2xl whitespace-nowrap">
-            Jane Smith
-          </td>
-          @for ($day = 1; $day <= 31; $day++)
-          <td class="border border-gray-200 px-2 py-1 text-center align-middle">
-            <label class="relative inline-flex cursor-pointer select-none">
-              <input type="checkbox" class="sr-only peer" />
-              <span class="w-8 h-4 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-indigo-400 peer-checked:bg-indigo-600 transition-colors"></span>
-              <span class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full shadow peer-checked:translate-x-4 transition-transform"></span>
-            </label>
-          </td>
-          @endfor
-        </tr>
-        {{-- Additional students dynamically loaded here --}}
-      </tbody>
-    </table>
-  </section>
+
+    <form action="{{ route('teacher.attendance.store') }}" method="POST" class="space-y-6">
+        @csrf
+
+        {{-- Hidden Fields --}}
+        <input type="hidden" name="class_id" value="{{ $class_id }}">
+        <input type="hidden" name="section_id" value="{{ $section_id }}">
+        <input type="hidden" name="subject_id" value="{{ $subject_id }}">
+
+        {{-- Date Picker --}}
+        <div>
+            <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Select Date</label>
+            <input type="date" name="date" required
+                class="w-full max-w-xs px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        {{-- Attendance Table --}}
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+            <table class="min-w-full bg-white text-sm text-gray-800">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-semibold border-b">#</th>
+                        <th class="px-6 py-3 text-left font-semibold border-b">Student Name</th>
+                        <th class="px-6 py-3 text-left font-semibold border-b">Attendance Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($students as $index => $student)
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4 border-b">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4 border-b">
+                                {{ $student->full_name }}
+                                <input type="hidden" name="student_ids[]" value="{{ $student->id }}">
+                            </td>
+                            <td class="px-6 py-4 border-b">
+                                <select name="attendance_status[{{ $student->id }}]" required
+                                    class="px-3 py-1 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-blue-400">
+                                    <option value="present">✅ Present</option>
+                                    <option value="absent">❌ Absent</option>
+                                    <option value="leave">📘 Leave</option>
+                                </select>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        {{-- Submit Button --}}
+        <div class="text-right pt-4">
+            <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition-all duration-200">
+                ✅ Submit Attendance
+            </button>
+        </div>
+    </form>
 </div>
 @endsection
-
