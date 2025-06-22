@@ -243,3 +243,19 @@ Route::get('/admin/create-section',[SectionContoller::class,'index'])->name('cre
 Route::post('/admin/store',[SectionContoller::class,'storeSections'])->name('store.section');
 Route::delete('/admin/delete{id}',[SectionContoller::class,'delete'])->name('delete.section');
 
+
+
+    Route::get('/teacher/attendance', [AttendanceController::class, 'index'])->name('teacher.attendance.index');
+
+    Route::get('/teacher/attendance/form/{class_id}/{section_id}/{subject_id}', 
+        [AttendanceController::class, 'showForm'])->name('teacher.attendance.form');
+
+    Route::post('/teacher/attendance/store', [AttendanceController::class, 'store'])->name('teacher.attendance.store');
+
+
+
+    //attendace calendar
+   Route::get('teacher/calendar', [AttendanceController::class, 'calendarView'])->name('attendance.calendar');
+Route::get('/attendance-events', [AttendanceController::class, 'getEvents'])->name('attendance.events');
+Route::get('/get-sections/{id}', [SectionContoller::class, 'getSectionByClass']);
+

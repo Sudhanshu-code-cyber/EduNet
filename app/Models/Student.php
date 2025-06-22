@@ -9,6 +9,7 @@ class Student extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'user_id',
         'full_name',
@@ -33,11 +34,15 @@ class Student extends Model
         'parents_photo',
     ];
 
-    public function feePayments() {
+    protected $guarded = [];
+
+
+    public function feePayments()
+    {
         return $this->hasMany(FeePayment::class);
     }
-    
-    
+
+
     public function class()
     {
         return $this->belongsTo(ClassModel::class, 'class_id');
@@ -48,7 +53,21 @@ class Student extends Model
         return $this->belongsTo(Section::class, 'section_id');
     }
 
+
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'student_id');
+    }
+
+
+
+
+
 }
+
+
+
