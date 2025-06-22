@@ -73,13 +73,13 @@
 
   <ul x-show="openHomework" x-transition class="ml-6 mt-1 space-y-0.5 text-sm">
          <li>
-          <a href="{{ route('teacher.homework') }}"
+          <a href="{{ route('teacher.homework.index') }}"
             class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
             All Homework
           </a>
         </li>
         <li>
-          <a href="{{ route('teacher.submission') }}"
+          <a href="{{ route('teacher.homework.submissions') }}"
             class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
             Submission
           </a>
@@ -157,7 +157,7 @@
   
       <!-- Logout -->
       <div class="mt-auto">
-        <a href="#" class="block px-3 py-2 rounded-md text-sm text-red-600 hover:bg-red-50 transition duration-200 items-center gap-2 justify-center">
+        <a href="{{ route('user.logout') }}" class="block px-3 py-2 rounded-md text-sm text-red-600 hover:bg-red-50 transition duration-200 items-center gap-2 justify-center">
           <i class="fas fa-sign-out-alt w-4 text-center text-red-500"></i>
           Logout
         </a>

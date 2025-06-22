@@ -23,7 +23,7 @@
           <p class="text-sm font-semibold text-gray-700">Number of Students: <span class="font-normal">{{ $class['student_count'] }}</span></p>
         </div>
         <div class="mt-6">
-          <a href="{{ route('teacher.studentlist') }}" 
+          <a href="" 
              class="inline-block w-full text-center bg-black text-white py-2 rounded-md text-sm font-semibold hover:bg-gray-900 transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             View Class

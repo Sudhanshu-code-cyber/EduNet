@@ -16,34 +16,48 @@
             </div>
 
             <!-- Modal Form -->
-            <form action="#" method="POST" enctype="multipart/form-data" class="p-4 md:p-6 space-y-5">
+            <form action="{{ route('teacher.homework.store') }}" method="POST" enctype="multipart/form-data" class="p-4 md:p-6 space-y-5">
                 @csrf
                 <div>
                     <label class="block font-medium mb-1 text-gray-800 dark:text-white">Homework Title</label>
                     <input type="text" name="title" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Enter title">
                 </div>
+
                 <div class="flex flex-col md:flex-row gap-4">
+                    <!-- Class Dropdown -->
                     <div class="w-full">
                         <label class="block font-medium mb-1 text-gray-800 dark:text-white">Class</label>
-                        <select name="class" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <select name="class_id" required class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
                             <option value="">Select Class</option>
-                            <option value="Class 1">Class 1</option>
-                            <option value="Class 2">Class 2</option>
+                            @foreach($assignedSubjects->unique('class_id') as $assignment)
+                                <option value="{{ $assignment->class->id }}">{{ $assignment->class->name }}</option>
+                            @endforeach
                         </select>
                     </div>
+
+                    <!-- Section Dropdown -->
                     <div class="w-full">
                         <label class="block font-medium mb-1 text-gray-800 dark:text-white">Section</label>
-                        <select name="section" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <select name="section_id" required class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
                             <option value="">Select Section</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
+                            @foreach($assignedSubjects->unique('section_id') as $assignment)
+                                <option value="{{ $assignment->section->id }}">{{ $assignment->section->name }}</option>
+                            @endforeach
                         </select>
                     </div>
+
+                    <!-- Subject Dropdown -->
                     <div class="w-full">
                         <label class="block font-medium mb-1 text-gray-800 dark:text-white">Subject</label>
-                        <input type="text" name="subject" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="e.g., Math, Science">
+                        <select name="subject_id" required class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                            <option value="">Select Subject</option>
+                            @foreach($assignedSubjects as $assignment)
+                                <option value="{{ $assignment->subject->id }}">{{ $assignment->subject->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
+
                 <div class="flex flex-col md:flex-row gap-4">
                     <div class="w-full">
                         <label class="block font-medium mb-1 text-gray-800 dark:text-white">Homework Date</label>
@@ -54,14 +68,17 @@
                         <input type="date" name="submission_date" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
                     </div>
                 </div>
+
                 <div>
                     <label class="block font-medium mb-1 text-gray-800 dark:text-white">Attach Document</label>
                     <input type="file" name="document" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
                 </div>
+
                 <div>
                     <label class="block font-medium mb-1 text-gray-800 dark:text-white">Homework Content</label>
                     <textarea name="content" rows="4" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" placeholder="Write homework details here..."></textarea>
                 </div>
+
                 <div class="text-end">
                     <button type="submit" class="bg-blue-600 text-white px-5 py-2 text-sm rounded hover:bg-blue-700">
                         Submit Homework
@@ -71,3 +88,59 @@
         </div>
     </div>
 </div>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const classSelect = document.querySelector('select[name="class_id"]');
+        const sectionSelect = document.querySelector('select[name="section_id"]');
+        const subjectSelect = document.querySelector('select[name="subject_id"]');
+
+        // ✅ When class changes → fetch sections
+        classSelect.addEventListener('change', function () {
+            const classId = this.value;
+
+            // Reset section and subject dropdowns
+            sectionSelect.innerHTML = '<option value="">Loading sections...</option>';
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+
+            // AJAX request to fetch assigned sections
+            fetch(`/teacher/get-sections/${classId}`)
+                .then(response => response.json())
+                .then(sections => {
+                    sectionSelect.innerHTML = '<option value="">Select Section</option>';
+                    sections.forEach(section => {
+                        sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching sections:', error);
+                    sectionSelect.innerHTML = '<option value="">Error loading sections</option>';
+                });
+        });
+
+        // ✅ When section changes → fetch subjects
+        sectionSelect.addEventListener('change', function () {
+            const classId = classSelect.value;
+            const sectionId = this.value;
+
+            subjectSelect.innerHTML = '<option value="">Loading subjects...</option>';
+
+            // AJAX request to fetch assigned subjects
+            fetch(`/teacher/get-subjects/${classId}/${sectionId}`)
+                .then(response => response.json())
+                .then(subjects => {
+                    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+                    subjects.forEach(subject => {
+                        subjectSelect.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching subjects:', error);
+                    subjectSelect.innerHTML = '<option value="">Error loading subjects</option>';
+                });
+        });
+    });
+</script>

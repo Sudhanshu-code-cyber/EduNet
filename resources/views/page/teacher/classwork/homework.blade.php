@@ -18,16 +18,17 @@
 <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
 
     <!-- Search and Filters -->
-    <div class="flex flex-wrap gap-3">
-        <!-- Search Input -->
-        <input type="text" placeholder="Search by title..."
-            class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-60 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+   <!-- Search Form -->
+<form method="GET" action="{{ route('teacher.homework.search') }}" class="flex gap-3 mb-4">
+    <input type="text" name="search" placeholder="Search by title..."
+        value="{{ request('search') }}"
+        class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-60 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    <button type="submit"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+    </button>
+</form>
 
-        <!-- Search Button -->
-        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm">
-            <i class="fa-solid fa-magnifying-glass"></i> Search
-        </button>
-    </div>
 
     <!-- Filter Button -->
     <button data-modal-target="filter-modal" data-modal-toggle="filter-modal"
@@ -40,50 +41,60 @@
     <!-- Homework Table -->
     <div class="overflow-x-auto bg-white shadow-xl rounded-lg border border-gray-200">
         <table class="min-w-full divide-y divide-gray-200 text-sm">
-            <thead class="bg-blue-100 text-gray-700">
-                <tr>
-                    <th class="px-4 py-3 text-left">ID</th>
-                    <th class="px-4 py-3 text-left">Class</th>
-                    <th class="px-4 py-3 text-left">Section</th>
-                    <th class="px-4 py-3 text-left">Title</th>
-                    <th class="px-4 py-3 text-left">Subject</th>
-                    <th class="px-4 py-3 text-left">Homework Date</th>
-                    <th class="px-4 py-3 text-left">Submission Date</th>
-                    <th class="px-4 py-3 text-left">Created By</th>
-                    <th class="px-4 py-3 text-left">Action</th>
-                </tr>
-            </thead>
-            
-            <tbody class="divide-y divide-gray-200">
-                <!-- Sample Row -->
-                <tr class="hover:bg-gray-100 transition-all duration-300">
-                    <td class="px-4 py-3 font-medium text-gray-700">HW1783929</td>
-                    <td class="px-4 py-3">I</td>
-                    <td class="px-4 py-3">A</td>
-                    <td class="px-4 py-3">English Grammar Worksheet</td> <!-- Title -->
-                    <td class="px-4 py-3">English</td>
-                    <td class="px-4 py-3">10 May 2024</td>
-                    <td class="px-4 py-3">12 May 2024</td>
-                    <td class="px-4 py-3 flex items-center gap-2">
-                        <img src="https://i.pravatar.cc/300" class="w-8 h-8 rounded-full border" alt="Janet">
-                        <span>Janet</span>
-                    </td>
-                    <td class="px-4 py-3">
-                        <div class="flex gap-3 text-gray-600">
-                            <a href="#" title="View">
-                                <i class="fa-regular fa-eye hover:text-blue-600"></i>
-                            </a>
-                            <a href="#" title="Edit">
-                                <i class="fa-regular fa-pen-to-square hover:text-yellow-500"></i>
-                            </a>
-                            <a href="#" title="Delete" onclick="return confirm('Are you sure?')">
-                                <i class="fa-regular fa-trash-can hover:text-red-600"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                
-            </tbody>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Homework Date</th>
+                        <th>Submission Date</th>
+                        <th>Teacher</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($homeworks as $homework)
+                    <tr class="hover:bg-gray-100 transition-all duration-300">
+                        <td class="px-4 py-3 font-medium text-gray-700">{{ $homework->id }}</td>
+                        <td class="px-4 py-3">{{ $homework->class->name ?? '-' }}</td>
+                        <td class="px-4 py-3">{{ $homework->section->name ?? '-' }}</td>
+                        <td class="px-4 py-3">{{ $homework->title }}</td>
+                        <td class="px-4 py-3">{{ $homework->subject->name ?? '-' }}</td>
+                        <td class="px-4 py-3">{{ \Carbon\Carbon::parse($homework->homework_date)->format('d M Y') }}</td>
+                        <td class="px-4 py-3">{{ \Carbon\Carbon::parse($homework->submission_date)->format('d M Y') }}</td>
+                        <td class="px-4 py-3 flex items-center gap-2">
+                            <img src="{{ $homework->teacher->user->photo_url ?? 'https://i.pravatar.cc/300' }}" class="w-8 h-8 rounded-full border" alt="{{ $homework->teacher->user->name ?? 'Unknown' }}">
+                            <span>{{ $homework->teacher->user->name ?? 'Unknown' }}</span>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="flex gap-3 text-gray-600">
+                                <a href="" title="View">
+                                    <i class="fa-regular fa-eye hover:text-blue-600"></i>
+                                </a>
+                                <a href="{{ route('teacher.homework.edit', $homework->id) }}" title="Edit">
+                                    <i class="fa-regular fa-pen-to-square hover:text-yellow-500"></i>
+                                </a>
+                                <form method="POST" action="{{ route('teacher.homework.destroy', $homework->id) }}" onsubmit="return confirm('Are you sure?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" title="Delete">
+                                        <i class="fa-regular fa-trash-can hover:text-red-600"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="9" class="text-center py-10 text-gray-400 text-lg">
+                            <i class="fa-regular fa-face-frown text-2xl mb-2 block"></i>
+                            No homework found.
+                        </td>
+                    </tr>                    
+                @endforelse
+                </tbody>
         </table>
     </div>
 
