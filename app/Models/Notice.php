@@ -9,9 +9,7 @@ class Notice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'posted_by',
-        'details',
-        'date',
+        'title', 'details', 'date', 'expires_at',
+        'created_by', 'creator_role', 'target',
     ];
 }

@@ -3,13 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Notice;
 
 class TeacherController extends Controller
 {
     
-public function dashboard(){
-    return view('page.teacher.dashboard');
+   public function dashboard()
+{
+    $latestNotices = Notice::where('creator_role', 'admin')
+        ->where('target', 'teacher')
+        ->where(function ($query) {
+            $query->whereNull('expires_at')
+                  ->orWhere('expires_at', '>=', now());
+        })
+        ->orderByDesc('date')
+        ->take(3)
+        ->get();
+
+    return view('page.teacher.dashboard', compact('latestNotices'));
 }
+    
+    
 
     public function myclass(){
     $classes = [

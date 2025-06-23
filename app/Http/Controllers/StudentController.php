@@ -11,10 +11,19 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function dashboard(){
-        $notice=Notice::all();
-        return view('page.student.dashboard',compact('notice'));
+    public function dashboard()
+    {
+        $latestNotices = Notice::where('target', 'student')
+            ->where(function ($query) {
+                $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
+            })
+            ->orderByDesc('date')
+            ->take(3)
+            ->get();
+    
+        return view('page.student.dashboard', compact('latestNotices'));
     }
+    
 
     public function myclass() {
         $student = Student::where("user_id", Auth::id())->first();
@@ -58,9 +67,19 @@ public function myresult(){
         return view('page.student.myfee');
     }
 
-    public function notice(){
-        return view('page.student.notice');
+    public function notice()
+    {
+        $notices = \App\Models\Notice::where('target', 'student')
+            ->where('creator_role', 'teacher')
+            ->where(function ($query) {
+                $query->whereNull('expires_at')->orWhere('expires_at', '>', now());
+            })
+            ->latest()
+            ->paginate(4);
+    
+        return view('page.student.notice', compact('notices'));
     }
+    
 
 
     public function store(Request $request)

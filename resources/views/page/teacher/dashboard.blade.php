@@ -5,7 +5,7 @@
 
     <!-- Welcome -->
     <div class="bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold text-gray-800">Welcome back, <span class="text-indigo-600">Ms. Briganza</span>!</h1>
+        <h1 class="text-3xl font-bold text-gray-800">Welcome back, <span class="text-indigo-600">{{auth()->user()->name}}</span>!</h1>
         <p class="text-sm text-gray-500 mt-2">Hope you're ready for a productive teaching day.</p>
     </div>
 
@@ -55,10 +55,17 @@
         <div class="bg-white w-full lg:w-1/2 p-5 rounded-lg shadow">
             <h2 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">📋 Notice Board</h2>
             <ul class="list-disc pl-5 text-sm text-gray-700 space-y-2">
-                <li>Parent-Teacher Meeting on Friday at 3 PM</li>
-                <li>Science Project Submission due next Monday</li>
-                <li>School Annual Day preparations start next week</li>
+                @forelse ($latestNotices as $notice)
+                    <li>
+                        <span class="font-medium text-gray-900">{{ $notice->title }}:</span>
+                        {{ \Illuminate\Support\Str::limit($notice->details, 80) }}
+                        <span class="text-xs text-gray-500 block">Date: {{ \Carbon\Carbon::parse($notice->date)->format('d M Y') }}</span>
+                    </li>
+                @empty
+                    <li class="text-gray-500">No recent notices from admin.</li>
+                @endforelse
             </ul>
+            
         </div>
 
         <!-- My Classes Table -->
