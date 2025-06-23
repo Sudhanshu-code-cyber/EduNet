@@ -131,46 +131,9 @@ public function noticeBoard()
     return view('page.teacher.notices', compact('notices'));
 }
 
-public function studentlist(){
-    return view('page.teacher.student-list');
-}
-
-public function homework(){
-    return view('page.teacher.classwork.homework');
-}
 
 public function submission(){
     return view('page.teacher.classwork.submission');
 }
-
-//teacher edit profile work
-
-public function teachereditProfile(){
-     $teacher = auth()->user();
-
-    return view('page.teacher.edit-profile',compact('teacher'));
-
-}
-
-public function updateProfile(Request $request)
-{
-    $request->validate([
-        'contact' => 'required|string|max:20',
-        'password' => 'nullable|string|min:6|confirmed',
-    ]);
-    
-    $teacher = auth()->user();
-    $teacher->contact = $request->contact;
-
-    if ($request->password) {
-        $teacher->password = bcrypt($request->password);
-    }
-
-    $teacher->save();
-
-    return back()->with('success', 'Profile updated successfully!');
-}
-
-
 
 }

@@ -32,7 +32,7 @@
                             </div>
                             <div>
                                 <label class="font-medium">Section</label>
-                                <input type="text" name="section" value="{{ $student->section->name }}" class="w-full border rounded p-2">
+                                {{-- <input type="text" name="section" value="{{ $student->section->name }}" class="w-full border rounded p-2"> --}}
                             </div>
                             <div>
                                 <label class="font-medium">Contact</label>

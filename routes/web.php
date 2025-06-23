@@ -5,7 +5,6 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SectionContoller;
 use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\TeacherExamScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
@@ -21,19 +20,22 @@ use App\Http\Controllers\FeeStructureController;
 use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\AssignTeacherController;
 use App\Http\Controllers\StudentListController;
+use App\Http\Controllers\Teacher\HomeworkController as TeacherHomeworkController;
+use App\Http\Controllers\Student\HomeworkController as StudentHomeworkController;
 
 
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
     Route::get('/', 'dashboard')->name('/student');
-    Route::get('/myclass', 'showTimetable')->name('student.myclass');
     Route::get('/attendance', 'attendance')->name('student.attendance');
-    Route::get('/assignment', 'assignment')->name('student.assignment');
+    Route::get('/homework', 'homework')->name('student.homework');
     Route::get('/myresult', 'myresult')->name('student.myresult');
     Route::get('/marksheet', 'marksheet')->name('student.marksheet');
     Route::get('/myfee', 'myfee')->name('student.myfee');
     Route::get('/notice', 'notice')->name('student.notice');
     Route::post('/insert', 'store')->name('students.store');
+Route::get('/myclass','myclass')->name('student.myclass');
+
 });
 
 // Parent Route
@@ -71,10 +73,7 @@ Route::controller(TeacherController::class)->prefix('teacher')->name('teacher.')
     Route::get('/', 'dashboard')->name('dashboard');
     Route::get('/myclass', 'myclass')->name('myclass');
     Route::get('/timetable', 'timetable')->name('timetable');
-    Route::get('/studentlist', 'studentlist')->name('studentlist');
     Route::get('/notice', 'noticeBoard')->name('notice');
-    Route::get('/homework', 'homework')->name('homework');
-    Route::get('/homework/submission', 'submission')->name('submission');
 });
 
 // Exam Routes (Part of Teacher Role)
@@ -148,7 +147,44 @@ Route::get('/get-subjects-by-class/{class_id}', [AssignTeacherController::class,
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/student-list', [StudentListController::class, 'index'])->name('student-list.index');
+    Route::get('/get-sections-by-class/{id}', [StudentListController::class, 'getSectionsByClass']);
 });
+
+// Teacher Routes for Homework
+// Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
+
+Route::prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('homework', [TeacherHomeworkController::class, 'index'])->name('homework.index');
+    Route::post('homework', [TeacherHomeworkController::class, 'store'])->name('homework.store');
+    Route::get('homework/{id}/edit', [TeacherHomeworkController::class, 'edit'])->name('homework.edit');
+    Route::put('homework/{id}', [TeacherHomeworkController::class, 'update'])->name('homework.update');
+    Route::delete('homework/{id}', [TeacherHomeworkController::class, 'destroy'])->name('homework.destroy');
+    // Route::get('homework/{id}', [TeacherHomeworkController::class, 'show'])->name('homework.show');
+    Route::get('homework/search', [TeacherHomeworkController::class, 'search'])->name('homework.search');
+    Route::get('homework/submissions', [TeacherHomeworkController::class, 'submissions'])->name('homework.submissions');
+
+    // Fetch sections for selected class assigned to the logged-in teacher
+Route::get('get-sections/{class_id}', [\App\Http\Controllers\Teacher\HomeworkController::class, 'getSections']);
+// Fetch subjects for selected class and section assigned to the logged-in teacher
+Route::get('get-subjects/{class_id}/{section_id}', [\App\Http\Controllers\Teacher\HomeworkController::class, 'getSubjects']);
+});
+
+// Student Routes for Homework
+Route::prefix('student')->name('student.')->group(function () {
+    Route::get('homework', [StudentHomeworkController::class, 'index'])->name('homework.index');
+    Route::post('homework/submit', [StudentHomeworkController::class, 'submit'])->name('homework.submit');
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -162,8 +198,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/transport/submit', [TransportController::class, 'store'])->name('admin.store');
     Route::delete('/transport/{id}', [TransportController::class, 'deletetransport'])->name('transport.delete');
     Route::get('/transport/search', [TransportController::class, 'search'])->name('transport.search');
+    Route::put('/transport/update/{id}', [TransportController::class, 'update'])->name('transport.update');
 });
-Route::put('/transport/update/{id}', [TransportController::class, 'update'])->name('transport.update');
 
 
 
@@ -224,55 +260,9 @@ Route::delete('/admin/delete{id}',[SectionContoller::class,'delete'])->name('del
     //attendace calendar
    Route::get('teacher/calendar', [AttendanceController::class, 'calendarView'])->name('attendance.calendar');
 Route::get('/attendance-events', [AttendanceController::class, 'getEvents'])->name('attendance.events');
-Route::get('/get-sections/{id}', [SectionContoller::class, 'getSectionByClass']);
 
-Route::get('/teacher/attendance', [AttendanceController::class, 'index'])->name('teacher.attendance.index');
-Route::post('/teacher/attendance/store', [AttendanceController::class, 'store'])->name('teacher.attendance.store');
-
-Route::get('/teacher/calendar', [AttendanceController::class, 'showCalendar'])->name('teacher.calendar');
-Route::get('/teacher/attendance-events', [AttendanceController::class, 'getAttendanceAjax'])->name('teacher.attendance.ajax');
-
-// AJAX: get sections by class
-Route::get('/teacher/get-sections/{class_id}', function ($class_id) {
-    $teacherId = auth()->id();
-    $sections = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
-        ->where('class_id', $class_id)
-        ->with('section')
-        ->get()
-        ->pluck('section')
-        ->unique('id')
-        ->values();
-    return response()->json(['sections' => $sections]);
-});
-
-// AJAX: get subjects by class
-Route::get('/teacher/get-subjects/{class_id}', function ($class_id) {
-    $teacherId = auth()->id();
-    $subjects = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
-        ->where('class_id', $class_id)
-        ->with('subject')
-        ->get()
-        ->pluck('subject')
-        ->unique('id')
-        ->values();
-    return response()->json(['subjects' => $subjects]);
-});
-
-Route::get('/teacher/exam-schedule/create', [TeacherExamScheduleController::class, 'examschedule'])->name('teacher.exam_schedule.create');
-Route::post('/teacher/exam-schedule/store', [TeacherExamScheduleController::class, 'storeschedule'])->name('teacher.exam_schedule.store');
-Route::delete('/teacher/exam-schedule/{id}', [TeacherExamScheduleController::class, 'deleteExam'])->name('delete.exam');
-Route::put('/teacher/exam-schedule/update/{id}', [TeacherExamScheduleController::class, 'update'])->name('exam.update');
-Route::get('/teacher/class-data/{class_id}', [TeacherExamScheduleController::class, 'getClassData']);
+Route::get('/sections/by-class/{id}', [SectionContoller::class, 'getSectionsByClass']);
 
 
-Route::get('/student/profile', [StudentController::class, 'editProfile'])->name('student.profile.edit');
-Route::post('/student/profile', [StudentController::class, 'updateProfile'])->name('student.profile.update');
 
-//teacher edit profile
-Route::get('/teacher/profile', [TeacherController::class, 'teachereditProfile'])->name('teacher.profile.edit');
-Route::post('/teacher/profile', [TeacherController::class, 'updateProfile'])->name('teacher.profile.update');
 
-Route::get('/subjects/by-class/{id}', [AttendanceController::class, 'getByClass']);
-Route::get('/sections/by-class/{id}', [AttendanceController::class, 'getBySection']);
-
-Route::get('/sections/by-class/{class_id}', [AdminController::class, 'getSectionsByClass']);

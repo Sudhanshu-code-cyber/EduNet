@@ -56,6 +56,12 @@ public function update(Request $request, $classId)
     return redirect()->route('create.section')->with('success', 'Sections updated!');
 }
 
+public function getSectionsByClass($id)
+{
+    $sections = \App\Models\Section::where('class_id', $id)->get(['id', 'name']);
+    return response()->json($sections);
+}
+
 
 
 

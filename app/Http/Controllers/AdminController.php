@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use App\Models\ClassSection;
 use App\Models\Event;
 use App\Models\Student;
@@ -72,6 +73,16 @@ class AdminController extends Controller
 
         $data['uses_transport'] = $request->has('uses_transport');
 
+        $user = User::create([
+            'name' => $data['full_name'],
+            'email' => $data['email'],
+            'contact' => $data['contact'], // make sure contact is in your users table
+            'password' => Hash::make('password'), // default password
+            'role' => 'student',
+        ]);
+        
+        $data['user_id'] = $user->id;
+        
         Student::create($data);
 
         return redirect()->route('admin.allstudent')->with('success', 'Student added successfully!');
@@ -176,11 +187,6 @@ class AdminController extends Controller
         ClassModel::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Class Section Deleted!');
     }
-    public function getSectionsByClass($class_id)
-{
-    $sections = Section::where('class_id', $class_id)->select('id', 'name')->get();
-    return response()->json($sections);
-}
 }
 
 
