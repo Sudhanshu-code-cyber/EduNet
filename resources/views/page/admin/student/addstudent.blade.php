@@ -71,8 +71,11 @@
                         <!-- Row 1 -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                            <input type="text" name="full_name" required
+                            <input type="text" name="full_name" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                @error('full_name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <!-- Class Dropdown -->
@@ -80,50 +83,65 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
                             <select name="class_id"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" required>
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" >
                                 <option value="" disabled selected>Select class</option>
                                 @foreach ($classes as $class)
                                     <option value="{{ $class->id }}">{{ $class->name }}</option>
                                 @endforeach
                             </select>
+                            @error('class_id')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <!-- Section Dropdown -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
                             <select name="section_id"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" required>
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" >
                                 <option value="" disabled selected>Select section</option>
                                 @foreach ($sections as $section)
                                     <option value="{{ $section->id }}">{{ $section->name }}</option>
                                 @endforeach
                             </select>
+                             @error('section_id')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
 
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gender*</label>
-                            <select name="gender" required
+                            <select name="gender" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
                                 <option value="">Select Gender</option>
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Other</option>
                             </select>
+                             @error('gender')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <!-- Row 2 -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Date Of Birth</label>
-                            <input type="date" name="dob" required
+                            <input type="date" name="dob" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('dob')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Roll No</label>
-                            <input type="text" name="roll_no" required
+                            <input type="text" name="roll_no" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('roll_no')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <!--  Transport Checkbox (NEW) -->
@@ -131,12 +149,18 @@
                             <input type="checkbox" id="uses_transport" name="uses_transport"
                                 class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                             <label for="uses_transport" class="ml-2 text-sm text-gray-700">Uses Transport Facility?</label>
+                             @error('uses_transport')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Admission No</label>
-                            <input type="text" name="admission_no" required
+                            <input type="text" name="admission_no" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('admission_no')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <!-- Row 3 -->
@@ -151,6 +175,9 @@
                                 <option>Sikh</option>
                                 <option>Other</option>
                             </select>
+                             @error('religion')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
@@ -168,18 +195,28 @@
                                 <option>AB-</option>
                             </select>
 
+                             @error('blood_group')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Age</label>
-                            <input type="text" name="age" required
+                            <input type="text" name="age" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('age')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                            <input type="email" name="email" required
+                            <input type="email" name="email" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('email')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
 
@@ -187,6 +224,9 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Upload Student Photo</label>
                             <input type="file" name="photo" accept="image/*"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('photo')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
                     </div>
                 </div>
@@ -202,50 +242,74 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Father Name</label>
-                            <input type="text" name="father_name" required
+                            <input type="text" name="father_name" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('father_name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Mother Name</label>
-                            <input type="text" name="mother_name" required
+                            <input type="text" name="mother_name" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('mother_name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Father Occupation</label>
                             <input type="text" name="father_occupation"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('father_occupation')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="text" name="contact" required
+                            <input type="text" name="contact" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('contact')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
-                            <input type="text" name="nationality" required
+                            <input type="text" name="nationality" 
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('nationality')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Present Address</label>
                             <textarea name="present_address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
                                 rows="2"></textarea>
+                                 @error('present_address')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Permanent Address</label>
                             <textarea name="permanent_address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
                                 rows="2"></textarea>
+                                 @error('permanent_address')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Upload Parents Photo</label>
                             <input type="file" name="parents_photo" accept="image/*"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                 @error('parents_photo')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                         </div>
                     </div>
                 </div>

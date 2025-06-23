@@ -54,24 +54,4 @@ class StudentListController extends Controller
         ));
     }
     
-    public function getSectionsByClass($classId)
-    {
-        $teacher = Teacher::where('user_id', Auth::id())->first();
-    
-        if (!$teacher) {
-            return response()->json([], 403);
-        }
-    
-        // Only sections assigned to this teacher for selected class
-        $sections = AssignedTeacher::where('teacher_id', $teacher->id)
-            ->where('class_id', $classId)
-            ->with('section')
-            ->get()
-            ->pluck('section')
-            ->unique('id')
-            ->values();
-    
-        return response()->json($sections);
-    }
-    
 }

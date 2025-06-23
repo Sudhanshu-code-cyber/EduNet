@@ -131,6 +131,13 @@ public function noticeBoard()
     return view('page.teacher.notices', compact('notices'));
 }
 
+public function studentlist(){
+    return view('page.teacher.student-list');
+}
+
+public function homework(){
+    return view('page.teacher.classwork.homework');
+}
 
 public function submission(){
     return view('page.teacher.classwork.submission');

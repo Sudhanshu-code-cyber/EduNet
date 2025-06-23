@@ -1,0 +1,3 @@
+@extends('page.teacher.parent')
+
+

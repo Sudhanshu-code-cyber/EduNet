@@ -20,22 +20,19 @@ use App\Http\Controllers\FeeStructureController;
 use App\Http\Controllers\FeePaymentController;
 use App\Http\Controllers\AssignTeacherController;
 use App\Http\Controllers\StudentListController;
-use App\Http\Controllers\Teacher\HomeworkController as TeacherHomeworkController;
-use App\Http\Controllers\Student\HomeworkController as StudentHomeworkController;
 
 
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
     Route::get('/', 'dashboard')->name('/student');
+    Route::get('/myclass', 'showTimetable')->name('student.myclass');
     Route::get('/attendance', 'attendance')->name('student.attendance');
-    Route::get('/homework', 'homework')->name('student.homework');
+    Route::get('/assignment', 'assignment')->name('student.assignment');
     Route::get('/myresult', 'myresult')->name('student.myresult');
     Route::get('/marksheet', 'marksheet')->name('student.marksheet');
     Route::get('/myfee', 'myfee')->name('student.myfee');
     Route::get('/notice', 'notice')->name('student.notice');
     Route::post('/insert', 'store')->name('students.store');
-Route::get('/myclass','myclass')->name('student.myclass');
-
 });
 
 // Parent Route
@@ -73,7 +70,10 @@ Route::controller(TeacherController::class)->prefix('teacher')->name('teacher.')
     Route::get('/', 'dashboard')->name('dashboard');
     Route::get('/myclass', 'myclass')->name('myclass');
     Route::get('/timetable', 'timetable')->name('timetable');
+    Route::get('/studentlist', 'studentlist')->name('studentlist');
     Route::get('/notice', 'noticeBoard')->name('notice');
+    Route::get('/homework', 'homework')->name('homework');
+    Route::get('/homework/submission', 'submission')->name('submission');
 });
 
 // Exam Routes (Part of Teacher Role)
@@ -147,44 +147,7 @@ Route::get('/get-subjects-by-class/{class_id}', [AssignTeacherController::class,
 
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/student-list', [StudentListController::class, 'index'])->name('student-list.index');
-    Route::get('/get-sections-by-class/{id}', [StudentListController::class, 'getSectionsByClass']);
 });
-
-// Teacher Routes for Homework
-// Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
-
-Route::prefix('teacher')->name('teacher.')->group(function () {
-    Route::get('homework', [TeacherHomeworkController::class, 'index'])->name('homework.index');
-    Route::post('homework', [TeacherHomeworkController::class, 'store'])->name('homework.store');
-    Route::get('homework/{id}/edit', [TeacherHomeworkController::class, 'edit'])->name('homework.edit');
-    Route::put('homework/{id}', [TeacherHomeworkController::class, 'update'])->name('homework.update');
-    Route::delete('homework/{id}', [TeacherHomeworkController::class, 'destroy'])->name('homework.destroy');
-    // Route::get('homework/{id}', [TeacherHomeworkController::class, 'show'])->name('homework.show');
-    Route::get('homework/search', [TeacherHomeworkController::class, 'search'])->name('homework.search');
-    Route::get('homework/submissions', [TeacherHomeworkController::class, 'submissions'])->name('homework.submissions');
-
-    // Fetch sections for selected class assigned to the logged-in teacher
-Route::get('get-sections/{class_id}', [\App\Http\Controllers\Teacher\HomeworkController::class, 'getSections']);
-// Fetch subjects for selected class and section assigned to the logged-in teacher
-Route::get('get-subjects/{class_id}/{section_id}', [\App\Http\Controllers\Teacher\HomeworkController::class, 'getSubjects']);
-});
-
-// Student Routes for Homework
-Route::prefix('student')->name('student.')->group(function () {
-    Route::get('homework', [StudentHomeworkController::class, 'index'])->name('homework.index');
-    Route::post('homework/submit', [StudentHomeworkController::class, 'submit'])->name('homework.submit');
-});
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -198,8 +161,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/transport/submit', [TransportController::class, 'store'])->name('admin.store');
     Route::delete('/transport/{id}', [TransportController::class, 'deletetransport'])->name('transport.delete');
     Route::get('/transport/search', [TransportController::class, 'search'])->name('transport.search');
-    Route::put('/transport/update/{id}', [TransportController::class, 'update'])->name('transport.update');
 });
+Route::put('/transport/update/{id}', [TransportController::class, 'update'])->name('transport.update');
 
 
 

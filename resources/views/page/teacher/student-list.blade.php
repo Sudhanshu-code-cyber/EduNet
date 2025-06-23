@@ -7,7 +7,7 @@
 
         <!-- Filter Form -->
         <form method="GET" action="{{ route('teacher.student-list.index') }}" class="mb-6 flex flex-wrap gap-4">
-            <select id="class_id" name="class_id" class="border px-4 py-2 rounded shadow-sm w-48">
+            <select name="class_id" class="border px-4 py-2 rounded shadow-sm w-48">
                 <option value="">-- Select Class --</option>
                 @foreach($assignedClasses as $class)
                     <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>
@@ -16,7 +16,7 @@
                 @endforeach
             </select>
 
-            <select id="section_id" name="section_id" class="border px-4 py-2 rounded shadow-sm w-48">
+            <select name="section_id" class="border px-4 py-2 rounded shadow-sm w-48">
                 <option value="">-- Select Section --</option>
                 @foreach($assignedSections as $section)
                     <option value="{{ $section->id }}" {{ request('section_id') == $section->id ? 'selected' : '' }}>
@@ -62,29 +62,4 @@
         @endif
     </div>
 </div>
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#class_id').change(function () {
-            const classId = $(this).val();
-
-            $('#section_id').html('<option value="">Loading...</option>');
-
-            if (classId) {
-                $.get(`/teacher/get-sections-by-class/${classId}`, function (sections) {
-                    $('#section_id').html('<option value="">-- Select Section --</option>');
-                    sections.forEach(function (section) {
-                        $('#section_id').append(`<option value="${section.id}">${section.name}</option>`);
-                    });
-                });
-            } else {
-                $('#section_id').html('<option value="">-- Select Section --</option>');
-            }
-        });
-    });
-</script>
-
-
 @endsection

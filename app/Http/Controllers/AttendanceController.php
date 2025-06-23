@@ -13,30 +13,28 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-public function index()
-{
-    $teacher = auth()->user();
+    public function index()
+    {
+        $teacher = auth()->user();
+        $assignment = AssignedTeacher::where('teacher_id', $teacher->id)
+            ->with(['class', 'section', 'subject'])
+            ->first();
+        // if (!$assignment) {
+        //     return redirect()->back()->with('error', 'No assigned class/section/subject found.');
+        // }
 
-    $assignment = AssignedTeacher::where('teacher_id', $teacher->id)
-        ->with(['class', 'section', 'subject'])
-        ->first();
+        // Fetch students of that class and section
+        $students = Student::where('class_id', $assignment->class_id)
+            ->where('section_id', $assignment->section_id)
+            ->get();
 
-    if (!$assignment) {
-        return redirect()->back()->with('error', 'No assigned class/section/subject found.');
+        return view('page.teacher.attendance', [
+            'class_id' => $assignment->class_id,
+            'section_id' => $assignment->section_id,
+            'subject_id' => $assignment->subject_id,
+            'students' => $students
+        ]);
     }
-
-    // Fetch students of that class and section
-    $students = Student::where('class_id', $assignment->class_id)
-        ->where('section_id', $assignment->section_id)
-        ->get();
-
-    return view('page.teacher.attendance', [
-        'class_id' => $assignment->class_id,
-        'section_id' => $assignment->section_id,
-        'subject_id' => $assignment->subject_id,
-        'students' => $students
-    ]);
-}
 
 
 
@@ -70,54 +68,53 @@ public function index()
         return redirect()->back()->with('success', 'Attendance recorded successfully!');
     }
 
-public function calendarView()
-{
-    $classes = ClassModel::all(); // your class model
-    return view('page.teacher.attendance-calendar', compact('classes'));
-}
-
-public function getSectionByClass($id){
-    return Section::where('class_id',$id)->get();
-}
-
-
-
-public function getEvents(Request $request)
-{
-    $query = Attendance::with('student');
-
-    if ($request->class_id) {
-        $query->whereHas('student', fn ($q) =>
-            $q->where('class_id', $request->class_id)
-        );
+    public function showCalendar()
+    {
+        $teacherId = auth()->id();
+        $assigned = AssignedTeacher::where('teacher_id', $teacherId)->with(['class'])->get();
+        $classes = $assigned->pluck('class')->unique('id');
+        return view('page.teacher.attendance-calendar', compact('classes'));
     }
 
-    if ($request->section_id) {
-        $query->whereHas('student', fn ($q) =>
-            $q->where('section_id', $request->section_id)
-        );
+    public function getAttendanceAjax(Request $request)
+    {
+        $teacherId = auth()->id();
+
+        $isAssigned = AssignedTeacher::where('teacher_id', $teacherId)
+            ->where('class_id', $request->class_id)
+            ->where('section_id', $request->section_id)
+            ->where('subject_id', $request->subject_id)
+            ->exists();
+
+        if (!$isAssigned)
+            return response()->json([]);
+
+        $attendances = Attendance::with('student')
+            ->whereBetween('date', [$request->start, $request->end])
+            ->whereHas('student', function ($q) use ($request) {
+                $q->where('class_id', $request->class_id)
+                    ->where('section_id', $request->section_id)
+                    ->where('subject_id', $request->subject_id);
+            })
+            ->get();
+
+        $events = [];
+
+        foreach ($attendances as $attendance) {
+            $color = match ($attendance->status) {
+                'present' => 'green',
+                'absent' => 'red',
+                'leave' => 'orange',
+                default => 'gray',
+            };
+
+            $events[] = [
+                'title' => $attendance->student->name . ' - ' . ucfirst($attendance->status),
+                'start' => $attendance->date,
+                'color' => $color,
+            ];
+        }
+
+        return response()->json($events);
     }
-
-    $attendances = $query->get();
-    $events = [];
-
-    foreach ($attendances as $attendance) {
-        $color = match($attendance->status) {
-            'present' => 'green',
-            'absent' => 'red',
-            'leave' => 'orange',
-            default => 'gray'
-        };
-
-        $events[] = [
-            'title' => $attendance->student->name . ' - ' . ucfirst($attendance->status),
-            'start' => $attendance->date,
-            'color' => $color,
-        ];
-    }
-
-    return response()->json($events);
-}
-
-
 }
