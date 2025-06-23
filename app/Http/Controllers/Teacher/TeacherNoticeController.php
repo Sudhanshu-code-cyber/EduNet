@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Notice; 
+use Illuminate\Support\Facades\Auth;
 
 class TeacherNoticeController extends Controller
 {
@@ -13,112 +14,141 @@ class TeacherNoticeController extends Controller
      */
     public function index()
     {
-        $notices = Notice::paginate(4);
-        return view('page.teacher.notices',compact('notices'));
+        $notices = Notice::where('creator_role', 'teacher')
+            ->where('created_by', Auth::id())
+            ->where('target', 'student')
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                      ->orWhere('expires_at', '>=', now());
+            })
+            ->latest()
+            ->paginate(4);
+
+        return view('page.teacher.notices', compact('notices'));
     }
 
+    public function adminNotices()
+    {
+        $notices = \App\Models\Notice::where('target', 'teacher')
+            ->where('creator_role', 'admin')
+            ->where(function ($query) {
+                $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
+            })
+            ->orderByDesc('date')
+            ->paginate(5);
+    
+        return view('page.teacher.notice-admin', compact('notices'));
+    }
+    
+
     /**
-     * Show the form for creating a new resource.
+     * Show the form to create a new notice.
      */
     public function create()
     {
-        $notices = Notice::paginate(4); 
-        return view('page.teacher.notices', compact('notices'));
+        return view('page.teacher.notices'); // Should be a separate create form
     }
-    
+
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created notice in the database.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'posted_by' => 'required|string|max:255',
+            'title'   => 'required|string|max:255',
             'details' => 'required|string',
-            'date' => 'required|date',
+            'date'    => 'required|date',
         ]);
-    
+
         Notice::create([
-            'title' => $request->title,
-            'posted_by' => $request->posted_by,
-            'details' => $request->details,
-            'date' => $request->date,
+            'title'        => $request->title,
+            'details'      => $request->details,
+            'date'         => $request->date,
+            'expires_at'   => now()->addDays(30),
+            'created_by'   => Auth::id(),
+            'creator_role' => 'teacher',
+            'target'       => 'student',
         ]);
-    
-        return redirect()->route('teacher.notice.index')->with('success', 'Notice added successfully.');
-    }
-    
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return redirect()->route('teacher.notice.index')->with('success', 'Notice created successfully.');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing a notice.
      */
     public function edit($id)
     {
         $notice = Notice::findOrFail($id);
-        $notices = Notice::paginate(4);
-        return view('page.teacher.notices', compact('notices', 'notice'));
-    }    
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'posted_by' => 'required|string|max:255',
-            'details' => 'required|string',
-            'date' => 'required|date',
-    ]);
+        if ($notice->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized to edit this notice.');
+        }
 
-$notice = Notice::findOrFail($id);
-
-$notice->update([
-    'title' => $request->title,
-    'posted_by' => $request->posted_by,
-    'details' => $request->details,
-    'date' => $request->date,
-]);
-
-        return redirect()->route('teacher.notice.index')->with('success','Notice updated successfully!');
+        return view('page.teacher.notice-edit-modal', compact('notice')); // Should be a separate edit view
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update an existing notice.
      */
-    public function destroy(string $id)
+    public function update(Request $request, $id)
     {
         $notice = Notice::findOrFail($id);
-        $notice->delete(); 
 
-        return redirect()->route('teacher.notice.index')->with('error','Notice deleted successfully!');
+        if ($notice->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized to update this notice.');
+        }
+
+        $request->validate([
+            'title'   => 'required|string|max:255',
+            'details' => 'required|string',
+            'date'    => 'required|date',
+        ]);
+
+        $notice->update([
+            'title'   => $request->title,
+            'details' => $request->details,
+            'date'    => $request->date,
+        ]);
+
+        return redirect()->route('teacher.notice.index')->with('success', 'Notice updated successfully!');
     }
 
-public function search(Request $request)
-{
-    $query = Notice::query();
+    /**
+     * Delete a notice permanently.
+     */
+    public function destroy($id)
+    {
+        $notice = Notice::findOrFail($id);
 
-    // Filter by title
-    if ($request->has('search_title') && $request->search_title != '') {
-        $query->where('title', 'like', '%' . $request->search_title . '%');
+        if ($notice->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized to delete this notice.');
+        }
+
+        $notice->delete();
+
+        return redirect()->route('teacher.notice.index')->with('error', 'Notice deleted successfully!');
     }
 
-    // Filter by date
-    if ($request->has('search_date') && $request->search_date != '') {
-        $query->whereDate('date', $request->search_date);
+    /**
+     * Search for notices based on title or date.
+     */
+    public function search(Request $request)
+    {
+        $query = Notice::where('creator_role', 'teacher')
+            ->where('created_by', Auth::id())
+            ->where('target', 'student');
+
+        if ($request->filled('search_title')) {
+            $query->where('title', 'like', '%' . $request->search_title . '%');
+        }
+
+        if ($request->filled('search_date')) {
+            $query->whereDate('date', $request->search_date);
+        }
+
+        $notices = $query->latest()->paginate(4);
+
+        return view('page.teacher.notices', compact('notices'));
     }
-
-    $notices = $query->latest()->paginate(4);
-
-    return view('page.teacher.notices', compact('notices'));
-}
 
 }

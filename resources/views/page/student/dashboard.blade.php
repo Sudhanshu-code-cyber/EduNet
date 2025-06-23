@@ -3,7 +3,7 @@
 @section('content')
     <div class="py-10">
         <div class="w-full bg-white p-6 rounded-lg shadow-sm mb-6">
-            <h1 class="text-2xl font-semibold text-gray-800">Welcome back, <span class="text-indigo-600">Student</span>! 🎓
+            <h1 class="text-2xl font-semibold text-gray-800">Welcome back, <span class="text-indigo-600">{{auth()->user()->name}}</span>! 🎓
             </h1>
             <p class="text-sm text-gray-500 mt-1">Hope you're having a great learning experience today.</p>
         </div>
@@ -96,7 +96,7 @@
                 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
                 <!-- Single Notice -->
-                @forelse ($notice as  $note)
+                @forelse ($latestNotices as  $note)
                     <div class="flex flex-col gap-4" x-data="{ showModal: false, selectedNotice: '' }">
 
                         <!-- Notice Item -->

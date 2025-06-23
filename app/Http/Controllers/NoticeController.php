@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Notice;
+use Illuminate\Support\Facades\Auth;
 
 class NoticeController extends Controller
 {
@@ -12,8 +13,15 @@ class NoticeController extends Controller
      */
     public function index()
     {
-        $notices = Notice::paginate(4);
-        return view('page.admin.notice',compact('notices'));
+        $notices = Notice::where('creator_role', 'admin')
+                         ->where('target', 'teacher')
+                         ->where(function ($query) {
+                             $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
+                         })
+                         ->latest()
+                         ->paginate(4);
+
+        return view('page.admin.notice', compact('notices'));
     }
 
     /**
@@ -27,24 +35,25 @@ class NoticeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $req)
+    public function store(Request $request)
     {
-        $data = $req->validate([
-                'title' => 'required|string|max:255',
-                'posted_by' => 'required|string|max:255',
-                'details' => 'required|string',
-                'date' => 'required|date',
+        $request->validate([
+            'title'   => 'required|string|max:255',
+            'details' => 'required|string',
+            'date'    => 'required|date',
         ]);
-        Notice::create($data);
-        return redirect()->route('notice.index')->with('success', 'Notice created successfully.');
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        Notice::create([
+            'title'        => $request->title,
+            'details'      => $request->details,
+            'date'         => $request->date,
+            'expires_at'   => now()->addDays(30),
+            'created_by'   => Auth::id(),
+            'creator_role' => 'admin',
+            'target'       => 'teacher',
+        ]);
+
+        return redirect()->route('notice.index')->with('success', 'Notice created successfully.');
     }
 
     /**
@@ -53,7 +62,7 @@ class NoticeController extends Controller
     public function edit(string $id)
     {
         $notice = Notice::findOrFail($id);
-        return view('page.admin.notice',compact('notice'));
+        return view('page.admin.notice-edit-modal', compact('notice'));
     }
 
     /**
@@ -61,23 +70,26 @@ class NoticeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'posted_by' => 'required|string|max:255',
+        $request->validate([
+            'title'   => 'required|string|max:255',
             'details' => 'required|string',
-            'date' => 'required|date',
-    ]);
+            'date'    => 'required|date',
+        ]);
 
-$notice = Notice::findOrFail($id);
+        $notice = Notice::findOrFail($id);
 
-$notice->update([
-    'title' => $request->title,
-    'posted_by' => $request->posted_by,
-    'details' => $request->details,
-    'date' => $request->date,
-]);
+        // Optional: Prevent editing if not creator
+        if ($notice->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
 
-        return redirect()->route('notice.index')->with('success','Notice updated successfully!');
+        $notice->update([
+            'title'   => $request->title,
+            'details' => $request->details,
+            'date'    => $request->date,
+        ]);
+
+        return redirect()->route('notice.index')->with('success', 'Notice updated successfully!');
     }
 
     /**
@@ -86,28 +98,37 @@ $notice->update([
     public function destroy(string $id)
     {
         $notice = Notice::findOrFail($id);
-        $notice->delete(); 
 
-        return redirect()->route('notice.index')->with('error','Notice deleted successfully!');
+        // Only the creator can delete
+        if ($notice->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized to delete this notice.');
+        }
+
+        $notice->delete();
+
+        return redirect()->route('notice.index')->with('error', 'Notice deleted successfully!');
     }
 
-public function search(Request $request)
-{
-    $query = Notice::query();
+    /**
+     * Search filtered notices.
+     */
+    public function search(Request $request)
+    {
+        $query = Notice::query()
+            ->where('creator_role', 'admin')
+            ->where('target', 'teacher');
 
-    // Filter by title
-    if ($request->has('search_title') && $request->search_title != '') {
-        $query->where('title', 'like', '%' . $request->search_title . '%');
+        if ($request->filled('search_title')) {
+            $query->where('title', 'like', '%' . $request->search_title . '%');
+        }
+
+        if ($request->filled('search_date')) {
+            $query->whereDate('date', $request->search_date);
+        }
+
+        $notices = $query->latest()->paginate(4);
+
+        return view('page.admin.notice', compact('notices'));
     }
-
-    // Filter by date
-    if ($request->has('search_date') && $request->search_date != '') {
-        $query->whereDate('date', $request->search_date);
-    }
-
-    $notices = $query->latest()->paginate(4);
-
-    return view('page.admin.notice', compact('notices'));
-}
 
 }

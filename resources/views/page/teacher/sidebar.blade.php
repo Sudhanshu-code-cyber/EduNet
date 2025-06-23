@@ -9,7 +9,7 @@
           <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></span>
         </div>
         <div>
-          <p class="font-medium text-sm text-gray-800">Ms. Briganza</p>
+          <p class="font-medium text-sm text-gray-800">{{auth()->user()->name}}</p>
           <p class="text-xs text-gray-500">Teacher</p>
         </div>
       </div>
@@ -139,12 +139,33 @@
         Timetable
       </a>
     </li>
+  <!-- Notices Dropdown -->
+<li x-data="{ openNotice: false }">
+  <button @click="openNotice = !openNotice"
+    class="w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+    <span class="flex items-center gap-2">
+      <i class="fas fa-bullhorn w-4 text-center text-gray-500"></i>
+      Notices
+    </span>
+    <i :class="openNotice ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-xs text-gray-500"></i>
+  </button>
+
+  <ul x-show="openNotice" x-transition class="ml-6 mt-1 space-y-0.5 text-sm">
     <li>
-      <a href="{{ route('teacher.notice.index') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-        <i class="fas fa-bullhorn w-4 text-center text-gray-500"></i>
-        Notices
+      <a href="{{ route('teacher.notice.index') }}"
+        class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+        My Notices
       </a>
     </li>
+    <li>
+      <a href="{{ route('teacher.notice.admin') }}"
+        class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+        Admin Notices
+      </a>
+    </li>
+  </ul>
+</li>
+
   </ul>
 </div>
 

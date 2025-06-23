@@ -23,7 +23,7 @@
 <div class="dropdown relative">
     <div class="flex items-center text-sm font-medium text-gray-900 rounded-full focus:outline-none">
     <img src="https://i.pravatar.cc/300" alt="Profile Picture" class="w-9 h-9 rounded-full object-cover" />
-    <span class="ml-2 hidden md:inline font-medium text-gray-800">Ms. Briganza</span>
+    <span class="ml-2 hidden md:inline font-medium text-gray-800">{{auth()->user()->name}}</span>
     <button  onclick="toggleDropdown('teacherDropdown')">
         <svg class="w-4 h-4 ml-1 hidden md:inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>

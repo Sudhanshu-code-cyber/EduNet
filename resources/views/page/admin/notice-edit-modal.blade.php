@@ -7,8 +7,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6 z-10 w-11/12 sm:w-1/2 relative max-h-screen overflow-y-auto">
         <h2 class="text-2xl font-semibold mb-4 text-blue-700">Edit Notice</h2>
 
-        @if(isset($notice))
-        <form id="editNoticeForm" method="POST" action="{{route('notice.update',$notice->id)}}">
+        <form id="editNoticeForm" method="POST">
             @csrf
             @method('PUT')
 
@@ -42,7 +41,7 @@
                 </div>
             </div>
 
-            <div class="flex gap-4 mt-4">
+            <div class="flex gap-4 mt-6">
                 <button type="submit"
                     class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Update
@@ -53,22 +52,26 @@
                 </button>
             </div>
         </form>
-        @endif
     </div>
 </div>
 
 
+
+
 <script>
     function openEditModal(id, title, posted_by, details, date) {
+        // Fill form inputs
         document.getElementById('edit_id').value = id;
         document.getElementById('edit_title').value = title;
         document.getElementById('edit_posted_by').value = posted_by;
         document.getElementById('edit_details').value = details;
         document.getElementById('edit_date').value = date;
 
-        // Update the form action URL
-        document.getElementById('editNoticeForm').action = `/admin/notice/${id}`;
+        // Set dynamic form action
+        const form = document.getElementById('editNoticeForm');
+        form.action = `/admin/notice/${id}`; // or `/teacher/notice/${id}` if used for teachers
 
+        // Show modal
         document.getElementById('editNoticeModal').classList.remove('hidden');
     }
 
