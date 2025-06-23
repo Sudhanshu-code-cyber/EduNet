@@ -102,5 +102,33 @@ public function store(Request $request)
 
     return redirect()->back()->with('success', 'Student added successfully!');
 }
+  public function editProfile(){
+        $student = auth()->user();
+
+    return view('page.student.edit-profile',compact('student'));
+  }
+  public function updateProfile(Request $request)
+{
+    $request->validate([
+        'contact' => 'required|string|max:20',
+        'password' => 'nullable|string|min:6|confirmed',
+    ]);
+
+    $student = auth()->user();
+    $student->contact = $request->contact;
+
+    if ($request->password) {
+        $student->password = bcrypt($request->password);
+    }
+
+    $student->save();
+
+    return back()->with('success', 'Profile updated successfully!');
+}
 
 }
+
+
+
+
+

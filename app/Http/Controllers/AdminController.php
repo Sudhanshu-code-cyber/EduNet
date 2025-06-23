@@ -176,6 +176,11 @@ class AdminController extends Controller
         ClassModel::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Class Section Deleted!');
     }
+    public function getSectionsByClass($class_id)
+{
+    $sections = Section::where('class_id', $class_id)->select('id', 'name')->get();
+    return response()->json($sections);
+}
 }
 
 

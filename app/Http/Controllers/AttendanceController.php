@@ -7,7 +7,10 @@ use App\Models\Attendance;
 use App\Models\ClassModel;
 use App\Models\Section;
 use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -15,7 +18,7 @@ class AttendanceController extends Controller
 {
     public function index()
     {
-        $teacher = auth()->user();
+        $teacher = Teacher::where("user_id",Auth::id())->first();
         $assignment = AssignedTeacher::where('teacher_id', $teacher->id)
             ->with(['class', 'section', 'subject'])
             ->first();
@@ -70,7 +73,7 @@ class AttendanceController extends Controller
 
     public function showCalendar()
     {
-        $teacherId = auth()->id();
+        $teacherId = Teacher::where("user_id",Auth::id())->first();
         $assigned = AssignedTeacher::where('teacher_id', $teacherId)->with(['class'])->get();
         $classes = $assigned->pluck('class')->unique('id');
         return view('page.teacher.attendance-calendar', compact('classes'));
@@ -117,4 +120,17 @@ class AttendanceController extends Controller
 
         return response()->json($events);
     }
+
+     public function getByClass($id)
+{
+    $subjects = Subject::where('class_id', $id)->select('id', 'name', 'code')->get();
+    return response()->json($subjects);
+}
+
+public function getBySection($id)
+{
+    $sections = Section::where('class_id', $id)->select('id', 'name')->get();
+    return response()->json($sections);
+}
+
 }

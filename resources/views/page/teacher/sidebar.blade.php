@@ -54,7 +54,7 @@
             </li>
 
             <li>
-              <a href="{{ route('attendance.calendar') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+              <a href="{{ route('teacher.calendar') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
                 <i class="fas fa-calendar-check w-4 text-center text-gray-500"></i>
                 Attendance calendar
               </a>
@@ -113,7 +113,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('teacher.examschedule') }}"
+          <a href="{{ route('teacher.exam_schedule.create') }}"
             class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
          Exam Schedule
           </a>
@@ -153,7 +153,7 @@
           <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Account</p>
           <ul class="space-y-0.5">
             <li>
-              <a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+              <a href="{{route('teacher.profile.edit')}}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
                 <i class="fas fa-user-cog w-4 text-center text-gray-500"></i>
                 Profile & Settings
               </a>
@@ -164,7 +164,7 @@
   
       <!-- Logout -->
       <div class="mt-auto">
-        <a href="#" class="block px-3 py-2 rounded-md text-sm text-red-600 hover:bg-red-50 transition duration-200 items-center gap-2 justify-center">
+        <a href="{{route('user.logout')}}" class="block px-3 py-2 rounded-md text-sm text-red-600 hover:bg-red-50 transition duration-200 items-center gap-2 justify-center">
           <i class="fas fa-sign-out-alt w-4 text-center text-red-500"></i>
           Logout
         </a>

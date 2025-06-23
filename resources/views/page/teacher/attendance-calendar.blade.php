@@ -4,30 +4,35 @@
     <div class="max-w-7xl mx-auto py-6">
         <h2 class="text-2xl font-bold mb-6">📅 Attendance Calendar</h2>
 
-        <!-- Filters -->
-        <div class="flex gap-4 mb-6">
-            <div>
-                <label class="block mb-1 text-sm font-medium">Class</label>
-                <select id="class_id" class="border px-3 py-2 rounded w-full">
-                    <option value="">-- Select Class --</option>
-                    @foreach ($classes as $class)
-                        <option value="{{ $class->id }}">{{ $class->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <label class="block mb-1 text-sm font-medium">Section</label>
-                <select id="section_id" class="border px-3 py-2 rounded w-full">
-                    <option value="">-- Select Section --</option>
-                </select>
-            </div>
-            <div>
-                <label class="block mb-1 text-sm font-medium">Subject</label>
-                <select id="subject_id" class="border px-3 py-2 rounded w-full">
-                    <option value="">-- Select Subject --</option>
-                </select>
-            </div>
+         <div class="flex flex-col md:flex-row gap-6 mb-6">
+        <!-- Class -->
+        <div class="w-full">
+            <label class="block mb-1 text-sm font-medium text-gray-700">Class</label>
+            <select id="class_id" class="border px-3 py-2 rounded w-full">
+                <option value="">-- Select Class --</option>
+                @foreach ($classes as $class)
+                    <option value="{{ $class->id }}">{{ $class->name }}</option>
+                @endforeach
+            </select>
         </div>
+
+        <!-- Section -->
+        <div class="w-full">
+            <label class="block mb-1 text-sm font-medium text-gray-700">Section</label>
+            <select id="section_id" class="border px-3 py-2 rounded w-full">
+                <option value="">-- Select Section --</option>
+            </select>
+        </div>
+
+        <!-- Subject -->
+        <div class="w-full">
+            <label class="block mb-1 text-sm font-medium text-gray-700">Subject</label>
+            <select id="subject_id" class="border px-3 py-2 rounded w-full">
+                <option value="">-- Select Subject --</option>
+            </select>
+        </div>
+    </div>
+</div>
 
         <div id="calendar" class="bg-white p-4 rounded shadow"></div>
     </div>
@@ -98,5 +103,33 @@
             }
 
         });
+
+
+        
     </script>
+<script>
+    $(document).ready(function () {
+        $('#class_id').on('change', function () {
+            const classId = $(this).val();
+
+            $('#subject_id').html('<option value="">-- Select Subject --</option>');
+            $('#section_id').html('<option value="">-- Select Section --</option>');
+
+            if (classId) {
+                $.get(`/subjects/by-class/${classId}`, function (data) {
+                    $.each(data, function (i, subject) {
+                        $('#subject_id').append(`<option value="${subject.id}">${subject.name} (${subject.code})</option>`);
+                    });
+                });
+
+                $.get(`/sections/by-class/${classId}`, function (data) {
+                    $.each(data, function (i, section) {
+                        $('#section_id').append(`<option value="${section.id}">${section.name}</option>`);
+                    });
+                });
+            }
+        });
+    });
+</script>
+
 @endsection

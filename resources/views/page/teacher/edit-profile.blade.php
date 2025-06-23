@@ -1,7 +1,7 @@
-@extends('page.student.parent')
+@extends('page.teacher.parent')
 
 @section('content')
-<div class="max-w-xl mx-auto mt-12 bg-white rounded-2xl shadow-lg p-8 transition-all duration-300">
+    <div class="max-w-xl mx-auto mt-12 bg-white rounded-2xl shadow-lg p-8 transition-all duration-300">
     <h2 class="text-3xl font-bold text-blue-700 mb-6 text-center">🛠️ Edit Profile</h2>
 
     @if(session('success'))
@@ -10,27 +10,27 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('student.profile.update') }}" class="space-y-6">
+    <form method="POST" action="{{ route('teacher.profile.update') }}" class="space-y-6">
         @csrf
 
         {{-- Name (read-only) --}}
         <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">👤 Name</label>
-            <input type="text" value="{{ $student->name }}" disabled
+            <input type="text" value="{{ $teacher->name }}" disabled
                    class="w-full p-3 border border-gray-300 bg-gray-100 text-gray-700 rounded-lg focus:outline-none cursor-not-allowed">
         </div>
 
         {{-- Email (read-only) --}}
         <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">📧 Email</label>
-            <input type="email" value="{{ $student->email }}" disabled
+            <input type="email" value="{{ $teacher->email }}" disabled
                    class="w-full p-3 border border-gray-300 bg-gray-100 text-gray-700 rounded-lg focus:outline-none cursor-not-allowed">
         </div>
 
         {{-- Contact --}}
         <div>
             <label class="block text-sm font-semibold text-gray-700 mb-1">📞 Contact Number</label>
-            <input type="text" name="contact" value="{{ old('contact', $student->contact) }}" required
+            <input type="text" name="contact" value="{{ old('contact', $teacher->contact) }}" required
                    placeholder="Enter your contact number"
                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none transition">
         </div>
@@ -60,5 +60,6 @@
         </div>
     </form>
 </div>
-
 @endsection
+
+
