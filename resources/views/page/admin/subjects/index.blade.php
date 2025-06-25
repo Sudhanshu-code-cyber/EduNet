@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="max-w-5xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Manage Subjects</h2>
+        <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b pb-2">Assign Subjects to Classes</h2>
 
         <!-- Add Subject Form -->
         <div class="bg-white shadow-md border border-gray-200 rounded-xl p-6 mb-10">

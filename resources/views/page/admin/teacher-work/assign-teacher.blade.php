@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto p-8 bg-white rounded-2xl shadow-lg mt-10 border border-gray-200">
-    <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b pb-2">Assign Teachers to Subjects</h2>
+    <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b pb-2">Assign Subjects to Teachers</h2>
 
     {{-- Flash Success --}}
     @if (session('success'))
@@ -98,47 +98,61 @@
     const teachers = @json($teachers);
 
     $('#class_id').change(function () {
-        const classId = $(this).val();
+    const classId = $(this).val();
 
-        // Load Sections
-        $('#section_id').html('<option value="">Loading...</option>');
-        $.get('/get-sections-by-class/' + classId, function (sections) {
-            $('#section_id').html('<option value="">-- Choose Section --</option>');
-            sections.forEach(section => {
-                $('#section_id').append(`<option value="${section.id}">${section.name}</option>`);
-            });
-        });
-
-        // Load Subjects
-        $('#subjectContainer').html('<p class="text-gray-500">Loading subjects...</p>');
-        $.get('/get-subjects-by-class/' + classId, function (subjects) {
-            if (subjects.length === 0) {
-                $('#subjectContainer').html('<p class="text-red-500">No subjects found for this class.</p>');
-                return;
-            }
-
-            let html = '';
-            let teacherOptions = '<option value="">-- Select Teacher --</option>';
-            teachers.forEach(t => {
-                teacherOptions += `<option value="${t.id}">${t.first_name} ${t.last_name}</option>`;
-            });
-
-            subjects.forEach(subject => {
-                html += `
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <div class="flex items-center gap-2">
-                            <input type="checkbox" name="subjects_selected[]" value="${subject.id}" id="subject_${subject.id}" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                            <label for="subject_${subject.id}" class="text-gray-700 font-medium">${subject.name}</label>
-                        </div>
-                        <select name="subjects[${subject.id}]" class="w-full sm:w-1/2 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            ${teacherOptions}
-                        </select>
-                    </div>
-                `;
-            });
-
-            $('#subjectContainer').html(html);
+    // Load Sections
+    $('#section_id').html('<option value="">Loading...</option>');
+    $.get('/get-sections-by-class/' + classId, function (sections) {
+        $('#section_id').html('<option value="">-- Choose Section --</option>');
+        sections.forEach(section => {
+            $('#section_id').append(`<option value="${section.id}">${section.name}</option>`);
         });
     });
+
+    // Clear subject container
+    $('#subjectContainer').html('');
+});
+
+$('#section_id').change(function () {
+    const classId = $('#class_id').val();
+    const sectionId = $(this).val();
+
+    if (!classId || !sectionId) return;
+
+    $('#subjectContainer').html('<p class="text-gray-500">Loading subjects...</p>');
+
+    $.get('/get-subjects-by-class', {
+        class_id: classId,
+        section_id: sectionId
+    }, function (subjects) {
+        if (subjects.length === 0) {
+            $('#subjectContainer').html('<p class="text-red-500">No subjects found for this class.</p>');
+            return;
+        }
+
+        let html = '';
+        let teacherOptions = '<option value="">-- Select Teacher --</option>';
+        teachers.forEach(t => {
+            teacherOptions += `<option value="${t.id}">${t.first_name} ${t.last_name}</option>`;
+        });
+
+        subjects.forEach(subject => {
+            html += `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" name="subjects_selected[]" value="${subject.id}" id="subject_${subject.id}" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="subject_${subject.id}" class="text-gray-700 font-medium">${subject.name}</label>
+                    </div>
+                    <select name="subjects[${subject.id}]" class="w-full sm:w-1/2 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        ${teacherOptions}
+                    </select>
+                </div>
+            `;
+        });
+
+        $('#subjectContainer').html(html);
+    });
+});
+
 </script>
 @endsection

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-center mb-8 text-blue-700">📚 Manage Classes</h1>
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-700">📚 Manage Subjects</h1>
 
 
 

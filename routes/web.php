@@ -145,9 +145,9 @@ Route::get('admin/assign-teacher', [AssignTeacherController::class, 'index'])->n
 Route::post('admin/assign-teacher/submit', [AssignTeacherController::class, 'store'])->name('assign.teacher.store');
 Route::delete('/assigned-subjects/{id}', [AssignTeacherController::class, 'destroy'])->name('assign.teacher.delete');
 Route::get('/get-sections-by-class/{id}', [AssignTeacherController::class, 'getSectionsByClass']);
-Route::get('/get-subjects-by-class/{class_id}', [AssignTeacherController::class, 'getSubjectsByClass']);
+Route::get('/get-subjects-by-class', [AssignTeacherController::class, 'getSubjectsByClass']);
 
-
+//Student List route
 Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/student-list', [StudentListController::class, 'index'])->name('student-list.index');
     Route::get('/get-sections-by-class/{id}', [StudentListController::class, 'getSectionsByClass']);

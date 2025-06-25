@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ClassModel;
 use App\Models\Section;
+use App\Models\ClassSubject;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\AssignedTeacher;
@@ -26,15 +27,22 @@ class AssignTeacherController extends Controller
         return Section::where('class_id', $id)->get();
     }
     
-    public function getSubjectsByClass($classId)
+    public function getSubjectsByClass(Request $request)
     {
-        $subjects = AssignedTeacher::where('class_id', $request->class_id)
-        ->where('section_id', $request->section_id)
-        ->with('subject')
-        ->get();
+        $classId = $request->class_id;
+        $sectionId = $request->section_id;
+    
+        // Fetch subjects assigned to class from class_subjects table
+        $subjects = ClassSubject::with('subject')
+            ->where('class_id', $classId)
+            ->get()
+            ->pluck('subject') // get only subject info
+            ->unique('id')     // remove duplicates
+            ->values();        // reset keys
     
         return response()->json($subjects);
     }
+    
     
 
     public function store(Request $request)

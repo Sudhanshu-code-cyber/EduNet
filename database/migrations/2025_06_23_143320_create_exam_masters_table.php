@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('exam_masters', function (Blueprint $table) {
             $table->id();
             $table->string('exam_name');
-            $table->date('exam_date')->nullable();
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
             $table->timestamps();
         });
     }
