@@ -18,14 +18,14 @@
             <form method="GET" action="{{ route('teacher.notice.search') }}" class="flex flex-col sm:flex-row gap-4">
                 <div class="flex-1">
                     <label for="search_title" class="block text-gray-700 font-medium mb-1">Title</label>
-                    <input type="text" name="search_title" id="search_title" value="{{ request('search_title') }}"
+                    <input type="text" name="search_title" id="search_title" value=""
                         class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Search by title">
                 </div>
 
                 <div>
                     <label for="search_date" class="block text-gray-700 font-medium mb-1">Date</label>
-                    <input type="date" name="search_date" id="search_date" value="{{ request('search_date') }}"
+                    <input type="date" name="search_date" id="search_date" value=""
                         class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 

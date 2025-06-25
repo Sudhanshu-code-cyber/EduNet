@@ -19,7 +19,7 @@
                     class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                         <div>
                             <label for="title" class="text-gray-700 font-medium">Title</label>
-                            <input type="text" name="title" id="title" value="{{ old('title') }}" required
+                            <input type="text" name="title" id="title" value=""
                                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
                             @error('title')
                                 <p class="text-red-600 text-sm">{{ $message }}</p>
@@ -28,7 +28,7 @@
                     
                     <div>
                         <label for="search_date" class="block text-gray-700 font-medium mb-2">Date</label>
-                        <input type="date" name="search_date" id="search_date" value="{{ request('search_date') }}"
+                        <input type="date" name="search_date" id="search_date" value=""
                             class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
                     <div>
@@ -58,9 +58,18 @@
                                 </div>
                                 <div class="flex gap-3 mt-4 md:mt-0 md:ml-6">
                                     @if($notice->created_by == auth()->id())
-                                        <a href="{{ route('notice.edit', $notice->id) }}"
-                                            class="text-blue-600 hover:underline font-semibold">Edit</a>
-                                
+                                    <a href="javascript:void(0);"
+                                    onclick="openEditModal({!! json_encode([
+                                         'id' => $notice->id,
+                                         'title' => $notice->title,
+                                         'posted_by' => \App\Models\User::find($notice->created_by)?->name,
+                                         'details' => $notice->details,
+                                         'date' => $notice->date,
+                                     ]) !!})"
+                                    class="text-blue-600 hover:underline font-semibold">
+                                    Edit
+                                 </a>                                                             
+                                 
                                         <form method="POST" action="{{ route('notice.destroy', $notice->id) }}">
                                             @csrf
                                             @method('DELETE')
@@ -164,6 +173,15 @@
         </div>
     </div>
 
+    <script>
+        document.querySelector('form[action="{{ route('notice.search') }}"]').addEventListener('submit', function () {
+            setTimeout(() => {
+                document.getElementById('title').value = '';
+                document.getElementById('search_date').value = '';
+            }, 100); // Delay to ensure form submits first
+        });
+    </script>
+    
     <script>
         function openModal() {
             document.getElementById('noticeModal').classList.remove('hidden');

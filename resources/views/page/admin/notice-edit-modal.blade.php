@@ -59,17 +59,15 @@
 
 
 <script>
-    function openEditModal(id, title, posted_by, details, date) {
-        // Fill form inputs
-        document.getElementById('edit_id').value = id;
-        document.getElementById('edit_title').value = title;
-        document.getElementById('edit_posted_by').value = posted_by;
-        document.getElementById('edit_details').value = details;
-        document.getElementById('edit_date').value = date;
+    function openEditModal(notice) {
+        document.getElementById('edit_id').value = notice.id;
+        document.getElementById('edit_title').value = notice.title;
+        document.getElementById('edit_posted_by').value = notice.posted_by;
+        document.getElementById('edit_details').value = notice.details;
+        document.getElementById('edit_date').value = notice.date;
 
-        // Set dynamic form action
-        const form = document.getElementById('editNoticeForm');
-        form.action = `/admin/notice/${id}`; // or `/teacher/notice/${id}` if used for teachers
+        // Set form action dynamically
+        document.getElementById('editNoticeForm').action = `/admin/notice/${notice.id}`;
 
         // Show modal
         document.getElementById('editNoticeModal').classList.remove('hidden');
@@ -79,3 +77,4 @@
         document.getElementById('editNoticeModal').classList.add('hidden');
     }
 </script>
+

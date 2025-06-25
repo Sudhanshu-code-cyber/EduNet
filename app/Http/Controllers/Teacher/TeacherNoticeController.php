@@ -34,7 +34,7 @@ class TeacherNoticeController extends Controller
             ->where(function ($query) {
                 $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
             })
-            ->orderByDesc('date')
+            ->orderByDesc('created_at')
             ->paginate(5);
     
         return view('page.teacher.notice-admin', compact('notices'));

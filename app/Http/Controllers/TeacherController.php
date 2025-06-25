@@ -16,7 +16,7 @@ class TeacherController extends Controller
             $query->whereNull('expires_at')
                   ->orWhere('expires_at', '>=', now());
         })
-        ->orderByDesc('date')
+        ->orderByDesc('created_at')
         ->take(3)
         ->get();
 

@@ -63,7 +63,6 @@ Route::controller(AdminController::class)->prefix('admin')->group(function () {
     // Class Section
     Route::get('/class', 'class')->name('admin.class');
     Route::post('/class/store', 'storeSection')->name('admin.storeSection');
-    Route::delete('/class/{id}', 'destroy')->name('class.destroy');
 });
 
 
@@ -240,7 +239,7 @@ Route::delete('/admin/class-sub/{id}', [SubjectController::class, 'destroy'])->n
 
 Route::get('/admin/subjects/', [SubjectController::class, 'sub_index'])->name('subjects.index');
 Route::post('/admin/subjects', [SubjectController::class, 'sub_store'])->name('subjects.store');
-Route::put('/admin/update/{id}', [SubjectController::class, 'sub_update'])->name('subjecss.update');
+Route::put('/admin/update/{id}', [SubjectController::class, 'sub_update'])->name('subjects.update');
 Route::delete('/admin/destory/{id}', [SubjectController::class, 'sub_destroy'])->name('subjects.destroy');
 // routes/web.php
 Route::get('/admin/subjects/by-class/{id}', [SubjectController::class, 'getByClass']);
@@ -288,7 +287,6 @@ Route::delete('/admin/delete{id}',[SectionContoller::class,'delete'])->name('del
    Route::get('teacher/calendar', [AttendanceController::class, 'calendarView'])->name('attendance.calendar');
 Route::get('/attendance-events', [AttendanceController::class, 'getEvents'])->name('attendance.events');
 
-Route::get('/sections/by-class/{id}', [SectionContoller::class, 'getSectionsByClass']);
 Route::get('/sections/by-class/{id}', [SectionContoller::class, 'getSectionsByClass']);
 
 Route::get('/get-sections/{id}', [SectionContoller::class, 'getSectionByClass']);

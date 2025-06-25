@@ -114,21 +114,31 @@ class NoticeController extends Controller
      */
     public function search(Request $request)
     {
-        $query = Notice::query()
-            ->where('creator_role', 'admin')
-            ->where('target', 'teacher');
-
-        if ($request->filled('search_title')) {
-            $query->where('title', 'like', '%' . $request->search_title . '%');
+        $query = \App\Models\Notice::query();
+    
+        // Filter by title
+        if ($request->filled('title')) {
+            $query->where('title', 'like', '%' . $request->title . '%');
         }
-
+    
+        // Filter by date
         if ($request->filled('search_date')) {
             $query->whereDate('date', $request->search_date);
         }
-
-        $notices = $query->latest()->paginate(4);
-
+    
+        // Filter by role and target if needed
+        $query->where('creator_role', 'admin')
+              ->where('target', 'teacher');
+    
+        // Exclude expired
+        $query->where(function ($q) {
+            $q->whereNull('expires_at')
+              ->orWhere('expires_at', '>=', now());
+        });
+    
+        $notices = $query->orderByDesc('date')->paginate(10);
+    
         return view('page.admin.notice', compact('notices'));
     }
-
+    
 }
