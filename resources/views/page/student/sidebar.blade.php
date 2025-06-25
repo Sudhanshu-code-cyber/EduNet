@@ -110,7 +110,7 @@
                <p class="text-xs font-semibold text-gray-400 uppercase mb-2">Account</p>
                <ul class="space-y-1">
                   <li>
-                     <a href="#"
+                     <a href="{{route('student.profile.edit')}}"
                         class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition">
                         👤 <span>My Profile</span>
                      </a>

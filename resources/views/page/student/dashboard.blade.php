@@ -1,9 +1,10 @@
 @extends('page.student.parent')
 
 @section('content')
-    <div class="py-10">
+    <div class="py-5">
         <div class="w-full bg-white p-6 rounded-lg shadow-sm mb-6">
-            <h1 class="text-2xl font-semibold text-gray-800">Welcome back, <span class="text-indigo-600">{{auth()->user()->name}}</span>! 🎓
+            <h1 class="text-2xl font-semibold text-gray-800">Welcome back, <span
+                    class="text-indigo-600">{{ auth()->user()->name }}</span>! 🎓
             </h1>
             <p class="text-sm text-gray-500 mt-1">Hope you're having a great learning experience today.</p>
         </div>
@@ -11,8 +12,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
             <!-- Upcoming Exam -->
             <div class="border rounded-lg p-4 bg-white shadow-sm text-center">
-                <h2 class="text-sm font-semibold text-gray-500 mb-1">Upcoming Exams</h2>
-                <p class="text-2xl font-bold text-indigo-600">05</p>
+                <h2 class="text-sm font-semibold text-gray-500 mb-1">Upcoming Exams Schedule</h2>
+                <p class="text-2xl font-bold text-indigo-600">{{$countExamShedules}}</p>
             </div>
 
             <!-- Events -->
@@ -32,55 +33,44 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 p-4">
             <div class="bg-white shadow-xl rounded-2xl p-6 overflow-x-auto">
-                <h2 class="text-xl font-semibold text-gray-800 border-b pb-3 mb-6">📊 All Exam Results</h2>
+                <h2 class="text-2xl font-bold text-blue-800 border-b-2 pb-4 mb-6 flex items-center gap-2">
+                    📝 Upcoming Exam Schedule
+                </h2>
 
-                <!-- Search Filters -->
-                <div class="flex flex-col sm:flex-row gap-3 mb-6">
-                    <input type="text" placeholder="🔍 Search by Exam"
-                        class="border border-gray-300 px-4 py-2 rounded-lg w-full sm:w-1/3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                    <input type="date"
-                        class="border border-gray-300 px-4 py-2 rounded-lg w-full sm:w-1/3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                    <button
-                        class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg w-full sm:w-auto transition duration-300 ease-in-out">
-                        🔎 Search
-                    </button>
-                </div>
 
-                <!-- Table -->
-                <div class="rounded-lg overflow-hidden border border-gray-200">
+
+                <!-- Exam Table -->
+                <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
                     <table class="min-w-full text-sm text-left">
-                        <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
+                        <thead class="bg-blue-100 text-blue-800 uppercase text-xs tracking-wider">
                             <tr>
-                                <th class="px-4 py-3 border-b">Exam Name</th>
-                                <th class="px-4 py-3 border-b">Subject</th>
-                                <th class="px-4 py-3 border-b">Grade Point</th>
-                                <th class="px-4 py-3 border-b">Percent From</th>
-                                <th class="px-4 py-3 border-b">Percent Upto</th>
-                                <th class="px-4 py-3 border-b">Date</th>
+                                <th class="px-4 py-3">Subject</th>
+                                <th class="px-4 py-3">Exam Date</th>
+                                <th class="px-4 py-3">Start Time</th>
+                                <th class="px-4 py-3">End Time</th>
+                                <th class="px-4 py-3">Duration</th>
+                                <th class="px-4 py-3">Room No</th>
+                                <th class="px-4 py-3">Max Marks</th>
+                                <th class="px-4 py-3">Min Marks</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <tr class="hover:bg-yellow-50 transition">
-                                <td class="px-4 py-3">Class Test</td>
-                                <td class="px-4 py-3">Mathematics</td>
-                                <td class="px-4 py-3 font-semibold text-green-600">4.00</td>
-                                <td class="px-4 py-3">98.00</td>
-                                <td class="px-4 py-3">100.00</td>
-                                <td class="px-4 py-3">20/06/2017</td>
-                            </tr>
-                            <tr class="hover:bg-yellow-50 transition">
-                                <td class="px-4 py-3">Pre Test</td>
-                                <td class="px-4 py-3">English</td>
-                                <td class="px-4 py-3 font-semibold text-yellow-600">3.50</td>
-                                <td class="px-4 py-3">70.00</td>
-                                <td class="px-4 py-3">100.00</td>
-                                <td class="px-4 py-3">20/06/2017</td>
-                            </tr>
-                            <!-- More rows -->
+                        <tbody class=" divide-gray-100 bg-white">
+                            @foreach ($examSchedules as $exam)
+                                <tr>
+                                    <td>{{ $exam->class->name ?? 'N/A' }}</td>
+                                    <td>{{ $exam->subject->name ?? 'N/A' }}</td>
+                                    <td>{{ $exam->exam_date }}</td>
+                                    <td>{{ $exam->teacher->user->name ?? 'N/A' }}</td>
+                                </tr>
+                            @endforeach
+
+                            <!-- Add more rows as needed -->
                         </tbody>
                     </table>
                 </div>
             </div>
+
+
 
 
             <!-- All Exam Result -->

@@ -288,6 +288,60 @@ Route::delete('/admin/delete{id}',[SectionContoller::class,'delete'])->name('del
 Route::get('/attendance-events', [AttendanceController::class, 'getEvents'])->name('attendance.events');
 
 Route::get('/sections/by-class/{id}', [SectionContoller::class, 'getSectionsByClass']);
+Route::get('/sections/by-class/{id}', [SectionContoller::class, 'getSectionsByClass']);
+
+Route::get('/get-sections/{id}', [SectionContoller::class, 'getSectionByClass']);
+
+Route::get('/teacher/attendance', [AttendanceController::class, 'index'])->name('teacher.attendance.index');
+Route::post('/teacher/attendance/store', [AttendanceController::class, 'store'])->name('teacher.attendance.store');
+
+Route::get('/teacher/calendar', [AttendanceController::class, 'showCalendar'])->name('teacher.calendar');
+Route::get('/teacher/attendance-events', [AttendanceController::class, 'getAttendanceAjax'])->name('teacher.attendance.ajax');
+
+// AJAX: get sections by class
+Route::get('/teacher/get-sections/{class_id}', function ($class_id) {
+    $teacherId = auth()->id();
+    $sections = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
+        ->where('class_id', $class_id)
+        ->with('section')
+        ->get()
+        ->pluck('section')
+        ->unique('id')
+        ->values();
+    return response()->json(['sections' => $sections]);
+});
+
+// AJAX: get subjects by class
+Route::get('/teacher/get-subjects/{class_id}', function ($class_id) {
+    $teacherId = auth()->id();
+    $subjects = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
+        ->where('class_id', $class_id)
+        ->with('subject')
+        ->get()
+        ->pluck('subject')
+        ->unique('id')
+        ->values();
+    return response()->json(['subjects' => $subjects]);
+});
+
+Route::get('/teacher/exam-schedule/create', [TeacherExamScheduleController::class, 'examschedule'])->name('teacher.exam_schedule.create');
+Route::post('/teacher/exam-schedule/store', [TeacherExamScheduleController::class, 'storeschedule'])->name('teacher.exam_schedule.store');
+Route::delete('/teacher/exam-schedule/{id}', [TeacherExamScheduleController::class, 'deleteExam'])->name('delete.exam');
+Route::put('/teacher/exam-schedule/update/{id}', [TeacherExamScheduleController::class, 'update'])->name('exam.update');
+Route::get('/teacher/class-data/{class_id}', [TeacherExamScheduleController::class, 'getClassData']);
+
+
+Route::get('/student/profile', [StudentController::class, 'editProfile'])->name('student.profile.edit');
+Route::post('/student/profile', [StudentController::class, 'updateProfile'])->name('student.profile.update');
+
+//teacher edit profile
+Route::get('/teacher/profile', [TeacherController::class, 'teachereditProfile'])->name('teacher.profile.edit');
+Route::post('/teacher/profile', [TeacherController::class, 'updateProfile'])->name('teacher.profile.update');
+
+Route::get('/subjects/by-class/{id}', [AttendanceController::class, 'getByClass']);
+Route::get('/sections/by-class/{id}', [AttendanceController::class, 'getBySection']);
+
+
 
 
 

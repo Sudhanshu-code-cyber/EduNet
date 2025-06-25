@@ -54,7 +54,7 @@
           </li>
 
           <li>
-            <a href="{{ route('attendance.calendar') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+            <a href="" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
               <i class="fas fa-calendar-check w-4 text-center text-gray-500"></i>
               Attendance calendar
             </a>
@@ -113,7 +113,7 @@
         </a>
       </li>
       <li>
-        <a href="{{ route('teacher.examschedule') }}"
+        <a href="{{ route('teacher.exam_schedule.create') }}"
           class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
        Exam Schedule
         </a>
@@ -174,7 +174,7 @@
         <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Account</p>
         <ul class="space-y-0.5">
           <li>
-            <a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+            <a href="{{route('teacher.profile.edit')}}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
               <i class="fas fa-user-cog w-4 text-center text-gray-500"></i>
               Profile & Settings
             </a>

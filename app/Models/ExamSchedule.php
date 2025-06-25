@@ -14,9 +14,12 @@ class ExamSchedule extends Model
         'exam_date', 'start_time', 'end_time', 'duration',
         'room_no', 'max_marks', 'min_marks', 'teacher_id'
     ];
+public function subject()
+{
+    return $this->belongsTo(Subject::class);
+}
 
     public function class()    { return $this->belongsTo(ClassModel::class); }
     public function section()  { return $this->belongsTo(Section::class); }
-    public function subject()  { return $this->belongsTo(Subject::class); }
     public function teacher()  { return $this->belongsTo(Teacher::class); }
 }

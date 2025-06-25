@@ -71,55 +71,68 @@ class AttendanceController extends Controller
         return redirect()->back()->with('success', 'Attendance recorded successfully!');
     }
 
-    public function showCalendar()
-    {
-        $teacherId = Teacher::where("user_id",Auth::id())->first();
-        $assigned = AssignedTeacher::where('teacher_id', $teacherId)->with(['class'])->get();
-        $classes = $assigned->pluck('class')->unique('id');
-        return view('page.teacher.attendance-calendar', compact('classes'));
+    //calendar work
+   public function showCalendar()
+{
+    $teacher = Teacher::where("user_id", Auth::id())->first();
+
+    if (!$teacher) {
+        abort(403, "Teacher not found for this user.");
     }
 
-    public function getAttendanceAjax(Request $request)
-    {
-        $teacherId = auth()->id();
+    $assigned = AssignedTeacher::where('teacher_id', $teacher->id)->with('class')->get();
 
-        $isAssigned = AssignedTeacher::where('teacher_id', $teacherId)
-            ->where('class_id', $request->class_id)
-            ->where('section_id', $request->section_id)
-            ->where('subject_id', $request->subject_id)
-            ->exists();
+    $classes = $assigned->pluck('class')->unique('id');
 
-        if (!$isAssigned)
-            return response()->json([]);
+    
+    return view('page.teacher.attendance-calendar', compact('classes'));
+}
 
-        $attendances = Attendance::with('student')
-            ->whereBetween('date', [$request->start, $request->end])
-            ->whereHas('student', function ($q) use ($request) {
-                $q->where('class_id', $request->class_id)
-                    ->where('section_id', $request->section_id)
-                    ->where('subject_id', $request->subject_id);
-            })
-            ->get();
 
-        $events = [];
-
-        foreach ($attendances as $attendance) {
-            $color = match ($attendance->status) {
-                'present' => 'green',
-                'absent' => 'red',
-                'leave' => 'orange',
-                default => 'gray',
-            };
-
-            $events[] = [
-                'title' => $attendance->student->name . ' - ' . ucfirst($attendance->status),
-                'start' => $attendance->date,
-                'color' => $color,
-            ];
-        }
-
-        return response()->json($events);
+  public function getAttendanceAjax(Request $request)
+{
+    $teacher = Teacher::where("user_id", Auth::id())->first();
+    
+    if (!$teacher) {
+        return response()->json([]);
     }
+
+    // Validate required parameters
+    if (!$request->class_id || !$request->section_id || !$request->subject_id) {
+        return response()->json([]);
+    }
+
+    // Get attendance records
+    $attendances = Attendance::where('subject_id', $request->subject_id)
+        ->whereBetween('date', [$request->start, $request->end])
+        ->whereHas('student', function ($q) use ($request) {
+            $q->where('class_id', $request->class_id)
+                ->where('section_id', $request->section_id);
+        })
+        ->with('student')
+        ->get();
+        dd($attendances);
+
+    $events = [];
+
+    foreach ($attendances as $attendance) {
+        $color = match ($attendance->status) {
+            'present' => 'green',
+            'absent' => 'red',
+            'leave' => 'orange',
+            default => 'gray',
+        };
+
+        $events[] = [
+            'title' => $attendance->student->name . ' - ' . ucfirst($attendance->status),
+            'start' => $attendance->date,
+            'color' => $color,
+        ];
+    }
+
+    return response()->json($events);
+}
+
 
      public function getByClass($id)
 {

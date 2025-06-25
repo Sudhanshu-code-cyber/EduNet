@@ -13,7 +13,7 @@
         <input type="hidden" name="class_id" value="{{ $class_id }}">
         <input type="hidden" name="section_id" value="{{ $section_id }}">
         <input type="hidden" name="subject_id" value="{{ $subject_id }}">
-
+ 
         {{-- Date Picker --}}
         <div>
             <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Select Date</label>

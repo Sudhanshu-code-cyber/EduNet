@@ -14,35 +14,37 @@
 
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">Add Exam Schedule</h2>
 
-            <form id="examForm" action= " {{route('teacher.exam_schedule.store') }}" method="POST">
+            <form id="examForm" action= " {{ route('teacher.exam_schedule.store') }}" method="POST">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                   <!-- Class -->
-<div>
-    <label class="block text-sm font-medium mb-1">Class</label>
-    <select name="class_id" id="class_id" class="w-full border border-gray-300 rounded px-3 py-2">
-        <option value="">Select Class</option>
-        @foreach ($assigned->unique('class_id') as $item)
-            <option value="{{ $item->class_id }}">{{ $item->class->name }}</option>
-        @endforeach
-    </select>
-</div>
+                    <!-- Class -->
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Class</label>
+                        <select name="class_id" id="class_id" class="w-full border border-gray-300 rounded px-3 py-2">
+                            <option value="">Select Class</option>
+                            @foreach ($assigned->unique('class_id') as $item)
+                                <option value="{{ $item->class_id }}">{{ $item->class->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-<!-- Section -->
-<div>
-    <label class="block text-sm font-medium mb-1">Section</label>
-    <select name="section_id" id="section_id" class="w-full border border-gray-300 rounded px-3 py-2">
-        <option value="">Select Section</option>
-    </select>
-</div>
+                    <!-- Section -->
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Section</label>
+                        <select name="section_id" id="section_id"
+                            class="w-full border border-gray-300 rounded px-3 py-2">
+                            <option value="">Select Section</option>
+                        </select>
+                    </div>
 
-<!-- Subject -->
-<div>
-    <label class="block text-sm font-medium mb-1">Subject</label>
-    <select name="subject_id" id="subject_id" class="w-full border border-gray-300 rounded px-3 py-2">
-        <option value="">Select Subject</option>
-    </select>
-</div>
+                    <!-- Subject -->
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Subject</label>
+                        <select name="subject_id" id="subject_id"
+                            class="w-full border border-gray-300 rounded px-3 py-2">
+                            <option value="">Select Subject</option>
+                        </select>
+                    </div>
 
                     <!-- Exam Name -->
                     <div>
@@ -54,7 +56,7 @@
                         @enderror
                     </div>
 
-                  
+
 
                     <!-- Exam Date -->
                     <div>
@@ -143,14 +145,16 @@
             </form>
         </div>
     </div>
-</div> 
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#class_id').on('change', function () {
+    $(document).ready(function() {
+        $('#class_id').on('change', function() {
             const classId = $(this).val();
 
+  console.log("Selected Class ID:", classId);
+  
             $('#section_id').html('<option value="">Loading...</option>');
             $('#subject_id').html('<option value="">Loading...</option>');
 
@@ -158,19 +162,23 @@
                 $.ajax({
                     url: `/teacher/class-data/${classId}`,
                     method: 'GET',
-                    success: function (data) {
+                    success: function(data) {
                         $('#section_id').html('<option value="">Select Section</option>');
                         $('#subject_id').html('<option value="">Select Subject</option>');
 
-                        $.each(data.sections, function (i, section) {
-                            $('#section_id').append(`<option value="${section.id}">${section.name}</option>`);
+                        $.each(data.sections, function(i, section) {
+                            $('#section_id').append(
+                                `<option value="${section.id}">${section.name}</option>`
+                                );
                         });
 
-                        $.each(data.subjects, function (i, subject) {
-                            $('#subject_id').append(`<option value="${subject.id}">${subject.name}</option>`);
+                        $.each(data.subjects, function(i, subject) {
+                            $('#subject_id').append(
+                                `<option value="${subject.id}">${subject.name}</option>`
+                                );
                         });
                     },
-                    error: function () {
+                    error: function() {
                         alert('Failed to fetch sections/subjects.');
                     }
                 });
@@ -178,4 +186,3 @@
         });
     });
 </script>
-

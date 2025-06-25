@@ -12,5 +12,10 @@ class Subject extends Model
     {
         return $this->belongsTo(ClassModel::class); // Replace with actual model if different
     }
+    public function subject()
+{
+    return $this->belongsTo(Subject::class, 'subject_id');
+}
+
 
 }
