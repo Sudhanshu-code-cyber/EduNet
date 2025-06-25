@@ -57,7 +57,7 @@ class SubjectController extends Controller
     {
         $subjects = Subject::where('class_id', $id)->select('id', 'name', 'code')->get();
         return response()->json($subjects);
-    }
+    } 
 
     public function sub_index() {
         $subjects = Subject::all();
