@@ -15,7 +15,7 @@
                     <td class="px-6 py-4">{{ $index + 1 }}</td>
                     <td class="px-6 py-4">{{ $subject->name }}</td>
                     <td class="px-6 py-4">{{ $subject->code ?? '-' }}</td>
-                    <td class="px-6 py-4">{{ $subject->class->name }}</td>
+                    {{-- <td class="px-6 py-4">{{ $subject->class->name }}</td> --}}
                     <td class="px-6 py-4 text-center">
                         <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST"
                             onsubmit="return confirm('Are you sure you want to delete this subject?');">

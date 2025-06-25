@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SectionContoller;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherExamScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;

@@ -61,7 +61,7 @@ class SubjectController extends Controller
 
     public function sub_index() {
         $subjects = Subject::all();
-        return view('page.admin.subjects.subject', compact('classes'));
+        return view('page.admin.subjects.subject', compact('subjects'));
     }
     
     public function sub_store(Request $request) {
@@ -71,7 +71,7 @@ class SubjectController extends Controller
     }
     
     public function sub_update(Request $request, $id) {
-        $class = Subject::findOrFail($id);
+        $subject = Subject::findOrFail($id);
         $subject->update($request->only('name'));
         return redirect()->back()->with('success', 'subject added!');
     }
