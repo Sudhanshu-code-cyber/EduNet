@@ -17,9 +17,6 @@ class ExamMasterController extends Controller
     {
         $request->validate([
             'exam_name' => 'required|string',
-            'exam_date' => 'required|date',
-            'start_time' => 'required',
-            'end_time' => 'required',
         ]);
 
         ExamMaster::create($request->all());

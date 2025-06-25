@@ -19,9 +19,6 @@
                 <thead class="bg-blue-600 text-white">
                     <tr>
                         <th class="px-6 py-3">Exam Name</th>
-                        <th class="px-6 py-3">Exam Date</th>
-                        <th class="px-6 py-3">Start Time</th>
-                        <th class="px-6 py-3">End Time</th>
                         <th class="px-6 py-3 text-center">Action</th>
                     </tr>
                 </thead>
@@ -29,9 +26,6 @@
                     @forelse($exams as $exam)
                     <tr>
                         <td class="px-6 py-4">{{ $exam->exam_name }}</td>
-                        <td class="px-6 py-4">{{ $exam->exam_date }}</td>
-                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($exam->start_time)->format('h:i A') }}</td>
-                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($exam->end_time)->format('h:i A') }}</td>
                         <td class="px-6 py-4 text-center flex justify-center gap-4">
                             <a href="{{ route('teacher.exams.edit', $exam->id) }}" title="Edit"
                                 class="text-green-600 hover:text-green-800 transition">
@@ -81,27 +75,7 @@
                     class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter exam name">
             </div>
-
-            <div>
-                <label for="exam_date" class="block text-gray-700 font-medium mb-1">Exam Date</label>
-                <input type="date" name="exam_date" id="exam_date" required
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-4">
-                <div class="w-full sm:w-1/2">
-                    <label for="start_time" class="block text-gray-700 font-medium mb-1">Start Time</label>
-                    <input type="time" name="start_time" id="start_time" required
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500">
-                </div>
-
-                <div class="w-full sm:w-1/2">
-                    <label for="end_time" class="block text-gray-700 font-medium mb-1">End Time</label>
-                    <input type="time" name="end_time" id="end_time" required
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500">
-                </div>
-            </div>
-
+         
             <div class="flex gap-4 mt-4">
                 <button type="submit"
                     class="bg-blue-600 text-white font-semibold px-5 py-2 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">

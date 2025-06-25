@@ -9,7 +9,7 @@ class ExamMaster extends Model
 {
     use HasFactory;
 
-    protected $fillable =['exam_name', 'exam_date', 'start_time', 'end_time'];
+    protected $fillable =['exam_name'];
 
     public function marksEntries()
     {
