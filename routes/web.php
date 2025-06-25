@@ -195,6 +195,8 @@ Route::prefix('teacher/marks-entry')->middleware(['auth'])->group(function () {
     
     Route::get('/class-sections', [MarksEntryController::class, 'getSections'])->name('get.class.sections');
 });
+Route::get('/get-sections-by-class/{id}', [TeacherExamScheduleController::class, 'getSectionsByClass']);
+Route::get('/get-subjects-by-class', [TeacherExamScheduleController::class, 'getSubjectsByClass']);
 
 
 

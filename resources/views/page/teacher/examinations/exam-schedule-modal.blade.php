@@ -17,34 +17,37 @@
             <form id="examForm" action= " {{ route('teacher.exam_schedule.store') }}" method="POST">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Class Dropdown -->
                     <!-- Class -->
-                    <div>
+                    <div class="mb-4">
                         <label class="block text-sm font-medium mb-1">Class</label>
-                        <select name="class_id" id="class_id" class="w-full border border-gray-300 rounded px-3 py-2">
+                        <select id="class_id" name="class_id" class="w-full border border-gray-300 rounded px-3 py-2">
                             <option value="">Select Class</option>
-                            @foreach ($assigned->unique('class_id') as $item)
-                                <option value="{{ $item->class_id }}">{{ $item->class->name }}</option>
+                            @foreach ($classes as $c)
+                                <option value="{{ $c->id }}">{{ $c->name }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <!-- Section -->
-                    <div>
+                    <div class="mb-4">
                         <label class="block text-sm font-medium mb-1">Section</label>
-                        <select name="section_id" id="section_id"
+                        <select id="section_id" name="section_id"
                             class="w-full border border-gray-300 rounded px-3 py-2">
                             <option value="">Select Section</option>
                         </select>
                     </div>
 
-                    <!-- Subject -->
-                    <div>
+                    <!-- Subject (Always Visible) -->
+                    <div class="mb-4">
                         <label class="block text-sm font-medium mb-1">Subject</label>
-                        <select name="subject_id" id="subject_id"
+                        <select id="subject_id" name="subject_id"
                             class="w-full border border-gray-300 rounded px-3 py-2">
                             <option value="">Select Subject</option>
                         </select>
                     </div>
+
+
 
                     <!-- Exam Name -->
                     <div>
@@ -149,40 +152,51 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#class_id').on('change', function() {
-            const classId = $(this).val();
+    $('#class_id').on('change', function() {
+        const classId = $(this).val();
 
-  console.log("Selected Class ID:", classId);
-  
-            $('#section_id').html('<option value="">Loading...</option>');
-            $('#subject_id').html('<option value="">Loading...</option>');
+        $('#section_id').html('<option>Loading...</option>');
+        $('#subject_id').html('<option value="">Select Subject</option>');
 
-            if (classId) {
-                $.ajax({
-                    url: `/teacher/class-data/${classId}`,
-                    method: 'GET',
-                    success: function(data) {
-                        $('#section_id').html('<option value="">Select Section</option>');
-                        $('#subject_id').html('<option value="">Select Subject</option>');
-
-                        $.each(data.sections, function(i, section) {
-                            $('#section_id').append(
-                                `<option value="${section.id}">${section.name}</option>`
-                                );
-                        });
-
-                        $.each(data.subjects, function(i, subject) {
-                            $('#subject_id').append(
-                                `<option value="${subject.id}">${subject.name}</option>`
-                                );
-                        });
-                    },
-                    error: function() {
-                        alert('Failed to fetch sections/subjects.');
-                    }
+        if (classId) {
+            $.get('/get-sections-by-class/' + classId, function(sections) {
+                let sectionOptions = '<option value="">Select Section</option>';
+                sections.forEach(section => {
+                    sectionOptions += `<option value="${section.id}">${section.name}</option>`;
                 });
+                $('#section_id').html(sectionOptions);
+            });
+        } else {
+            $('#section_id').html('<option value="">Select Section</option>');
+        }
+    });
+
+    $('#section_id').on('change', function() {
+        const classId = $('#class_id').val();
+        const sectionId = $(this).val();
+
+        $('#subject_id').html('<option>Loading...</option>');
+
+        if (!classId || !sectionId) {
+            $('#subject_id').html('<option value="">Select Subject</option>');
+            return;
+        }
+
+        $.get('/get-subjects-by-class', {
+            class_id: classId,
+            section_id: sectionId
+        }, function(subjects) {
+            if (subjects.length === 0) {
+                $('#subject_id').html('<option value="">No subjects found</option>');
+                return;
             }
+
+            let subjectOptions = '<option value="">Select Subject</option>';
+            subjects.forEach(subject => {
+                subjectOptions += `<option value="${subject.id}">${subject.name}</option>`;
+            });
+
+            $('#subject_id').html(subjectOptions);
         });
     });
 </script>
