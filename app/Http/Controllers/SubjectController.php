@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassModel;
+use App\Models\ClassSubject;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 
@@ -26,18 +27,29 @@ class SubjectController extends Controller
     public function index()
     {
         $classes = ClassModel::all();
-        $subjects = Subject::with('class')->get();
-        return view('page.admin.subjects.index', compact('subjects', 'classes'));
+        $subjects = Subject::with('class')->get(); // ✅ this loads the class relation
+        $classSubjects = ClassSubject::all();
+        return view('page.admin.subjects.index', compact('subjects', 'classes', 'classSubjects'));
     }
     public function store(Request $request)
     {
         $request->validate([
             'class_id' => 'required|exists:classes,id',
-            'name' => 'required|string',
-            'code' => 'nullable|string'
+            'subject_id' => 'required|exists:subjects,id',
+            'max_marks' => 'required|integer|min:0',
+            'pass_marks' => 'required|integer|min:0|lte:max_marks',
         ]);
-        Subject::create($request->all());
-        return back()->with('success', 'Subject added!');
+
+
+
+        ClassSubject::create([
+            'class_id' => $request->class_id,
+            'subject_id' => $request->subject_id,
+            'max_marks' => $request->max_marks,
+            'pass_marks' => $request->pass_marks,
+        ]);
+
+        return back()->with('success', 'Subject assigned to class successfully!');
     }
 
     public function update(Request $request, $id)
@@ -59,24 +71,36 @@ class SubjectController extends Controller
         return response()->json($subjects);
     }
 
-    public function sub_index() {
+    public function sub_index()
+    {
         $subjects = Subject::all();
         return view('page.admin.subjects.subject', compact('subjects'));
     }
-    
-    public function sub_store(Request $request) {
-        $request->validate(['name' => 'required|string']);
-        Subject::create($request->only('name'));
-        return redirect()->back()->with('success', 'subject added!');
+
+    public function sub_store(Request $request)
+    {
+        // Validate both 'name' and 'code'
+        $request->validate([
+            'name' => 'required|string',
+            'code' => 'nullable|string',
+        ]);
+
+        // Store only 'name' and 'code'
+        Subject::create($request->only('name', 'code'));
+
+        return redirect()->back()->with('success', 'Subject added!');
     }
-    
-    public function sub_update(Request $request, $id) {
+
+
+    public function sub_update(Request $request, $id)
+    {
         $subject = Subject::findOrFail($id);
         $subject->update($request->only('name'));
         return redirect()->back()->with('success', 'subject added!');
     }
-    
-    public function sub_destroy($id) {
+
+    public function sub_destroy($id)
+    {
         Subject::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'subject added!');
     }

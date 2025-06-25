@@ -370,6 +370,13 @@
                     <span class="nav-text">Subject Management</span>
                 </a>
             </div>
+
+             <div class="nav-item">
+                <a href="{{route('class-sub.index')}}" class="nav-link">
+                    <i class="fas fa-book nav-icon"></i>
+                    <span class="nav-text">Subject & class Management</span>
+                </a>
+            </div>
             
 
              <div class="nav-item">
