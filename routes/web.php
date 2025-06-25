@@ -227,7 +227,7 @@ Route::prefix('admin')->group(function () {
 Route::get('/admin/classes/', [ClassController::class, 'index'])->name('classes.index');
 Route::post('/admin/classes', [ClassController::class, 'store'])->name('classes.store');
 Route::put('/admin/update/{id}', [ClassController::class, 'update'])->name('classes.update');
-Route::delete('/admin/destory/{id}', [ClassController::class, 'destroy'])->name('classes.destroy');
+Route::delete('/admin/destory/{id}', [ClassController::class, 'destroyClass'])->name('class.destroy');
 
 
 

@@ -42,7 +42,7 @@
                         <td class="px-6 py-4 font-medium text-gray-900">{{ $index + 1 }}</td>
                         <td class="px-6 py-4">{{ $class->name }}</td>
                         <td class="px-6 py-4 text-center">
-                            <form action="{{ route('classes.destroy', $class->id) }}" method="POST"
+                            <form action="{{ route('class.destroy', $class->id) }}" method="POST"
                                   onsubmit="return confirm('Are you sure you want to delete this class?');">
                                 @csrf
                                 @method('DELETE')

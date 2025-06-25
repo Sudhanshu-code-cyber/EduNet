@@ -6,7 +6,7 @@
 
         <!-- Add Subject Form -->
         <div class="bg-white shadow-md border border-gray-200 rounded-xl p-6 mb-10">
-            <form action="{{ route('subjects.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <form action="{{ route('class-sub.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 @csrf
                 <div class="col-span-1 md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Select Class</label>

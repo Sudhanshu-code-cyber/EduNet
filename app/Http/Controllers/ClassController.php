@@ -23,7 +23,7 @@ public function update(Request $request, $id) {
     return redirect()->back()->with('success', 'Class added!');
 }
 
-public function destroy($id) {
+public function destroyClass($id) {
     ClassModel::findOrFail($id)->delete();
     return redirect()->back()->with('success', 'Class added!');
 }
