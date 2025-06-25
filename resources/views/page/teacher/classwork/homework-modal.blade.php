@@ -112,8 +112,9 @@
                 .then(sections => {
                     sectionSelect.innerHTML = '<option value="">Select Section</option>';
                     sections.forEach(section => {
-                        sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
-                    });
+    sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
+});
+
                 })
                 .catch(error => {
                     console.error('Error fetching sections:', error);
@@ -134,8 +135,9 @@
                 .then(subjects => {
                     subjectSelect.innerHTML = '<option value="">Select Subject</option>';
                     subjects.forEach(subject => {
-                        subjectSelect.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
-                    });
+    subjectSelect.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
+});
+
                 })
                 .catch(error => {
                     console.error('Error fetching subjects:', error);

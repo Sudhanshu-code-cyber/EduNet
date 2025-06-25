@@ -100,6 +100,7 @@ public function getSections($classId)
     return response()->json($sections);
 }
 
+
 public function getSubjects($classId, $sectionId)
 {
     $teacher = Teacher::where('user_id', Auth::id())->first();
