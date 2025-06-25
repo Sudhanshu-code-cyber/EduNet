@@ -26,32 +26,42 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
+                    @forelse($exams as $exam)
                     <tr>
-                        <td class="px-6 py-4">Mid Term</td>
-                        <td class="px-6 py-4">2025-07-10</td>
-                        <td class="px-6 py-4">10:00 AM</td>
-                        <td class="px-6 py-4">12:00 PM</td>
+                        <td class="px-6 py-4">{{ $exam->exam_name }}</td>
+                        <td class="px-6 py-4">{{ $exam->exam_date }}</td>
+                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($exam->start_time)->format('h:i A') }}</td>
+                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($exam->end_time)->format('h:i A') }}</td>
                         <td class="px-6 py-4 text-center flex justify-center gap-4">
-                            <a href="#" title="Edit" class="text-green-600 hover:text-green-800 transition">
-                                    <i class="fa-regular fa-pen-to-square hover:text-yellow-500"></i>
+                            <a href="{{ route('teacher.exams.edit', $exam->id) }}" title="Edit"
+                                class="text-green-600 hover:text-green-800 transition">
+                                <i class="fa-regular fa-pen-to-square hover:text-yellow-500"></i>
                             </a>
-                            <form method="POST" action="#" onsubmit="return confirm('Are you sure?')" class="inline">
+                            <form method="POST" action="{{ route('teacher.exams.destroy', $exam->id) }}"
+                                onsubmit="return confirm('Are you sure?')" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" title="Delete" class="text-red-600 hover:text-red-800 transition">
-                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </form>
                         </td>
                     </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">No exams found.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
 
         <!-- Total -->
-        <p class="text-sm text-gray-500 mt-6">Total Exams: 1</p>
+        <p class="text-sm text-gray-500 mt-6">Total Exams: {{ $exams->count() }}</p>
     </div>
 </div>
 
@@ -62,7 +72,7 @@
     <div class="bg-white rounded-lg shadow-lg w-11/12 sm:w-1/2 p-6 z-10 relative max-h-screen overflow-y-auto">
         <h2 class="text-2xl font-semibold mb-4 text-blue-700">Add New Exam</h2>
 
-        <form method="POST" action="" class="space-y-4">
+        <form method="POST" action="{{ route('teacher.exams.store') }}" class="space-y-4">
             @csrf
 
             <div>
@@ -110,6 +120,7 @@
     </div>
 </div>
 
+<!-- Modal JS -->
 <script>
     function openModal() {
         document.getElementById('examModal').classList.remove('hidden');

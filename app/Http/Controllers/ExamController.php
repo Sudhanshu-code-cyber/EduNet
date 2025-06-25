@@ -1,13 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\ExamMaster;
 
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
-    public function exam(){
-        return view('page.teacher.examinations.exam');
+    
+    public function exam()
+    {
+        $exams = ExamMaster::all();  // fetch all exams
+        return view('page.teacher.examinations.exam', compact('exams'));
     }
 
     public function marksentry(){

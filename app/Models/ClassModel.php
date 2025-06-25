@@ -11,7 +11,7 @@ class ClassModel extends Model
 
     public function subjects()
     {
-        return $this->hasMany(Subject::class);
+        return $this->hasMany(Subject::class,'class_id');
     }
 
     public function feeStructures()
@@ -27,6 +27,17 @@ class ClassModel extends Model
     public function sections()
 {
     return $this->hasMany(Section::class);
+}
+
+public function classSubjects()
+{
+    return $this->hasMany(ClassSubject::class, 'class_id');
+}
+
+public function pivotSubjects()
+{
+    return $this->belongsToMany(Subject::class, 'class_subjects')
+                ->withPivot('max_marks', 'pass_marks');
 }
 
 }

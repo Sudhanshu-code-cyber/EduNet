@@ -59,4 +59,25 @@ class SubjectController extends Controller
         return response()->json($subjects);
     }
 
+    public function sub_index() {
+        $subjects = Subject::all();
+        return view('page.admin.subjects.subject', compact('classes'));
+    }
+    
+    public function sub_store(Request $request) {
+        $request->validate(['name' => 'required|string']);
+        Subject::create($request->only('name'));
+        return redirect()->back()->with('success', 'subject added!');
+    }
+    
+    public function sub_update(Request $request, $id) {
+        $class = Subject::findOrFail($id);
+        $subject->update($request->only('name'));
+        return redirect()->back()->with('success', 'subject added!');
+    }
+    
+    public function sub_destroy($id) {
+        Subject::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'subject added!');
+    }
 }

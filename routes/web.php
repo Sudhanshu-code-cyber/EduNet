@@ -22,6 +22,8 @@ use App\Http\Controllers\AssignTeacherController;
 use App\Http\Controllers\StudentListController;
 use App\Http\Controllers\Teacher\HomeworkController as TeacherHomeworkController;
 use App\Http\Controllers\Student\HomeworkController as StudentHomeworkController;
+use App\Http\Controllers\Teacher\MarksEntryController;
+use App\Http\Controllers\ExamMasterController;
 
 
 // Student Routes
@@ -33,7 +35,7 @@ Route::controller(StudentController::class)->prefix('student')->group(function (
     Route::get('/marksheet', 'marksheet')->name('student.marksheet');
     Route::get('/myfee', 'myfee')->name('student.myfee');
     Route::get('/notice', 'notice')->name('student.notice');
-    Route::post('/insert', 'store')->name('students.store');
+    // Route::post('/insert', 'store')->name('students.store');
 Route::get('/myclass','myclass')->name('student.myclass');
 
 });
@@ -175,6 +177,24 @@ Route::prefix('student')->name('student.')->group(function () {
     Route::post('homework/submit', [StudentHomeworkController::class, 'submit'])->name('homework.submit');
 });
 
+// ExamMaster Route
+Route::prefix('teacher/exams')->middleware(['auth'])->name('teacher.')->group(function () {
+    Route::get('/', [ExamMasterController::class, 'index'])->name('exams.index');
+    Route::post('/', [ExamMasterController::class, 'store'])->name('exams.store');
+    Route::post('/{id}/edit', [ExamMasterController::class, 'edit'])->name('exams.edit');
+    Route::post('/{id}', [ExamMasterController::class, 'update'])->name('exams.update');
+    Route::delete('/{id}', [ExamMasterController::class, 'destroy'])->name('exams.destroy');
+});
+
+// Marks-Entry Route
+Route::prefix('teacher/marks-entry')->middleware(['auth'])->group(function () {
+    Route::get('/', [MarksEntryController::class, 'index'])->name('marks.entry.index');
+    Route::post('/search', [MarksEntryController::class, 'search'])->name('marks.entry.search');
+    Route::post('/save', [MarksEntryController::class, 'save'])->name('marks.entry.save');
+    Route::post('/next-student', [MarksEntryController::class, 'getNextStudent'])->name('marks.entry.next');
+    
+    Route::get('/class-sections', [MarksEntryController::class, 'getSections'])->name('get.class.sections');
+});
 
 
 
@@ -211,10 +231,16 @@ Route::delete('/admin/destory/{id}', [ClassController::class, 'destroy'])->name(
 
 
 // Subject Routes
-Route::get('/admin/subjects', [SubjectController::class, 'index'])->name('subjects.index');
-Route::post('/admin/subjects', [SubjectController::class, 'store'])->name('subjects.store');
-Route::put('/admin/subjects/{id}', [SubjectController::class, 'update'])->name('subjects.update');
-Route::delete('/admin/subjects/{id}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
+Route::get('/admin/class-sub', [SubjectController::class, 'index'])->name('class-sub.index');
+Route::post('/admin/class-sub', [SubjectController::class, 'store'])->name('class-sub.store');
+Route::put('/admin/class-sub/{id}', [SubjectController::class, 'update'])->name('class-sub.update');
+Route::delete('/admin/class-sub/{id}', [SubjectController::class, 'destroy'])->name('class-sub.destroy');
+
+
+Route::get('/admin/subjects/', [SubjectController::class, 'sub_index'])->name('subjects.index');
+Route::post('/admin/subjects', [SubjectController::class, 'sub_store'])->name('subjects.store');
+Route::put('/admin/update/{id}', [SubjectController::class, 'sub_update'])->name('subjecss.update');
+Route::delete('/admin/destory/{id}', [SubjectController::class, 'sub_destroy'])->name('subjects.destroy');
 // routes/web.php
 Route::get('/admin/subjects/by-class/{id}', [SubjectController::class, 'getByClass']);
 
