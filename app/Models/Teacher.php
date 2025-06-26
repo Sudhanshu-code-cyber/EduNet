@@ -68,5 +68,6 @@ class Teacher extends Model
                     ->unique('id')
                     ->values();
     }
+    
 
 }

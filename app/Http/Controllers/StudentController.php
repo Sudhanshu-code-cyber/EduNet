@@ -30,9 +30,11 @@ class StudentController extends Controller
             ->where('section_id', $student->section_id)
             ->get();
 
+            $countNotice=Notice::count();
+
         $countExamShedules=ExamSchedule::count();
 
-        return view('page.student.dashboard', compact('latestNotices', 'examSchedules','countExamShedules'));
+        return view('page.student.dashboard', compact('latestNotices', 'examSchedules','countExamShedules','countNotice'));
     }
 
 
@@ -173,6 +175,19 @@ class StudentController extends Controller
         $student->save();
 
         return back()->with('success', 'Profile updated successfully!');
+    }
+
+      public function examSchedule()
+    {
+          $student = Student::where('user_id', Auth::id())->firstOrFail();
+
+        $examSchedules = ExamSchedule::with(['subject', 'teacher.user', 'class', 'section'])
+    ->where('class_id', $student->class_id)
+    ->where('section_id', $student->section_id)
+    ->paginate(10); // Paginate 10 results per page
+
+return view('page.student.exam-schedule', compact('examSchedules'));
+
     }
 
 }

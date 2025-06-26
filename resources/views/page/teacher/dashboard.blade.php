@@ -99,30 +99,53 @@
         <div>
             <h2 class="text-xl font-bold text-gray-800 mb-4">🚀 Quick Actions</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                @php
-                    $actions = [
-                        ['label' => 'Student List', 'icon' => 'users', 'color' => 'primary', 'bg' => 'indigo-100'],
-                        ['label' => 'Send Homework', 'icon' => 'book-open', 'color' => 'secondary', 'bg' => 'purple-100'],
-                        ['label' => 'Exam Schedule', 'icon' => 'calendar-alt', 'color' => 'accent', 'bg' => 'orange-100'],
-                        ['label' => 'Send Notice', 'icon' => 'bullhorn', 'color' => 'green-500', 'bg' => 'green-100'],
-                    ];
-                @endphp
+    @php
+        $actions = [
+            [
+                'label' => 'Student List', 
+                'icon' => 'users', 
+                'color' => 'indigo-600', 
+                'bg' => 'indigo-100',
+                'url' => '/teacher/student-list' // Replace with your actual route
+            ],
+            [
+                'label' => 'Send Homework', 
+                'icon' => 'book-open', 
+                'color' => 'purple-600', 
+                'bg' => 'purple-100',
+                'url' => '/teacher/homework'// Replace with your actual route
+            ],
+            [
+                'label' => 'Exam Schedule', 
+                'icon' => 'calendar-alt', 
+                'color' => 'orange-600', 
+                'bg' => 'orange-100',
+                'url' => '/teacher/exam-schedule/create' // Replace with your actual route
+            ],
+            [
+                'label' => 'Send Notice', 
+                'icon' => 'bullhorn', 
+                'color' => 'green-600', 
+                'bg' => 'green-100',
+                'url' => '/teacher/notice' // Replace with your actual route
+            ],
+        ];
+    @endphp
 
-                @foreach ($actions as $action)
-                    <button
-                        class="bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg group hover:border-{{ $action['color'] }} transition">
-                        <div class="flex flex-col items-center">
-                            <div
-                                class="w-14 h-14 rounded-full flex items-center justify-center bg-{{ $action['bg'] }} group-hover:bg-{{ $action['color'] }} transition-colors">
-                                <i class="fas fa-{{ $action['icon'] }} text-{{ $action['color'] }} text-xl group-hover:text-white"></i>
-                            </div>
-                            <span class="mt-3 font-medium text-gray-700 group-hover:text-{{ $action['color'] }}">
-                                {{ $action['label'] }}
-                            </span>
-                        </div>
-                    </button>
-                @endforeach
+    @foreach ($actions as $action)
+        <a href="{{ $action['url'] }}" 
+           class="block bg-white p-5 rounded-xl shadow-md border border-gray-100 hover:shadow-lg group hover:border-{{ $action['color'] }} transition transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-{{ $action['color'] }} focus:ring-opacity-50">
+            <div class="flex flex-col items-center">
+                <div class="w-14 h-14 rounded-full flex items-center justify-center bg-{{ $action['bg'] }} group-hover:bg-{{ $action['color'] }} transition-colors duration-300">
+                    <i class="fas fa-{{ $action['icon'] }} text-{{ $action['color'] }} text-xl group-hover:text-white transition-colors duration-300"></i>
+                </div>
+                <span class="mt-3 font-medium text-gray-700 group-hover:text-{{ $action['color'] }} transition-colors duration-300">
+                    {{ $action['label'] }}
+                </span>
             </div>
+        </a>
+    @endforeach
+</div>
         </div>
     </div>
 

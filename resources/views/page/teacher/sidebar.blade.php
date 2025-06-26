@@ -47,7 +47,7 @@
             </a>
           </li>
           <li>
-            <a href="{{ route('teacher.attendance.index') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+            <a href="{{ route('teacher.attendance') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
               <i class="fas fa-calendar-check w-4 text-center text-gray-500"></i>
               Attendance
             </a>

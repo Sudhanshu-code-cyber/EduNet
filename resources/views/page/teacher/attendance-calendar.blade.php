@@ -1,146 +1,44 @@
-@extends('page.teacher.parent')
+@extends('page.student.parent')
 
 @section('content')
-    <div class="max-w-7xl mx-auto py-6">
-        <h2 class="text-2xl font-bold mb-6">📅 Attendance Calendar</h2>
+<div class="max-w-4xl mx-auto py-6">
+    <h2 class="text-2xl font-bold mb-4">📊 My Attendance</h2>
 
-        <div class="flex flex-col md:flex-row gap-6 mb-6">
-            <!-- Class -->
-            <div class="w-full">
-                <label class="block mb-1 text-sm font-medium text-gray-700">Class</label>
-                <select id="class_id" class="border px-3 py-2 rounded w-full">
-                    <option value="">-- Select Class --</option>
-                    @foreach ($classes as $class)
-                        <option value="{{ $class->id }}">{{ $class->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <!-- Section -->
-            <div class="w-full">
-                <label class="block mb-1 text-sm font-medium text-gray-700">Section</label>
-                <select id="section_id" class="border px-3 py-2 rounded w-full">
-                    <option value="">-- Select Section --</option>
-                </select>
-            </div>
-
-            <!-- Subject -->
-            <div class="w-full">
-                <label class="block mb-1 text-sm font-medium text-gray-700">Subject</label>
-                <select id="subject_id" class="border px-3 py-2 rounded w-full">
-                    <option value="">-- Select Subject --</option>
-                </select>
-            </div>
+    <div class="bg-white shadow rounded p-4">
+        <div class="mb-4 text-sm text-gray-600">
+            <p><strong>Name:</strong> {{ $student->name }}</p>
+            <p><strong>Student ID:</strong> {{ $student->student_id }}</p>
+            <p><strong>Class:</strong> {{ $student->class->name ?? 'N/A' }}</p>
+            <p><strong>Section:</strong> {{ $student->section->name ?? 'N/A' }}</p>
         </div>
+
+        <table class="w-full text-sm border">
+            <thead>
+                <tr class="bg-gray-100 text-left">
+                    <th class="p-2 border">Date</th>
+                    <th class="p-2 border">Subject</th>
+                    <th class="p-2 border">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($attendance as $att)
+                    <tr>
+                        <td class="p-2 border">{{ \Carbon\Carbon::parse($att->date)->format('d M Y') }}</td>
+                        <td class="p-2 border">{{ $att->subject->name ?? 'N/A' }}</td>
+                        <td class="p-2 border">
+                            <span class="px-2 py-1 rounded text-white
+                                {{ $att->status === 'present' ? 'bg-green-500' : ($att->status === 'absent' ? 'bg-red-500' : 'bg-yellow-500') }}">
+                                {{ ucfirst($att->status) }}
+                            </span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="p-4 text-center text-gray-500">No attendance records found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-
-    <div id="calendar" class="bg-white p-4 rounded shadow"></div>
-    </div>
-
-    <!-- FullCalendar + jQuery -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            let calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-                initialView: 'dayGridMonth',
-                height: "auto",
-                events: fetchEvents
-            });
-
-            calendar.render();
-
-            $('#class_id').on('change', function() {
-                const classId = $(this).val();
-
-                $('#subject_id').html('<option value="">-- Select Subject --</option>');
-                $('#section_id').html('<option value="">-- Select Section --</option>');
-
-                if (classId) {
-                    // Get Sections
-                    $.get(`/teacher/get-sections/${classId}`, function(res) {
-                        let options = '<option value="">-- Select Section --</option>';
-                        res.sections.forEach(section => {
-                            options +=
-                                `<option value="${section.id}">${section.name}</option>`;
-                        });
-                        $('#section_id').html(options);
-                    });
-
-                    // Get Subjects
-                    $.get(`/teacher/get-subjects/${classId}`, function(res) {
-                        let options = '<option value="">-- Select Subject --</option>';
-                        res.subjects.forEach(subject => {
-                            options +=
-                                `<option value="${subject.id}">${subject.name}</option>`;
-                        });
-                        $('#subject_id').html(options);
-                    });
-                }
-
-                // Refetch events
-                calendar.refetchEvents();
-            });
-
-
-            function fetchEvents(info, successCallback, failureCallback) {
-                // Only fetch if all selections are made
-                const classId = $('#class_id').val();
-                const sectionId = $('#section_id').val();
-                const subjectId = $('#subject_id').val();
-
-                if (!classId || !sectionId || !subjectId) {
-                    return successCallback([]);
-                }
-
-                $.ajax({
-                    url: "/teacher/attendance-events",
-                    data: {
-                        start: info.startStr,
-                        end: info.endStr,
-                        class_id: classId,
-                        section_id: sectionId,
-                        subject_id: subjectId
-                    },
-                    success: function(response) {
-                        successCallback(response);
-                    },
-                    error: function() {
-                        failureCallback();
-                    }
-                });
-            }
-
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#class_id').on('change', function() {
-                const classId = $(this).val();
-
-                $('#subject_id').html('<option value="">-- Select Subject --</option>');
-                $('#section_id').html('<option value="">-- Select Section --</option>');
-
-                if (classId) {
-                    $.get(`/subjects/by-class/${classId}`, function(data) {
-                        $.each(data, function(i, subject) {
-                            $('#subject_id').append(
-                                `<option value="${subject.id}">${subject.name} (${subject.code})</option>`
-                            );
-                        });
-                    });
-
-                    $.get(`/sections/by-class/${classId}`, function(data) {
-                        $.each(data, function(i, section) {
-                            $('#section_id').append(
-                                `<option value="${section.id}">${section.name}</option>`
-                            );
-                        });
-                    });
-                }
-            });
-        });
-    </script>
+</div>
 @endsection

@@ -11,48 +11,34 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentListController extends Controller
 {
-    public function index(Request $request)
-    {
-        // Step 1: Get user_id from logged-in user
-        $teacher = Teacher::where("user_id",Auth::id())->first();
-        // Step 2: Get teacher_id from teachers table
+  // In your StudentListController
+public function index()
+{
+    $assignedClasses = ClassModel::whereIn('id', function($query) {
+        $query->select('class_id')
+              ->from('assigned_teachers')
+              ->where('teacher_id', auth()->user()->teacher->id);
+    })->get();
 
-        if (!$teacher) {
-            abort(403, 'No teacher profile found.');
-        }
+    $assignedSections = Section::whereIn('id', function($query) {
+        $query->select('section_id')
+              ->from('assigned_teachers')
+              ->where('teacher_id', auth()->user()->teacher->id);
+    })->get();
 
-        $teacherId = $teacher->id;
+    $students = Student::whereIn('class_id', $assignedClasses->pluck('id'))
+        ->whereIn('section_id', $assignedSections->pluck('id'))
+        ->when(request('class_id'), function($query, $classId) {
+            return $query->where('class_id', $classId);
+        })
+        ->when(request('section_id'), function($query, $sectionId) {
+            return $query->where('section_id', $sectionId);
+        })
+        ->with(['class', 'section'])
+        ->paginate(15); // Add pagination here
 
-        // Step 3: Get assigned classes and sections for this teacher
-        $assignments = AssignedTeacher::where('teacher_id', $teacherId)->get();
-
-        $assignedClassIds = $assignments->pluck('class_id')->unique();
-        $assignedSectionIds = $assignments->pluck('section_id')->unique();
-
-        $assignedClasses = ClassModel::whereIn('id', $assignedClassIds)->get();
-        $assignedSections = Section::whereIn('id', $assignedSectionIds)->get();
-
-        // Step 4: Filter students based on class and section filters
-        $query = Student::query()->with('class', 'section');
-
-        if ($request->filled('class_id')) {
-            $query->where('class_id', $request->class_id);
-        }
-
-        if ($request->filled('section_id')) {
-            $query->where('section_id', $request->section_id);
-        }
-
-        // Step 5: Restrict students to only assigned class & section
-        $query->whereIn('class_id', $assignedClassIds)
-              ->whereIn('section_id', $assignedSectionIds);
-
-        $students = $query->get();
-
-        return view('page.teacher.student-list', compact(
-            'students', 'assignedClasses', 'assignedSections'
-        ));
-    }
+    return view('page.teacher.student-list', compact('assignedClasses', 'assignedSections', 'students'));
+}
     
     public function getSectionsByClass($classId)
     {

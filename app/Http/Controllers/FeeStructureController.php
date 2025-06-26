@@ -32,7 +32,7 @@ class FeeStructureController extends Controller
             'fee_type_id' => $request->fee_type_id,
             'amount' => $request->amount,
             'frequency' => $request->frequency,
-            'start_month' => $request->start_month,
+            'start_month' => $request->start_month,  
             'is_recurring' => $request->has('is_recurring') ? 1 : 0,
             'notes' => $request->notes
         ]);

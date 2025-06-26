@@ -13,7 +13,7 @@ return new class extends Migration
     {
        Schema::create('exam_schedules', function (Blueprint $table) {
     $table->id();
-    $table->string('exam_name');
+    $table->unsignedBigInteger('exam_id');
     $table->unsignedBigInteger('class_id');
     $table->unsignedBigInteger('section_id');
     $table->unsignedBigInteger('subject_id');
@@ -27,6 +27,7 @@ return new class extends Migration
     $table->unsignedBigInteger('teacher_id');
     $table->timestamps();
 
+    $table->foreign('exam_id')->references('id')->on('exam_masters')->onDelete('cascade');
     $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
     $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
     $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');

@@ -47,17 +47,22 @@
                         </select>
                     </div>
 
-
-
                     <!-- Exam Name -->
-                    <div>
-                        <label>Exam Name</label>
-                        <input type="text" name="exam_name" class="w-full border border-gray-300 rounded px-3 py-2">
+                    <div class="mb-4">
+                        <label for="exam_id" class="block text-sm font-medium text-gray-700 mb-1">Exam Name</label>
+                        <select name="exam_id" id="exam_id" class="w-full border border-gray-300 rounded px-3 py-2">
+                            <option value="">Select Exam</option>
+                            @foreach ($examMaster as $exam)
+                                <option value="{{ $exam->id }}">{{ $exam->exam_name }}</option>
+                            @endforeach
+                        </select>
 
-                        @error('exam_name')
+
+                        @error('exam_id')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
 
 
 

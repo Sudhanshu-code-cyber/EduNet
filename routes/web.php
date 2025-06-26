@@ -227,7 +227,7 @@ Route::prefix('admin')->group(function () {
 Route::get('/admin/classes/', [ClassController::class, 'index'])->name('classes.index');
 Route::post('/admin/classes', [ClassController::class, 'store'])->name('classes.store');
 Route::put('/admin/update/{id}', [ClassController::class, 'update'])->name('classes.update');
-Route::delete('/admin/destroy/{id}', [ClassController::class, 'destroyClass'])->name('class.destroy');
+Route::delete('/classes/{id}', [ClassController::class, 'destroy'])->name('classes.destroy');
 
 
 
@@ -340,6 +340,13 @@ Route::post('/teacher/profile', [TeacherController::class, 'updateProfile'])->na
 
 Route::get('/subjects/by-class/{id}', [AttendanceController::class, 'getByClass']);
 Route::get('/sections/by-class/{id}', [AttendanceController::class, 'getBySection']);
+Route::get('/student/examshedule', [StudentController::class, 'examSchedule'])->name('student.examschedule');
+// routes/web.php
+
+Route::get('/teacher/attendance', [AttendanceController::class, 'index'])->name('teacher.attendance');
+Route::post('/teacher/attendance/store', [AttendanceController::class, 'store'])->name('teacher.attendance.store');
+Route::post('/teacher/attendance/get-students', [AttendanceController::class, 'getStudentsForAttendance']);
+Route::get('/teacher/attendance/get-sections/{class_id}', [AttendanceController::class, 'getSectionsByClass']);
 
 
 

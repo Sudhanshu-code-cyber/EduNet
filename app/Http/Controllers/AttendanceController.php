@@ -16,28 +16,48 @@ use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    public function index()
-    {
-        $teacher = Teacher::where("user_id",Auth::id())->first();
-        $assignment = AssignedTeacher::where('teacher_id', $teacher->id)
-            ->with(['class', 'section', 'subject'])
-            ->first();
-        // if (!$assignment) {
-        //     return redirect()->back()->with('error', 'No assigned class/section/subject found.');
-        // }
+  public function index()
+{
+    $teacher = Teacher::where("user_id", Auth::id())->firstOrFail();
 
-        // Fetch students of that class and section
-        $students = Student::where('class_id', $assignment->class_id)
-            ->where('section_id', $assignment->section_id)
-            ->get();
+    // All class-section-subjects assigned to the teacher
+    $assigned = AssignedTeacher::where('teacher_id', $teacher->id)
+        ->with(['class', 'section', 'subject'])
+        ->get();
 
-        return view('page.teacher.attendance', [
-            'class_id' => $assignment->class_id,
-            'section_id' => $assignment->section_id,
-            'subject_id' => $assignment->subject_id,
-            'students' => $students
-        ]);
-    }
+    $classes = $assigned->pluck('class')->unique('id');
+    $sections = $assigned->pluck('section')->unique('id');
+
+    return view('page.teacher.attendance', compact('classes', 'sections'));
+}
+
+
+public function getSectionsByClass($class_id)
+{
+    $teacher = Teacher::where("user_id", Auth::id())->firstOrFail();
+
+    $sections = AssignedTeacher::where('teacher_id', $teacher->id)
+        ->where('class_id', $class_id)
+        ->with('section')
+        ->get()
+        ->pluck('section')
+        ->unique('id')
+        ->values();
+
+    return response()->json(['sections' => $sections]);
+}
+
+public function getStudentsForAttendance(Request $request)
+{
+    $teacher = Teacher::where("user_id", Auth::id())->firstOrFail();
+
+    $students = Student::where('class_id', $request->class_id)
+        ->where('section_id', $request->section_id)
+        ->get();
+
+    return response()->json(['students' => $students]);
+}
+    
 
 
 

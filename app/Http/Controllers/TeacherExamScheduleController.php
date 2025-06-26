@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AssignedTeacher;
 use App\Models\ClassModel;
 use App\Models\ClassSubject;
+use App\Models\ExamMaster;
 use App\Models\ExamSchedule;
 use App\Models\Section;
 use App\Models\Teacher;
@@ -15,11 +16,13 @@ class TeacherExamScheduleController extends Controller
 {
 
 
- public function examschedule()
+    public function examschedule()
     {
         $teacherId = Teacher::where("user_id", Auth::id())->value('id');
 
         $classes = ClassModel::all();
+        $examMaster = ExamMaster::all();
+
 
         $assigned = AssignedTeacher::with(['class', 'section', 'subject'])
             ->where('teacher_id', $teacherId)
@@ -37,9 +40,15 @@ class TeacherExamScheduleController extends Controller
         });
 
         return view('page.teacher.examinations.exam-schedule', compact(
-            'assigned', 'exams', 'classes', 'teachers'
+            'assigned',
+            'exams',
+            'classes',
+            'teachers',
+            'examMaster'
         ));
     }
+
+   
 
 
     public function getSectionsByClass($id)
@@ -64,30 +73,26 @@ class TeacherExamScheduleController extends Controller
     }
 
 
-    public function storeschedule(Request $request)
+    public function storeSchedule(Request $request)
     {
         $request->validate([
-            'exam_name' => 'required',
-            'class_id' => 'required',
-            'section_id' => 'required',
-            'subject_id' => 'required',
+            'exam_id' => 'required|exists:exam_masters,id',
+            'class_id' => 'required|exists:classes,id',
+            'section_id' => 'required|exists:sections,id',
+            'subject_id' => 'required|exists:subjects,id',
             'exam_date' => 'required|date',
             'start_time' => 'required',
             'end_time' => 'required',
             'duration' => 'required|integer',
-            'room_no' => 'required',
+            'room_no' => 'required|string',
             'max_marks' => 'required|integer',
             'min_marks' => 'required|integer',
         ]);
 
-        $teacherId = Teacher::where('user_id', auth()->id())->value('id');
-
-        if (!$teacherId) {
-            return redirect()->back()->with('error', 'Teacher not found for this user.');
-        }
+        $teacherId = auth()->user()->teacher->id;
 
         ExamSchedule::create([
-            'exam_name' => $request->exam_name,
+            'exam_id' => $request->exam_id,
             'class_id' => $request->class_id,
             'section_id' => $request->section_id,
             'subject_id' => $request->subject_id,
@@ -98,10 +103,10 @@ class TeacherExamScheduleController extends Controller
             'room_no' => $request->room_no,
             'max_marks' => $request->max_marks,
             'min_marks' => $request->min_marks,
-            'teacher_id' => $teacherId, // ✅ FIXED
+            'teacher_id' => $teacherId,
         ]);
 
-        return redirect()->back()->with('success', 'Exam schedule added.');
+        return redirect()->back()->with('success', 'Exam schedule created successfully!');
     }
 
 
