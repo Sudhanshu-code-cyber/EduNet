@@ -127,12 +127,32 @@
     </ul>
   </li>
 
-  <li>
-    <a href="{{ route('teacher.marksentry') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-      <i class="fas fa-chart-line w-4 text-center text-gray-500"></i>
-      Marks Entry
-    </a>
-  </li>
+  <li x-data="{ openNotice: false }">
+    <button @click="openNotice = !openNotice"
+      class="w-full flex items-center justify-between px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+      <span class="flex items-center gap-2">
+        <i class="fas fa-bullhorn w-4 text-center text-gray-500"></i>
+        Marks Entry
+      </span>
+      <i :class="openNotice ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-xs text-gray-500"></i>
+    </button>
+    
+    <ul x-show="openNotice" x-transition class="ml-6 mt-1 space-y-0.5 text-sm">
+      <li>
+          <a href="{{ route('marks.entry.index') }}"
+          class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
+          Marks Entry
+        </a>
+      </li>
+      <li>
+        <a href="{{ route('teacher.marksentry') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+          <i class="fas fa-chart-line w-4 text-center text-gray-500"></i>
+          Marks Entry List
+        </a>
+      </li>
+    </ul>
+      </li>
+
   <li>
     <a href="{{ route('teacher.timetable') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
       <i class="fas fa-clock w-4 text-center text-gray-500"></i>

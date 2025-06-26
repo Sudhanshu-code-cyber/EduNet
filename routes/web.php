@@ -8,7 +8,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherExamScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentController; 
 use App\Http\Controllers\TransportController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TeacherController;
@@ -192,7 +192,6 @@ Route::prefix('teacher/marks-entry')->middleware(['auth'])->group(function () {
     Route::post('/search', [MarksEntryController::class, 'search'])->name('marks.entry.search');
     Route::post('/save', [MarksEntryController::class, 'save'])->name('marks.entry.save');
     Route::post('/next-student', [MarksEntryController::class, 'getNextStudent'])->name('marks.entry.next');
-    
     Route::get('/class-sections', [MarksEntryController::class, 'getSections'])->name('get.class.sections');
 });
 Route::get('/get-sections-by-class/{id}', [TeacherExamScheduleController::class, 'getSectionsByClass']);
@@ -228,7 +227,7 @@ Route::prefix('admin')->group(function () {
 Route::get('/admin/classes/', [ClassController::class, 'index'])->name('classes.index');
 Route::post('/admin/classes', [ClassController::class, 'store'])->name('classes.store');
 Route::put('/admin/update/{id}', [ClassController::class, 'update'])->name('classes.update');
-Route::delete('/admin/destory/{id}', [ClassController::class, 'destroyClass'])->name('class.destroy');
+Route::delete('/admin/destroy/{id}', [ClassController::class, 'destroyClass'])->name('class.destroy');
 
 
 

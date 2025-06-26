@@ -18,28 +18,27 @@ class MarksEntryController extends Controller
     {
         $exams = ExamMaster::all();
         $teacher = Auth::user()->teacher;
-        $classes = ClassModel::all(); // your existing logic
+        $classes = ClassModel::all(); // you can replace this with assigned classes to teacher
         return view('page.teacher.examinations.marks-entry', compact('exams', 'classes'))->with('sections', []);
     }
-
 
     public function search(Request $request)
     {
         $students = Student::where('class_id', $request->class_id)
-                           ->where('section_id', $request->section_id)
-                           ->get();
-    
-                           $subjects = ClassSubject::with('subject')
-    ->where('class_id', $request->class_id)
-    ->get();
+            ->where('section_id', $request->section_id)
+            ->orderBy('roll_no')
+            ->get();
+
+        $subjects = ClassSubject::with('subject')
+            ->where('class_id', $request->class_id)
+            ->get();
 
         $sections = Section::where('class_id', $request->class_id)->get();
-        $student = $students->first(); // first student for entry
-    
+        $student = $students->first();
+
         $exams = ExamMaster::all();
-        $teacher = Auth::user()->teacher;
-        $classes = $teacher->assignedClasses();
-    
+        $classes = ClassModel::all();
+
         return view('page.teacher.examinations.marks-entry', [
             'students' => $students,
             'student' => $student,
@@ -51,20 +50,22 @@ class MarksEntryController extends Controller
             'class_id' => $request->class_id,
             'section_id' => $request->section_id,
         ]);
-        
     }
-    
 
     public function save(Request $request)
     {
         foreach ($request->subject_marks as $subject_id => $marks) {
-            MarksEntry::create([
-                'student_id' => $request->student_id,
-                'exam_master_id' => $request->exam_master_id,
-                'subject_id' => $subject_id,
-                'marks_obtained' => $marks,
-                'teacher_id' => Auth::id(),
-            ]);
+            MarksEntry::updateOrCreate(
+                [
+                    'student_id' => $request->student_id,
+                    'exam_master_id' => $request->exam_master_id,
+                    'subject_id' => $subject_id,
+                ],
+                [
+                    'marks_obtained' => $marks,
+                    'teacher_id' => Auth::id(),
+                ]
+            );
         }
 
         return response()->json(['success' => true]);
@@ -76,31 +77,36 @@ class MarksEntryController extends Controller
             ->where('section_id', $request->section_id)
             ->orderBy('roll_no')
             ->get();
-    
-        $index = $students->search(fn($s) => $s->id == $request->current_student_id);
+
+        $index = $students->search(function ($s) use ($request) {
+            return $s->id == $request->current_student_id;
+        });
+
         $nextStudent = $students->get($index + 1);
-    
+
         if (!$nextStudent) {
             return response()->json(['done' => true]);
         }
-    
+
         $subjects = ClassSubject::with('subject')
-            ->where('class_id', $request->class_id)->get();
+            ->where('class_id', $request->class_id)
+            ->get();
+
         $html = view('page.teacher.examinations.marks-entry', [
             'student' => $nextStudent,
             'subjects' => $subjects,
-            'request' => $request
+            'exam_master_id' => $request->exam_master_id,
+            'class_id' => $request->class_id,
+            'section_id' => $request->section_id,
         ])->render();
-    
+
         return response()->json(['html' => $html]);
     }
-    
-   
-public function getSections(Request $request)
-{
-    $sections = Section::where('class_id', $request->class_id)->get();
-    return response()->json($sections);
-}
 
+    public function getSections(Request $request)
+    {
+        $sections = Section::where('class_id', $request->class_id)->get();
+        return response()->json($sections);
+    }
 
 }

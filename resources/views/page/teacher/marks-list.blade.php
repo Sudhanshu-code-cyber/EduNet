@@ -6,32 +6,35 @@
         <h1 class="text-3xl font-bold mb-6 text-blue-800">Marks Entry</h1>
 
         <!-- Filter Form -->
-        <form method="GET" action="" class="bg-white shadow rounded-lg p-6 mb-10">
+        <form method="GET" action="{{ route('marks.entry.index') }}" class="bg-white shadow rounded-lg p-6 mb-10">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                     <label class="block text-gray-700 font-semibold mb-1">Select Exam</label>
-                    <select required class="w-full border rounded px-3 py-2">
-                        <option>-- Choose Exam --</option>
-                        <option>Mid Term</option>
-                        <option>Final Term</option>
+                    <select required name="exam_master_id" class="w-full border rounded px-3 py-2">
+                        <option value="">-- Choose Exam --</option>
+                        @foreach($exams as $exam)
+                            <option value="{{ $exam->id }}">{{ $exam->exam_name }}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 font-semibold mb-1">Select Class</label>
-                    <select required class="w-full border rounded px-3 py-2">
-                        <option>-- Choose Class --</option>
-                        <option>Class 7</option>
-                        <option>Class 8</option>
+                    <select required name="class_id" class="w-full border rounded px-3 py-2">
+                        <option value="">-- Choose Class --</option>
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->class_name }}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-gray-700 font-semibold mb-1">Select Section</label>
-                    <select required class="w-full border rounded px-3 py-2">
-                        <option>-- Choose Section --</option>
-                        <option>A</option>
-                        <option>B</option>
+                    <select required name="section_id" class="w-full border rounded px-3 py-2">
+                        <option value="">-- Choose Section --</option>
+                        @foreach($sections as $section)
+                            <option value="{{ $section->id }}">{{ $section->section_name }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -42,7 +45,7 @@
             </div>
         </form>
 
-        <!-- Static Table -->
+        <!-- Static Table (Demo Purpose Only) -->
         <div class="bg-white shadow rounded-lg overflow-x-auto">
             <table class="min-w-full text-sm text-left">
                 <thead class="bg-gray-100 text-gray-700">
@@ -62,7 +65,6 @@
                     </tr>
                 </thead>
                 <tbody class="text-gray-800">
-                    <!-- Static Row -->
                     <tr class="border-b hover:bg-gray-50">
                         <td class="p-4 font-medium">Riya Sharma</td>
                         <td class="p-4">55</td>
@@ -80,8 +82,6 @@
                             <button onclick="printAnotherPage()" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-xs">Print</button>
                         </td>
                     </tr>
-
-                    <!-- More Rows (copy & edit as needed) -->
                     <tr class="border-b hover:bg-gray-50">
                         <td class="p-4 font-medium">Aman Verma</td>
                         <td class="p-4">32</td>
@@ -107,12 +107,13 @@
 </div>
 @endsection
 
+@section('scripts')
 <script>
     function printAnotherPage() {
-        const printWindow = window.open("{{ route('teacher.marksentry') }}", '_blank');
+        const printWindow = window.open("{{ route('marks.entry.index') }}", '_blank');
         printWindow.onload = function () {
             printWindow.print();
         };
     }
-  </script>
-  
+</script>
+@endsection
