@@ -155,22 +155,16 @@ Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function
 });
 
 // Teacher Routes for Homework
-// Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function () {
-
 Route::prefix('teacher')->name('teacher.')->group(function () {
     Route::get('homework', [TeacherHomeworkController::class, 'index'])->name('homework.index');
     Route::post('homework', [TeacherHomeworkController::class, 'store'])->name('homework.store');
     Route::get('homework/{id}/edit', [TeacherHomeworkController::class, 'edit'])->name('homework.edit');
     Route::put('homework/{id}', [TeacherHomeworkController::class, 'update'])->name('homework.update');
     Route::delete('homework/{id}', [TeacherHomeworkController::class, 'destroy'])->name('homework.destroy');
-    // Route::get('homework/{id}', [TeacherHomeworkController::class, 'show'])->name('homework.show');
     Route::get('homework/search', [TeacherHomeworkController::class, 'search'])->name('homework.search');
     Route::get('homework/submissions', [TeacherHomeworkController::class, 'submissions'])->name('homework.submissions');
-
-    // Fetch sections for selected class assigned to the logged-in teacher
-Route::get('get-sections/{class_id}', [\App\Http\Controllers\Teacher\HomeworkController::class, 'getSections']);
-// Fetch subjects for selected class and section assigned to the logged-in teacher
-Route::get('get-subjects/{class_id}/{section_id}', [\App\Http\Controllers\Teacher\HomeworkController::class, 'getSubjects']);
+Route::get('get-sections/{class_id}', [TeacherHomeworkController::class, 'getSections'])->name('homework.get-sections');
+Route::get('get-subjects/{class_id}/{section_id}', [TeacherHomeworkController::class, 'getSubjects'])->name('homework.get-subjects');
 });
 
 // Student Routes for Homework
