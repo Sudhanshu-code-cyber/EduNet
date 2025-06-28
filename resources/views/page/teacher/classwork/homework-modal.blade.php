@@ -98,29 +98,38 @@
         const sectionSelect = document.querySelector('select[name="section_id"]');
         const subjectSelect = document.querySelector('select[name="subject_id"]');
 
-        // ✅ When class changes → fetch sections
-        classSelect.addEventListener('change', function () {
-            const classId = this.value;
+     classSelect.addEventListener('change', function () {
+    const classId = this.value;
 
-            // Reset section and subject dropdowns
-            sectionSelect.innerHTML = '<option value="">Loading sections...</option>';
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+    // Reset section and subject dropdowns
+    sectionSelect.innerHTML = '<option value="">Loading sections...</option>';
+    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
 
-            // AJAX request to fetch assigned sections
-            fetch(`/teacher/get-sections/${classId}`)
-                .then(response => response.json())
-                .then(sections => {
-                    sectionSelect.innerHTML = '<option value="">Select Section</option>';
-                    sections.forEach(section => {
-    sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
+    // ✅ Updated fetch with Laravel session & header support
+    fetch(`/teacher/get-sections/${classId}`, {
+        credentials: 'same-origin',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(sections => {
+        sectionSelect.innerHTML = '<option value="">Select Section</option>';
+        sections.forEach(section => {
+            sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching sections:', error);
+        sectionSelect.innerHTML = '<option value="">Error loading sections</option>';
+    });
 });
 
-                })
-                .catch(error => {
-                    console.error('Error fetching sections:', error);
-                    sectionSelect.innerHTML = '<option value="">Error loading sections</option>';
-                });
-        });
 
         // ✅ When section changes → fetch subjects
         sectionSelect.addEventListener('change', function () {
