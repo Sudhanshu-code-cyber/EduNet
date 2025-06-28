@@ -182,15 +182,6 @@ Route::prefix('teacher/exams')->middleware(['auth'])->name('teacher.')->group(fu
     Route::delete('/{id}', [ExamMasterController::class, 'destroy'])->name('exams.destroy');
 });
 
-// Marks Entry Routes 
-Route::prefix('teacher/marks-entry')->middleware(['auth'])->group(function () {
-    Route::get('/', [MarksEntryController::class, 'index'])->name('marks.entry.index');
-    Route::post('/search', [MarksEntryController::class, 'search'])->name('marks.entry.search');
-    Route::post('/save', [MarksEntryController::class, 'save'])->name('marks.entry.save');
-    Route::post('/next-student', [MarksEntryController::class, 'nextStudent'])->name('marks.entry.next');
-    Route::get('/get-sections/{class_id}', [MarksEntryController::class, 'getSections'])->name('marks.getSections');
-});
-
 // Marks Entry Routes
 Route::prefix('teacher/marks-entry')->middleware(['auth'])->group(function () {
     Route::get('/', [MarksEntryController::class, 'index'])->name('marks.entry.index');

@@ -24,7 +24,7 @@
 <div class="max-w-4xl mx-auto p-6 border border-gray-300 rounded shadow">
     <!-- Header -->
     <div class="flex justify-between items-center border-b pb-4 mb-4">
-        <img src="{{ asset('school-logo.png') }}" alt="School Logo" class="w-20 h-20 object-cover rounded">
+        <img src="{{ asset('storage/homework/images.jpeg') }}" alt="School Logo" class="w-20 h-20 object-cover rounded">
         <div class="text-center">
             <h1 class="text-2xl font-bold uppercase">School Model</h1>
             <h2 class="text-lg font-semibold text-gray-600 uppercase">International School</h2>

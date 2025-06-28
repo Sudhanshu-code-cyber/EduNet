@@ -134,6 +134,11 @@
             Delete
         </button>
     </form>
+
+<a href="{{ route('marks.entry.print', ['student_id' => $student->id, 'exam_id' => $exam->id]) }}" 
+    target="_blank"   class="text-sm bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+    Print Marksheet
+</a>
 </td>
 
                 </tr>

@@ -108,7 +108,7 @@ function attachSaveAndNextHandler() {
                         alert('All students completed!');
                         window.location.reload();
                     } else {
-                        document.querySelector('#marksWrapper').innerHTML = data.view;
+                       document.querySelector('#marksWrapper').innerHTML = `<div class="bg-white border shadow rounded-lg p-6">${data.view}</div>`;
                         attachMarksCalculationHandler();
                         attachSaveAndNextHandler();
                     }

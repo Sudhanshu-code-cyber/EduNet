@@ -80,33 +80,36 @@ class MarksEntryController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function nextStudent(Request $request)
-    {
-        $nextStudent = Student::where('class_id', $request->class_id)
-            ->where('section_id', $request->section_id)
-            ->where('id', '>', $request->current_student_id)
-            ->orderBy('id')
-            ->first();
+   public function nextStudent(Request $request)
+{
+    $nextStudent = Student::where('class_id', $request->class_id)
+        ->where('section_id', $request->section_id)
+        ->where('id', '>', $request->current_student_id)
+        ->orderBy('id')
+        ->first();
 
-        if (!$nextStudent) {
-            return response()->json(['done' => true]);
-        }
-
-        $subjects = ClassSubject::with('subject')
-            ->where('class_id', $request->class_id)
-            ->get();
-
-        return response()->json([
-            'done' => false,
-            'view' => view('page.teacher.examinations.marks-form', [
-                'student' => $nextStudent,
-                'subjects' => $subjects,
-                'exam_master_id' => $request->exam_master_id,
-                'class_id' => $request->class_id,
-                'section_id' => $request->section_id,
-            ])->render()
-        ]);
+    if (!$nextStudent) {
+        return response()->json(['done' => true]);
     }
+
+    $subjects = ClassSubject::with('subject')
+        ->where('class_id', $request->class_id)
+        ->get();
+
+    $exam = ExamMaster::find($request->exam_master_id); 
+
+    return response()->json([
+        'done' => false,
+        'view' => view('page.teacher.examinations.marks-form', [
+            'student' => $nextStudent,
+            'subjects' => $subjects,
+            'exam_master_id' => $request->exam_master_id,
+            'class_id' => $request->class_id,
+            'section_id' => $request->section_id,
+            'exam' => $exam, 
+        ])->render()
+    ]);
+}
 
     public function getSections($class_id)
     {
