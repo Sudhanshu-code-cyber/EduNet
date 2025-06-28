@@ -120,7 +120,7 @@
                      </a>
                      <ul class="absolute left-0 mt-1 w-full bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10 overflow-hidden border border-gray-100">
                         <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                           <a href="{{route('student.result')}}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                               <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
                               View Results
                            </a>
