@@ -32,6 +32,8 @@ class Student extends Model
         'present_address',
         'permanent_address',
         'parents_photo',
+        'transport_id',
+        'uses_transport'
     ];
 
     protected $guarded = [];
@@ -54,7 +56,8 @@ class Student extends Model
     }
 
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -63,6 +66,10 @@ class Student extends Model
         return $this->hasMany(Attendance::class, 'student_id');
     }
 
+    public function transport()
+    {
+        return $this->belongsTo(Transport::class);
+    }
 
 
 

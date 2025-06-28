@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transport;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\ClassSection;
@@ -29,13 +30,16 @@ class AdminController extends Controller
     {
         $classes = ClassModel::all();
         $sections = Section::all();
-        return view('page.admin.student.addstudent', compact('classes', 'sections'));
+        $transports=Transport::all();
+        
+        return view('page.admin.student.addstudent', compact('classes', 'sections','transports'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'full_name' => 'required|string|max:255',
+            'transport_id' => 'nullable|string|max:255',
             'roll_no' => 'required|string|max:20|unique:students,roll_no',
             'admission_no' => 'required|string|max:50|unique:students,admission_no',
             'class_id' => 'required|string|max:20',

@@ -53,6 +53,10 @@
         }
     </style>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <div class="mx-auto">
         <div class="form-container rounded">
             <!-- Student Information Section -->
@@ -79,33 +83,31 @@
                         </div>
 
                         <!-- Class Dropdown -->
-<div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
-    <select id="class_id" name="class_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
-        <option value="" disabled selected>Select class</option>
-        @foreach ($classes as $class)
-            <option value="{{ $class->id }}">{{ $class->name }}</option>
-        @endforeach
-    </select>
-    @error('class_id')
-        <span class="text-red-500 text-sm">{{ $message }}</span>
-    @enderror
-</div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
+                            <select id="class_id" name="class_id"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                <option value="" disabled selected>Select class</option>
+                                @foreach ($classes as $class)
+                                    <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('class_id')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-<!-- Section Dropdown -->
-<div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
-    <select id="section_id" name="section_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
-        <option value="" disabled selected>Select section</option>
-    </select>
-    @error('section_id')
-        <span class="text-red-500 text-sm">{{ $message }}</span>
-    @enderror
-</div>
-
-
-
-
+                        <!-- Section Dropdown -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+                            <select id="section_id" name="section_id"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+                                <option value="" disabled selected>Select section</option>
+                            </select>
+                            @error('section_id')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
+                        </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gender*</label>
@@ -140,10 +142,11 @@
                             @enderror
                         </div>
 
-                        <!--  Transport Checkbox (NEW) -->
+                        <!-- Transport Checkbox -->
                         <div class="flex items-center mt-8">
-                            <input type="checkbox" id="uses_transport" name="uses_transport"
-                                class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <input type="checkbox" id="uses_transport" name="uses_transport" value="1"
+                                class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                {{ old('uses_transport') ? 'checked' : '' }}>
                             <label for="uses_transport" class="ml-2 text-sm text-gray-700">Uses Transport Facility?</label>
                             @error('uses_transport')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -190,11 +193,9 @@
                                 <option>AB+</option>
                                 <option>AB-</option>
                             </select>
-
                             @error('blood_group')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
-
                         </div>
 
                         <div>
@@ -214,7 +215,6 @@
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
-
 
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Upload Student Photo</label>
@@ -310,6 +310,33 @@
                     </div>
                 </div>
 
+                <!-- Transport Dropdown -->
+                <div id="transport_select_container" class="p-6  {{ old('uses_transport') ? '' : 'hidden' }}">
+                    <div class="section-headertext-xl font-bold text-gray-900 bg-gray-200 p-2 rounded flex items-center">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-bus mr-3 "></i>
+                            Transport Information
+                        </h2>
+                    </div>
+
+                    <div class="mt-5">
+                        <label for="transport_id" class="block  text-sm font-medium text-gray-700 mb-1">Route List</label>
+                        <select name="transport_id" id="transport_id" class="w-full">
+                            <option value="" class="p-4">Select route...</option>
+                            @foreach ($transports as $transport)
+                                <option value="{{ $transport->id }}" data-route="{{ $transport->route_name }}"
+                                    data-vehicle="{{ $transport->vehicle_number }}"
+                                    {{ old('transport_id') == $transport->id ? 'selected' : '' }}>
+                                    {{ $transport->route_name }} ({{ $transport->vehicle_number }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('transport_id')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+
                 <!-- Submit Buttons -->
                 <div class="p-6 bg-gray-50 flex justify-end space-x-4">
                     <button type="reset"
@@ -338,35 +365,77 @@
             document.getElementById('parents-file-name').textContent = fileName;
         });
     </script>
-   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $('#class_id').on('change', function () {
-            const classId = $(this).val();
+    <script>
+        $(document).ready(function() {
+            // Class-Section AJAX
+            $('#class_id').on('change', function() {
+                const classId = $(this).val();
+                $('#section_id').html('<option value="">Loading...</option>');
 
-            $('#section_id').html('<option value="">Loading...</option>');
+                if (classId) {
+                    $.ajax({
+                        url: `/sections/by-class/${classId}`,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#section_id').empty().append(
+                                '<option value="" disabled selected>Select section</option>'
+                            );
+                            $.each(data, function(i, section) {
+                                $('#section_id').append(
+                                    `<option value="${section.id}">${section.name}</option>`
+                                );
+                            });
+                        },
+                        error: function() {
+                            $('#section_id').html(
+                                '<option value="" disabled selected>Error loading sections</option>'
+                            );
+                        }
+                    });
+                } else {
+                    $('#section_id').html('<option value="" disabled selected>Select section</option>');
+                }
+            });
 
-            if (classId) {
-                $.ajax({
-                    url: `/sections/by-class/${classId}`,
-                    type: 'GET',
-                    success: function (data) {
-                        $('#section_id').empty().append('<option value="" disabled selected>Select section</option>');
-                        $.each(data, function (i, section) {
-                            $('#section_id').append(`<option value="${section.id}">${section.name}</option>`);
-                        });
-                    },
-                    error: function () {
-                        alert('Unable to fetch sections. Please try again.');
-                    }
-                });
-            } else {
-                $('#section_id').html('<option value="" disabled selected>Select section</option>');
+            // Transport Select2 with search
+            $('#transport_id').select2({
+                width: '100%',
+                placeholder: "Search for a route...",
+                allowClear: true,
+                minimumResultsForSearch: 3,
+                templateResult: formatTransportOption,
+                templateSelection: formatTransportOption
+            });
+
+            function formatTransportOption(option) {
+                if (!option.id) {
+                    return option.text;
+                }
+                const route = $(option.element).data('route');
+                const vehicle = $(option.element).data('vehicle');
+                return $(`
+                    <div class="leading-tight">
+                        <div class="font-semibold">${route}</div>
+                        <div class="text-sm text-gray-500">${vehicle}</div>
+                    </div>
+                `);
             }
+
+            // Toggle transport dropdown
+            function toggleTransport() {
+                const isChecked = $('#uses_transport').is(':checked');
+                $('#transport_select_container').toggleClass('hidden', !isChecked);
+                if (!isChecked) {
+                    $('#transport_id').val(null).trigger('change');
+                }
+            }
+
+            // Initialize transport visibility
+            toggleTransport();
+
+            // Bind change event
+            $('#uses_transport').change(toggleTransport);
         });
-    });
-</script>
-
-
+    </script>
 @endsection

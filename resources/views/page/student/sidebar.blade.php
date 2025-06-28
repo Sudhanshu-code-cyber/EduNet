@@ -155,7 +155,7 @@
                      </a>
                   </li>
                   <li>
-                     <a href="#"
+                     <a href="{{route('student.transport')}}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-all duration-200 group">
                         <span class="w-6 h-6 flex items-center justify-center bg-cyan-100 text-cyan-600 rounded-lg group-hover:bg-cyan-600 group-hover:text-white transition-colors">🚌</span>
                         <span class="font-medium">Transport</span>

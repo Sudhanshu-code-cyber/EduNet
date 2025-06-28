@@ -46,22 +46,25 @@ Route::get('/parent', function () {
 })->name('/parent');
 
 // Admin Routes
-Route::controller(AdminController::class)->prefix('admin')->group(function () {
-    Route::get('/', 'index')->name('/admin');
 
-    // Student Management
-    Route::get('/allstudent', 'allstudent')->name('admin.allstudent');
-    Route::get('/allstudent/{student}', 'editStudent')->name('student.edit');
-    Route::put('/students/{id}', 'studentUpdate')->name('student.update');
-    Route::post('/student/store', 'store')->name('students.store');
-    Route::get('/student/{id}/show', 'showStudent')->name('student.show');
-    Route::delete('/student/{id}', 'deleteStudent')->name('student.destroy');
-    Route::get('/student/search', 'searchRollName')->name('student.search');
-    Route::get('/student/create', 'create')->name('student.create');
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::controller(AdminController::class)->group(function () {
+        // Dashboard
+        Route::get('/', 'index')->name('/admin');
 
-    // Class Section
-    Route::get('/class', 'class')->name('admin.class');
-    Route::post('/class/store', 'storeSection')->name('admin.storeSection');
+        // Student Management
+        Route::get('/allstudent', 'allstudent')->name('admin.allstudent');
+        Route::get('/allstudent/{student}', 'editStudent')->name('student.edit');
+        Route::put('/students/{id}', 'studentUpdate')->name('student.update');
+        Route::post('/student/store', 'store')->name('students.store');
+        Route::get('/student/{id}/show', 'showStudent')->name('student.show');
+        Route::delete('/student/{id}', 'deleteStudent')->name('student.destroy');
+        Route::get('/student/search', 'searchRollName')->name('student.search');
+        Route::get('/student/create', 'create')->name('student.create');
+        // Class Section
+        Route::get('/class', 'class')->name('class');
+        Route::post('/class/store', 'storeSection')->name('storeSection');
+    });
 });
 
 
@@ -272,7 +275,7 @@ Route::get('/admin/subjects/filter/{class_id?}', [SubjectController::class, 'fil
 
 Route::get('/', function () {
     return view('home');
-})->name('home.login');
+})->name('login');
 
 
 Route::get('/register',[AuthController::class,'register'])->name('register');
@@ -367,6 +370,9 @@ Route::get('/teacher/attendance', [AttendanceController::class, 'index'])->name(
 Route::post('/teacher/attendance/store', [AttendanceController::class, 'store'])->name('teacher.attendance.store');
 Route::post('/teacher/attendance/get-students', [AttendanceController::class, 'getStudentsForAttendance']);
 Route::get('/teacher/attendance/get-sections/{class_id}', [AttendanceController::class, 'getSectionsByClass']);
+// routes/web.php
+Route::get('/student/transport', [StudentController::class,'transport'])->name('student.transport');
+
 
 
 

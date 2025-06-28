@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\ExamSchedule;
+use App\Models\Transport;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Notice;
 use App\Models\Student;
@@ -14,6 +15,9 @@ class StudentController extends Controller
 {
     public function dashboard()
     {
+        if (!auth()->check()) {
+        return redirect()->route('login'); // make sure 'login' route exists
+    }
         $latestNotices = Notice::where('target', 'student')
             ->where(function ($query) {
                 $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
@@ -189,5 +193,15 @@ class StudentController extends Controller
 return view('page.student.exam-schedule', compact('examSchedules'));
 
     }
+
+    public function transport()
+{
+        $student = Student::where('user_id', Auth::id())->firstOrFail();
+
+    // Ensure relation is loaded
+    $transport = $student->transport;
+
+    return view('page.student.transport', compact('transport'));
+}
 
 }

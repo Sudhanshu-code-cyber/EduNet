@@ -8,8 +8,12 @@ use App\Models\Notice;
 class TeacherController extends Controller
 {
     
-   public function dashboard()
+  public function dashboard()
 {
+    if (!auth()->check()) {
+        return redirect()->route('login'); // make sure 'login' route exists
+    }
+
     $latestNotices = Notice::where('creator_role', 'admin')
         ->where('target', 'teacher')
         ->where(function ($query) {
@@ -22,7 +26,7 @@ class TeacherController extends Controller
 
     return view('page.teacher.dashboard', compact('latestNotices'));
 }
-    
+
     
 
     public function myclass(){
