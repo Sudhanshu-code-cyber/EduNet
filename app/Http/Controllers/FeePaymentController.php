@@ -55,27 +55,30 @@ class FeePaymentController extends Controller
 public function store(Request $request)
 {
     $request->validate([
-        'fees' => 'required|array',
-        'student_id' => 'required|exists:students,id',
-        'payment_method' => 'required|string',
-    ]);
+    'fees' => 'required|array',
+    'student_id' => 'required|exists:students,id',
+    'payment_method' => 'required|string',
+]);
 
     $totalPaid = 0;
 
-    foreach ($request->fees as $fee) {
-        if (isset($fee['selected'])) {
+   foreach ($request->fees as $fee) {
+    if (isset($fee['months']) && is_array($fee['months'])) {
+        foreach ($fee['months'] as $month) {
             FeePayment::create([
                 'student_id' => $request->student_id,
                 'fee_type_id' => $fee['fee_type_id'],
                 'amount' => $fee['amount'],
-                'month' => $fee['month'],
+                'month' => $month,
                 'payment_method' => $request->payment_method,
                 'status' => 'Paid',
                 'payment_date' => now(),
             ]);
+
             $totalPaid += $fee['amount'];
         }
     }
+}
 
     $student = Student::find($request->student_id);
     $requiredFees = FeeStructure::where('class_id', $student->class_id)->count();

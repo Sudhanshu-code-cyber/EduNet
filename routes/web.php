@@ -32,7 +32,6 @@ Route::controller(StudentController::class)->prefix('student')->group(function (
     Route::get('/', 'dashboard')->name('/student');
     Route::get('/attendance', 'attendance')->name('student.attendance');
     Route::get('/homework', 'homework')->name('student.homework');
-    Route::get('/myresult', 'myresult')->name('student.myresult');
     Route::get('/marksheet', 'marksheet')->name('student.marksheet');
     Route::get('/myfee', 'myfee')->name('student.myfee');
     Route::get('/notice', 'notice')->name('student.notice');
@@ -82,7 +81,7 @@ Route::controller(TeacherController::class)->prefix('teacher')->name('teacher.')
 Route::controller(ExamController::class)->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/exam', 'exam')->name('exam');
     Route::get('/examschedule', 'examschedule')->name('examschedule');
-    Route::get('/marksentry', 'marksentry')->name('marksentry');
+    // Route::get('/marksentry', 'marksentry')->name('marksentry');
 });
 
 // Admin Teacher Management
@@ -186,14 +185,35 @@ Route::prefix('teacher/exams')->middleware(['auth'])->name('teacher.')->group(fu
     Route::delete('/{id}', [ExamMasterController::class, 'destroy'])->name('exams.destroy');
 });
 
-// Marks-Entry Route
+// Marks Entry Routes 
 Route::prefix('teacher/marks-entry')->middleware(['auth'])->group(function () {
     Route::get('/', [MarksEntryController::class, 'index'])->name('marks.entry.index');
     Route::post('/search', [MarksEntryController::class, 'search'])->name('marks.entry.search');
     Route::post('/save', [MarksEntryController::class, 'save'])->name('marks.entry.save');
-    Route::post('/next-student', [MarksEntryController::class, 'getNextStudent'])->name('marks.entry.next');
-    Route::get('/class-sections', [MarksEntryController::class, 'getSections'])->name('get.class.sections');
+    Route::post('/next-student', [MarksEntryController::class, 'nextStudent'])->name('marks.entry.next');
+    Route::get('/get-sections/{class_id}', [MarksEntryController::class, 'getSections'])->name('marks.getSections');
 });
+
+// Marks Entry Routes
+Route::prefix('teacher/marks-entry')->middleware(['auth'])->group(function () {
+    Route::get('/', [MarksEntryController::class, 'index'])->name('marks.entry.index');
+    Route::post('/search', [MarksEntryController::class, 'search'])->name('marks.entry.search');
+    Route::post('/save', [MarksEntryController::class, 'save'])->name('marks.entry.save');
+    Route::post('/next-student', [MarksEntryController::class, 'nextStudent'])->name('marks.entry.next');
+    Route::get('/get-sections/{class_id}', [MarksEntryController::class, 'getSections'])->name('marks.getSections');
+  Route::get('/edit/{student_id}/{exam_id}', [MarksEntryController::class, 'editMarksEntry'])->name('marks.entry.edit'); 
+Route::post('/update', [MarksEntryController::class, 'updateMarksEntry'])->name('marks.entry.update');
+Route::delete('/delete', [MarksEntryController::class, 'deleteMarksEntry'])->name('marks.entry.delete');
+});
+
+// Marks List Routes 
+Route::match(['get', 'post'], 'teacher/marks-list', [MarksEntryController::class, 'marksList'])->name('marks.list');
+Route::get('teacher/marks-list/sections/{class_id}', [MarksEntryController::class, 'getSections'])->name('marks.list.sections');
+Route::get('/student/result/print',[MarksEntryController::class, 'printResult'])->name('student.result.print');
+Route::get('student/result', [MarksEntryController::class, 'viewResult'])->name('student.result');
+Route::get('marks-entry/print/{student_id}/{exam_id}', [MarksEntryController::class, 'printMarksheet'])->name('marks.entry.print');
+
+
 Route::get('/get-sections-by-class/{id}', [TeacherExamScheduleController::class, 'getSectionsByClass']);
 Route::get('/get-subjects-by-class', [TeacherExamScheduleController::class, 'getSubjectsByClass']);
 

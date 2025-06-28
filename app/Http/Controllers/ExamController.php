@@ -16,18 +16,6 @@ class ExamController extends Controller
         return view('page.teacher.examinations.exam', compact('exams'));
     }
 
-    public function marksentry(Request $request)
-    {
-        $exams = ExamMaster::all();
-        $classes = ClassModel::all();
-    
-        // Fix: always define $sections to avoid undefined variable error
-        $sections = [];
-    
-        return view('page.teacher.marks-list', compact('exams', 'classes', 'sections'));
-    }
-    
-
     public function examschedule(){
         return view('page.teacher.examinations.exam-schedule');
     }

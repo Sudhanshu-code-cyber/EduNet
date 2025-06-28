@@ -108,7 +108,7 @@
                      </a>
                   </li>
                   <li class="relative group">
-                     <a href="{{route('student.myresult')}}"
+                     <a href="{{route('student.result')}}"
                         class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-all duration-200">
                         <div class="flex items-center gap-3">
                            <span class="w-6 h-6 flex items-center justify-center bg-red-100 text-red-600 rounded-lg group-hover:bg-red-600 group-hover:text-white transition-colors">🧪</span>

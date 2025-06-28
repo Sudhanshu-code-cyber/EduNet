@@ -80,25 +80,36 @@
                     </thead>
                     <tbody>
                         @foreach($fees as $fee)
-                        <tr>
-                            <td class="p-2 border">{{ $fee->feeType->name }}</td>
-                            <td class="p-2 border">₹{{ number_format($fee->amount, 2) }}</td>
-                            <td class="p-2 border">
-                                <select name="fees[{{ $loop->index }}][month]" class="border border-gray-300 rounded px-2 py-1 w-full">
-                                    <option value="">Select Month</option>
-                                    @foreach (range(1, 12) as $month)
-                                        <option value="{{ $month }}" {{ old("fees.$loop->index.month") == $month ? 'selected' : '' }}>
-                                            {{ date('F', mktime(0, 0, 0, $month, 1)) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </td>
-                            <td class="p-2 border text-center">
-                                <input type="hidden" name="fees[{{ $loop->index }}][fee_type_id]" value="{{ $fee->fee_type_id }}">
-                                <input type="hidden" name="fees[{{ $loop->index }}][amount]" value="{{ $fee->amount }}">
-                                <input type="checkbox" name="fees[{{ $loop->index }}][selected]" value="1" class="fee-checkbox">
-                            </td>
-                        </tr>
+                      <tr>
+    <td class="p-2 border">{{ $fee->feeType->name }}</td>
+    <td class="p-2 border">₹{{ number_format($fee->amount, 2) }}</td>
+
+    <td class="p-2 border">
+        <div class="grid grid-cols-2 gap-1 max-h-32 overflow-y-auto">
+            @foreach (range(1, 12) as $month)
+                <label class="flex items-center space-x-1">
+                    <input 
+                        type="checkbox" 
+                        name="fees[{{ $loop->parent->index }}][months][]" 
+                        value="{{ $month }}" 
+                        data-amount="{{ $fee->amount }}"
+                        class="month-checkbox">
+                    <span class="text-xs">{{ date('M', mktime(0, 0, 0, $month, 1)) }}</span>
+                </label>
+            @endforeach
+        </div>
+    </td>
+
+   <td class="p-2 border text-center">
+    <input type="hidden" name="fees[{{ $loop->index }}][fee_type_id]" value="{{ $fee->fee_type_id }}">
+    <input type="hidden" name="fees[{{ $loop->index }}][amount]" value="{{ $fee->amount }}">
+    <input type="checkbox" 
+           name="fees[{{ $loop->index }}][selected]" 
+           value="1" 
+           class="select-fee-checkbox" 
+           data-index="{{ $loop->index }}">
+</td>
+</tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -113,9 +124,9 @@
                         </select>
                     </div>
 
-                    <div class="text-lg font-semibold text-right w-1/2">
-                        <span id="total-amount">Total: ₹0</span>
-                    </div>
+                  <div class="text-lg font-semibold text-right w-full mt-4">
+    <span id="total-amount">Total: ₹0.00</span>
+</div>
                 </div>
 
                 <button type="submit" class="mt-6 bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 w-full">Submit Payment</button>
@@ -126,20 +137,38 @@
 
 {{-- Optional JS: Real-time fee total --}}
 <script>
-    const checkboxes = document.querySelectorAll('.fee-checkbox');
-    const totalEl = document.getElementById('total-amount');
+    document.addEventListener("DOMContentLoaded", function () {
+        const totalEl = document.getElementById('total-amount');
 
-    function updateTotal() {
-        let total = 0;
-        checkboxes.forEach((cb) => {
-            if (cb.checked) {
-                const amount = parseFloat(cb.previousElementSibling.value);
-                total += amount;
-            }
+        function updateTotal() {
+            let total = 0;
+
+            // For each fee row's selected checkbox
+            document.querySelectorAll('.select-fee-checkbox').forEach(selectCb => {
+                if (selectCb.checked) {
+                    const index = selectCb.getAttribute('data-index');
+                    const monthCheckboxes = document.querySelectorAll(`input[name="fees[${index}][months][]"]:checked`);
+
+                    monthCheckboxes.forEach(cb => {
+                        const amount = parseFloat(cb.getAttribute('data-amount'));
+                        if (!isNaN(amount)) {
+                            total += amount;
+                        }
+                    });
+                }
+            });
+
+            totalEl.innerText = "Total: ₹" + total.toFixed(2);
+        }
+
+        // Attach listeners
+        document.querySelectorAll('.month-checkbox, .select-fee-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateTotal);
         });
-        totalEl.innerText = "Total: ₹" + total;
-    }
 
-    checkboxes.forEach(cb => cb.addEventListener('change', updateTotal));
+        updateTotal(); // on page load
+    });
 </script>
+
+
 @endsection
