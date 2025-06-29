@@ -392,9 +392,9 @@
                 <div class="dropdown-content" id="financeContent">
                     <a href="{{ route('fee-types.index') }}" class="dropdown-link">Fee Types</a>
                     <a href="{{ route('fee-structure.create') }}" class="dropdown-link">Fee Structure</a>
-                    <a href="{{ route('fee-payment.create') }}" class="dropdown-link">Student Fee Payment</a>
-            
-                    <a href="" class="dropdown-link">Staff Salary</a>
+                    <a href="{{ route('fee-payment.create') }}" class="dropdown-link">Admission Fee Payment</a>
+
+                    <a href="{{ route('admin.fee.summary') }}" class="dropdown-link">Student Fee Summary</a>
                 </div>
             </div>
             

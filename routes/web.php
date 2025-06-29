@@ -141,6 +141,10 @@ Route::post('admin/student/fee-payment/search', [FeePaymentController::class, 's
 Route::post('admin/student/fee-payment/', [FeePaymentController::class, 'store'])->name('fee-payment.store');
 Route::get('admin/student/fee-payment', [FeePaymentController::class, 'create'])->name('fee-payment.create');
 
+
+Route::get('/fee-payment/view/{student_id}', [FeePaymentController::class, 'showFeeDetails'])->name('admin.fee-payment.view');
+Route::post('/admin/fee-payment/store', [FeePaymentController::class, 'storeFeePayment'])->name('admin.fee-payment.store');
+
 //Assign Subject to teachers
 Route::get('admin/assign-teacher', [AssignTeacherController::class, 'index'])->name('assign.teacher.index');
 Route::post('admin/assign-teacher/submit', [AssignTeacherController::class, 'store'])->name('assign.teacher.store');
@@ -205,6 +209,9 @@ Route::get('marks-entry/print/{student_id}/{exam_id}', [MarksEntryController::cl
 Route::get('/get-sections-by-class/{id}', [TeacherExamScheduleController::class, 'getSectionsByClass']);
 Route::get('/get-subjects-by-class', [TeacherExamScheduleController::class, 'getSubjectsByClass']);
 
+Route::get('/admin/fee-payment-summary', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'index'])->name('admin.fee.summary');
+Route::get('/admin/fee-payment-summary/months', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'getFeeMonths'])->name('admin.fee.summary.months');
+Route::get('/admin/fee-payment-summary/months', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'monthsData']);
 
 
 

@@ -90,5 +90,67 @@ public function store(Request $request)
     return back()->with('success', 'Payment recorded. Total Paid: ₹' . $totalPaid);
 }
 
+public function showFeeDetails(Request $request, $student_id)
+{
+    $student = Student::with(['class', 'section'])->findOrFail($student_id);
+
+    $feeStructures = FeeStructure::with('feeType')
+        ->where('class_id', $student->class_id)
+        ->get();
+
+    // Start filtering paid fee data
+    $query = FeePayment::query()->where('student_id', $student->id);
+
+    if ($request->year) {
+        $query->whereYear('payment_date', $request->year);
+    }
+
+    if ($request->month) {
+        $query->whereMonth('payment_date', $request->month);
+    }
+
+    $paidFees = $query->with('feeType')->get();
+
+    // Grouping for disabling checkboxes
+    $groupedPaid = $paidFees->groupBy(function ($item) {
+    return $item->fee_type_id . '-' . str_pad($item->month, 2, '0', STR_PAD_LEFT);
+});
+
+   return view('page.admin.fee.fee-payment-view', compact(
+    'student', 'feeStructures', 'groupedPaid', 'paidFees'
+));
+}
+
+public function storeFeePayment(Request $request)
+{
+    $request->validate([
+        'student_id' => 'required|exists:students,id',
+        'fees' => 'required|array',
+        'payment_method' => 'required|string',
+    ]);
+
+    $total = 0;
+
+    foreach ($request->fees as $fee) {
+        if (!isset($fee['months'])) continue;
+
+        foreach ($fee['months'] as $month) {
+            FeePayment::create([
+                'student_id' => $request->student_id,
+                'fee_type_id' => $fee['fee_type_id'],
+                'amount' => $fee['amount'],
+                'month' => $month,
+                'payment_method' => $request->payment_method,
+                'status' => 'Paid',
+                'payment_date' => now(),
+            ]);
+
+            $total += $fee['amount'];
+        }
+    }
+
+    return back()->with('success', 'Payment recorded. Total Paid: ₹' . $total);
+}
+
 
 }
