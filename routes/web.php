@@ -137,13 +137,15 @@ Route::post('admin/student/fee-structure', [FeeStructureController::class, 'stor
 Route::delete('/fee-structure/{id}', [FeeStructureController::class, 'destroy'])->name('fee-structure.destroy');
 
 // Fee Payment
-Route::post('admin/student/fee-payment/search', [FeePaymentController::class, 'search'])->name('fee-payment.search');
+Route::match(['get', 'post'], 'admin/student/fee-payment/search', [FeePaymentController::class, 'search'])->name('fee-payment.search');
 Route::post('admin/student/fee-payment/', [FeePaymentController::class, 'store'])->name('fee-payment.store');
 Route::get('admin/student/fee-payment', [FeePaymentController::class, 'create'])->name('fee-payment.create');
 
 
 Route::get('/fee-payment/view/{student_id}', [FeePaymentController::class, 'showFeeDetails'])->name('admin.fee-payment.view');
 Route::post('/admin/fee-payment/store', [FeePaymentController::class, 'storeFeePayment'])->name('admin.fee-payment.store');
+Route::get('/admin/fee-payment/history', [FeePaymentController::class, 'paymentHistory'])->name('admin.fee-payment.history');
+
 
 //Assign Subject to teachers
 Route::get('admin/assign-teacher', [AssignTeacherController::class, 'index'])->name('assign.teacher.index');

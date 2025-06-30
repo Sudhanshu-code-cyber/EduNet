@@ -3,21 +3,37 @@
 @section('content')
 <div class="p-6 space-y-8">
 
-    <h1 class="text-3xl font-bold text-gray-800">Fee Payment</h1>
+  <div class="flex justify-between items-center mb-6">
+  <h1 class="text-3xl font-bold text-gray-800">Fee Payment</h1>
+    
+    <div class="text-right">
+    <a href="{{ route('admin.fee-payment.history') }}"
+       class="inline-block bg-blue-700 hover:bg-blue-900 text-white px-4 py-2 rounded shadow">
+         Check Payment History
+    </a>
+</div>
+  </div>
+
 @if(session('success'))
     <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded relative">
         <strong class="font-bold">Success:</strong>
         <span class="block sm:inline">{{ session('success') }}</span>
-        <a href="" target="_blank" class="ml-4 text-blue-600 underline hover:text-blue-800">Print Receipt</a>
+
+        @if(session('print_receipt'))
+            <a href=""
+               target="_blank" class="ml-4 text-blue-600 underline hover:text-blue-800">
+                Print Receipt
+            </a>
+        @endif
     </div>
 @endif
 
     {{-- Student Info --}}
     <div class="flex bg-white shadow-md rounded-lg p-5">
-        <img src="{{ asset('storage/students/'.$student->photo) }}" class="w-24 h-24 rounded-lg object-cover mr-6">
+        <img src="{{ $student->photo ? asset('uploads/students/' . $student->photo) : 'https://i.pravatar.cc/40?img=1' }}" class="w-24 h-24 rounded-lg object-cover mr-6">
         <div class="space-y-1">
             <h2 class="text-2xl font-semibold">{{ $student->full_name }}</h2>
-            <p><span class="font-medium">vAddress:</span> {{ $student->present_address }}</p>
+            <p><span class="font-medium">Address:</span> {{ $student->present_address }}</p>
             <p><span class="font-medium">Email:</span> {{ $student->email }}</p>
             <p><span class="font-medium">Phone:</span> {{ $student->contact }}</p>
         </div>
@@ -89,74 +105,37 @@
         </div>
 
         {{-- Payment Method --}}
-        <div class="bg-white shadow rounded-lg p-5">
-            <label class="block font-medium mb-2">Payment Method:</label>
-            <select name="payment_method" class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500">
-                <option value="Cash">Cash</option>
-                <option value="UPI">UPI</option>
-                <option value="Card">Card</option>
-            </select>
+      <div class="bg-white shadow-lg rounded-xl p-6 max-w-4xl mx-auto my-10">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <!-- Payment Method Selection -->
+        <div class="w-full md:w-1/2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+            <div class="relative">
+                <select 
+                    name="payment_method" 
+                    class="block w-full pl-3 pr-10 py-2.5 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                >
+                    <option value="Cash">Cash</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Card">Credit/Debit Card</option>
+                    <option value="Net Banking">Net Banking</option>
+                </select>
+            </div>
+        </div>
 
-            <button type="submit" class="mt-6 w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded hover:bg-blue-700 transition">
+        <!-- Submit Button -->
+        <div class="w-full md:w-auto mt-2 md:mt-0 mb-[-6px]">
+            <button 
+                type="submit"
+                onclick="return confirm('Are you sure you want to submit this payment?')"
+                class="w-full md:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 flex items-center justify-center"
+            >
                 Submit Payment
             </button>
         </div>
-    </form>
-
-
-    <form method="GET" class="flex flex-wrap gap-4 mb-4 items-center">
-    <select name="year" class="border px-2 py-1 rounded">
-        <option value="">All Years</option>
-        @foreach(range(date('Y'), date('Y') - 5) as $yr)
-            <option value="{{ $yr }}" {{ request('year') == $yr ? 'selected' : '' }}>{{ $yr }}</option>
-        @endforeach
-    </select>
-
-    <select name="month" class="border px-2 py-1 rounded">
-        <option value="">All Months</option>
-        @foreach(range(1, 12) as $m)
-            <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
-                {{ DateTime::createFromFormat('!m', $m)->format('F') }}
-            </option>
-        @endforeach
-    </select>
-
-    <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Filter</button>
-</form>
-
-    {{-- Payment History --}}
-    <div class="bg-white shadow rounded-lg p-5">
-        <h3 class="text-xl font-semibold mb-4">Payment History</h3>
-
-        <div class="overflow-x-auto">
-            <table class="w-full table-auto text-sm border border-collapse">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="p-2 border">Date</th>
-                        <th class="p-2 border">Fee Type</th>
-                        <th class="p-2 border">Month</th>
-                        <th class="p-2 border">Amount</th>
-                        <th class="p-2 border">Method</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($paidFees as $pay)
-                        <tr class="border-t hover:bg-gray-50">
-                            <td class="p-2 border">{{ $pay->payment_date }}</td>
-                            <td class="p-2 border">{{ $pay->feeType->name }}</td>
-                            <td class="p-2 border">{{ $pay->month ?? '-' }}</td>
-                            <td class="p-2 border">₹{{ $pay->amount }}</td>
-                            <td class="p-2 border">{{ $pay->payment_method }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="p-4 text-center text-gray-500">No payment history found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
     </div>
+</div>
+    </form>
 </div>
 
 {{-- Total calculation script --}}
@@ -180,6 +159,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     updateTotal(); // On load
+
+     form.addEventListener('submit', function (e) {
+        const checked = document.querySelectorAll('.month-checkbox:checked:not([disabled])').length;
+        if (checked === 0) {
+            alert("Please select at least one unpaid month before submitting.");
+            e.preventDefault();
+            return;
+        }
+
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerText = 'Processing...';
+    });
 });
 </script>
 @endsection

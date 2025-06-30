@@ -374,14 +374,6 @@
                     <a href="{{ route('assign.teacher.index') }}" class="dropdown-link">Assign Subjects to Teachers</a>
                 </div>
             </div>
-            
-
-             <div class="nav-item">
-                <a href="{{route('admin.transport')}}" class="nav-link">
-                    <i class="fas fa-calendar-alt nav-icon"></i>
-                    <span class="nav-text">Transport Management</span>
-                </a>
-            </div>
 
             <div class="nav-item">
                 <a href="#" class="nav-link dropdown-toggle" id="financeDropdown">
@@ -395,10 +387,16 @@
                     <a href="{{ route('fee-payment.create') }}" class="dropdown-link">Admission Fee Payment</a>
 
                     <a href="{{ route('admin.fee.summary') }}" class="dropdown-link">Student Fee Summary</a>
+                      <a href="{{ route('admin.fee-payment.history') }}" class="dropdown-link"> Fee Payment History</a>
                 </div>
             </div>
             
-            
+              <div class="nav-item">
+                <a href="{{route('admin.transport')}}" class="nav-link">
+                    <i class="fas fa-calendar-alt nav-icon"></i>
+                    <span class="nav-text">Transport Management</span>
+                </a>
+            </div>
             
             <div class="nav-item">
                 <a href="{{ route('notice.index') }}" class="nav-link">

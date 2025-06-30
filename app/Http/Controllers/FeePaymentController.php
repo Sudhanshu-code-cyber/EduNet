@@ -23,6 +23,11 @@ class FeePaymentController extends Controller
 
     public function search(Request $request)
     {
+        if($request->isMethod('get')) {
+$classes = ClassModel::all();
+            $sections = Section::all();
+            return view('page.admin.fee.fee-payment', compact('classes', 'sections'));
+        }
         // Validate input
             $request->validate([
                 'class_id' => 'required|exists:classes,id',
@@ -152,5 +157,36 @@ public function storeFeePayment(Request $request)
     return back()->with('success', 'Payment recorded. Total Paid: ₹' . $total);
 }
 
+public function paymentHistory(Request $request)
+{
+    $classes = ClassModel::all();
+    $sections = Section::all();
+
+    $query = FeePayment::with(['student.class', 'student.section', 'feeType']);
+
+    if ($request->year) {
+        $query->whereYear('payment_date', $request->year);
+    }
+
+    if ($request->month) {
+        $query->whereMonth('payment_date', $request->month);
+    }
+
+    if ($request->class_id) {
+        $query->whereHas('student', fn($q) => $q->where('class_id', $request->class_id));
+    }
+
+    if ($request->section_id) {
+        $query->whereHas('student', fn($q) => $q->where('section_id', $request->section_id));
+    }
+
+    if ($request->roll_no) {
+        $query->whereHas('student', fn($q) => $q->where('roll_no', $request->roll_no));
+    }
+
+    $payments = $query->latest()->get();
+
+    return view('page.admin.fee.fee-payment-history', compact('payments', 'classes', 'sections'));
+}
 
 }

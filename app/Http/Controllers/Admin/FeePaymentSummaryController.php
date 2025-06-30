@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Models\ClassModel;
+use App\Models\Section;
 use App\Models\FeeType;
 use App\Models\FeePayment;
 use App\Models\FeeStructure;
@@ -15,10 +17,23 @@ class FeePaymentSummaryController extends Controller
     {
         $students = Student::with('class', 'section')->get();
         $feeTypes = FeeType::all();
-
+    $classes = ClassModel::all(); 
+    $sections = Section::all(); 
         $initialSummary = [];
         $academicStartMonth = 4; // April
         $currentMonth = (int) date('n');
+
+        $classId = request('class_id');
+$sectionId = request('section_id');
+$name = request('name');
+$rollNo = request('roll_no');
+
+$students = Student::with('class', 'section')
+    ->when($classId, fn($q) => $q->where('class_id', $classId))
+    ->when($sectionId, fn($q) => $q->where('section_id', $sectionId))
+    ->when($name, fn($q) => $q->where('full_name', 'like', "%$name%"))
+    ->when($rollNo, fn($q) => $q->where('roll_no', $rollNo))
+    ->get();
 
         foreach ($students as $student) {
             $total = 0;
@@ -72,7 +87,7 @@ class FeePaymentSummaryController extends Controller
             ];
         }
 
-        return view('page.admin.fee.fee-payment-summary', compact('students', 'feeTypes', 'initialSummary'));
+        return view('page.admin.fee.fee-payment-summary', compact('students', 'feeTypes', 'initialSummary', 'classes', 'sections'));
     }
 
     public function getFeeMonths(Request $request)

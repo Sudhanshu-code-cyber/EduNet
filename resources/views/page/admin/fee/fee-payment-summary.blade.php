@@ -13,11 +13,65 @@
         <div class="w-3 h-3 bg-red-500 rounded-full"></div><span>Due</span>
     </div>
     <div class="flex items-center space-x-1">
-        <div class="w-3 h-3 bg-gray-400 rounded-full"></div><span>Not Applicable</span>
+        <div class="w-3 h-3 bg-gray-400 rounded-full"></div><span>Not Applicable</svvpan>
     </div>
 </div>
 
     </div>
+
+ {{-- Filter Form (One Line) --}}
+<form method="GET" class="flex flex-wrap items-end gap-4 mb-6 bg-gray-50 p-4 rounded-lg">
+    <div class="flex flex-col">
+        <label class="text-sm font-medium text-gray-700 mb-1">Class</label>
+        <select name="class_id" class="border border-gray-300 rounded-md px-3 py-2 w-48 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">All Classes</option>
+            @foreach($classes as $class)
+                <option value="{{ $class->id }}" {{ request('class_id') == $class->id ? 'selected' : '' }}>
+                    {{ $class->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="flex flex-col">
+        <label class="text-sm font-medium text-gray-700 mb-1">Section</label>
+        <select name="section_id" class="border border-gray-300 rounded-md px-3 py-2 w-48 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">All Sections</option>
+            @foreach($sections as $section)
+                <option value="{{ $section->id }}" {{ request('section_id') == $section->id ? 'selected' : '' }}>
+                    {{ $section->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="flex flex-col">
+        <label class="text-sm font-medium text-gray-700 mb-1">Student Name</label>
+        <input type="text" name="name" placeholder="Enter name"
+               value="{{ request('name') }}"
+               class="border border-gray-300 rounded-md px-3 py-2 w-48 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <div class="flex flex-col">
+        <label class="text-sm font-medium text-gray-700 mb-1">Roll No</label>
+        <input type="text" name="roll_no" placeholder="Enter roll number"
+               value="{{ request('roll_no') }}"
+               class="border border-gray-300 rounded-md px-3 py-2 w-48 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+
+    <div class="flex space-x-2 mt-6 ml-4">
+        <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-8 py-2 rounded-md">
+            Filter
+        </button>
+        <a href="{{ route('admin.fee.summary') }}"
+           class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-8 py-2 rounded-md">
+            Reset
+        </a>
+    </div>
+</form>
+    </div>
+
 
     <table class="table-auto w-full border text-sm">
         <thead class="bg-gray-100">
@@ -51,7 +105,7 @@
 
                 <tr>
                     <td class="p-2 border text-center">
-                        <img src="{{ asset('storage/' . $student->photo) }}" class="w-10 h-10 rounded-full object-cover" />
+                        <img src="{{ $student->photo ? asset('uploads/students/' . $student->photo) : 'https://i.pravatar.cc/40?img=1' }}" class="w-10 h-10 rounded-full object-cover" />
                     </td>
 
                     <td class="p-2 border">{{ $student->full_name }}</td>
