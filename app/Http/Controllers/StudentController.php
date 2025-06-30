@@ -1,46 +1,64 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\AssignedTeacher;
+use App\Models\Attendance;
 use App\Models\ExamSchedule;
+use App\Models\Subject;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Notice;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function dashboard()
-    {
 
-        if (!auth()->check()) {
+public function dashboard()
+{
+    if (!auth()->check()) {
         return redirect()->route('login'); // make sure 'login' route exists
     }
 
-        $latestNotices = Notice::where('target', 'student')
-            ->where(function ($query) {
-                $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
-            })
-            ->orderByDesc('created_at')
-            ->take(3)
-            ->get();
+    // Get the logged-in student's data
+    $student = Student::where('user_id', Auth::id())->firstOrFail();
 
-        // Get the logged-in student's class and section
-        $student = Student::where('user_id', Auth::id())->firstOrFail();
+    // Latest notices for students
+    $latestNotices = Notice::where('target', 'student')
+        ->where(function ($query) {
+            $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
+        })
+        ->orderByDesc('created_at')
+        ->take(3)
+        ->get();
 
-         $examSchedules = ExamSchedule::with(['subject', 'teacher.user'])
-            ->where('class_id', $student->class_id)
-            ->where('section_id', $student->section_id)
-            ->get();
+    // Exam schedules for student's class and section
+    $examSchedules = ExamSchedule::with(['subject', 'teacher.user'])
+        ->where('class_id', $student->class_id)
+        ->where('section_id', $student->section_id)
+        ->get();
 
-            $countNotice=Notice::count();
+    // Counts
+    $countNotice = Notice::count();
+    $countExamShedules = ExamSchedule::count();
 
-        $countExamShedules=ExamSchedule::count();
+    // Attendance calculation
+    $attendances = Attendance::where('student_id', $student->id)->get();
+    $totalDays = $attendances->count();
+    $presentDays = $attendances->where('status', 'present')->count();
+    $overallPercentage = $totalDays > 0 ? round(($presentDays / $totalDays) * 100) : 0;
 
-        return view('page.student.dashboard', compact('latestNotices', 'examSchedules','countExamShedules','countNotice'));
-    }
+    return view('page.student.dashboard', compact(
+        'latestNotices',
+        'examSchedules',
+        'countExamShedules',
+        'countNotice',
+        'overallPercentage'
+    ));
+}
 
 
     public function myclass()
@@ -63,10 +81,83 @@ class StudentController extends Controller
         return view('page.student.myclass', compact('student', 'classId', 'sectionId', 'timetable'));
     }
 
-
-    public function attendance()
+ public function attendance(Request $request)
     {
-        return view('page.student.attendance');
+        $student = Student::where('user_id', Auth::id())->firstOrFail();
+
+        // Get filters from request
+        $subject_id = $request->subject_id;
+        $month = $request->month ?? date('m');
+        $year = $request->year ?? date('Y');
+        $date = $request->date;
+
+        // Get all subjects for dropdown
+        $subjects = Subject::all();
+
+        // Base query
+        $query = Attendance::with(['subject', 'teacher'])
+            ->where('student_id', $student->id)
+            ->whereYear('date', $year);
+
+        if ($month) {
+            $query->whereMonth('date', $month);
+        }
+
+        if ($subject_id) {
+            $query->where('subject_id', $subject_id);
+        }
+
+        if ($date) {
+            $query->whereDate('date', $date);
+        }
+
+        $attendances = $query->get();
+
+        // Calculate overall counts
+        $totalDays = $attendances->count();
+        $presentDays = $attendances->where('status', 'present')->count();
+        $absentDays = $attendances->where('status', 'absent')->count();
+        $leaveDays = $attendances->where('status', 'leave')->count();
+
+        // Overall percentage
+        $overallPercentage = $totalDays > 0 ? round(($presentDays / $totalDays) * 100) : 0;
+
+        // Prepare subject-wise report
+        $report = [];
+        foreach ($subjects as $subject) {
+            $subjectAttendances = $attendances->where('subject_id', $subject->id);
+            $subjectTotal = $subjectAttendances->count();
+            $subjectPresent = $subjectAttendances->where('status', 'present')->count();
+            $subjectPercentage = $subjectTotal > 0 ? round(($subjectPresent / $subjectTotal) * 100) : 0;
+
+            if ($subjectTotal > 0) {
+                $report[] = [
+                    'subject' => $subject->name,
+                    'total_days' => $subjectTotal,
+                    'present_days' => $subjectPresent,
+                    'percentage' => $subjectPercentage,
+                ];
+            }
+        }
+
+        // Get month name for display
+        $monthName = Carbon::createFromDate(null, $month, 1)->format('F');
+
+        return view('page.student.attendance', [
+            'subjects' => $subjects,
+            'subject_id' => $subject_id,
+            'month' => $month,
+            'year' => $year,
+            'date' => $date,
+            'attendances' => $attendances,
+            'totalDays' => $totalDays,
+            'presentDays' => $presentDays,
+            'absentDays' => $absentDays,
+            'leaveDays' => $leaveDays,
+            'overallPercentage' => $overallPercentage,
+            'report' => $report,
+            'monthName' => $monthName,
+        ]);
     }
 
 

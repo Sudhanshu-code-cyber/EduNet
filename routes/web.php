@@ -32,7 +32,6 @@ use App\Http\Controllers\ExamMasterController;
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
     Route::get('/', 'dashboard')->name('/student');
-    Route::get('/attendance', 'attendance')->name('student.attendance');
     Route::get('/homework', 'homework')->name('student.homework');
     Route::get('/marksheet', 'marksheet')->name('student.marksheet');
     Route::get('/myfee', 'myfee')->name('student.myfee');
@@ -164,7 +163,7 @@ Route::middleware(['auth'])->prefix('teacher')->name('teacher.')->group(function
 
 // Teacher Routes for Homework
 Route::prefix('teacher')->name('teacher.')->group(function () {
-    Route::get('homework', [TeacherHomeworkController::class, 'index'])->name('homework.index');
+    Route::get('homework', [TeacherHomeworkController::class, 'index'])->name('homework.index');    
     Route::post('homework', [TeacherHomeworkController::class, 'store'])->name('homework.store');
     Route::get('homework/{id}/edit', [TeacherHomeworkController::class, 'edit'])->name('homework.edit');
     Route::put('homework/{id}', [TeacherHomeworkController::class, 'update'])->name('homework.update');
@@ -216,6 +215,7 @@ Route::get('/get-subjects-by-class', [TeacherExamScheduleController::class, 'get
 Route::get('/admin/fee-payment-summary', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'index'])->name('admin.fee.summary');
 Route::get('/admin/fee-payment-summary/months', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'getFeeMonths'])->name('admin.fee.summary.months');
 Route::get('/admin/fee-payment-summary/months', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'monthsData']);
+Route::get('/student/attendance/data', [StudentController::class, 'fetchStudentAttendance'])->name('student.attendance.data');
 
 
 
@@ -317,7 +317,6 @@ Route::post('/teacher/attendance/store', [AttendanceController::class, 'store'])
 Route::get('/teacher/calendar', [AttendanceController::class, 'showCalendar'])->name('teacher.calendar');
 Route::get('/teacher/attendance-events', [AttendanceController::class, 'getAttendanceAjax'])->name('teacher.attendance.ajax');
 
-// AJAX: get sections by class
 Route::get('/teacher/get-sections/{class_id}', function ($class_id) {
     $teacherId = auth()->id();
     $sections = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
@@ -330,7 +329,6 @@ Route::get('/teacher/get-sections/{class_id}', function ($class_id) {
     return response()->json(['sections' => $sections]);
 });
 
-// AJAX: get subjects by class
 Route::get('/teacher/get-subjects/{class_id}', function ($class_id) {
     $teacherId = auth()->id();
     $subjects = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
@@ -343,6 +341,8 @@ Route::get('/teacher/get-subjects/{class_id}', function ($class_id) {
     return response()->json(['subjects' => $subjects]);
 });
 
+Route::get('/teacher/get-students/{class_id}/{section_id}', [AttendanceController::class, 'getStudents']);
+Route::get('/teacher/get-student-report', [AttendanceController::class, 'getStudentReport']);
 Route::get('/teacher/exam-schedule/create', [TeacherExamScheduleController::class, 'examschedule'])->name('teacher.exam_schedule.create');
 Route::post('/teacher/exam-schedule/store', [TeacherExamScheduleController::class, 'storeschedule'])->name('teacher.exam_schedule.store');
 Route::delete('/teacher/exam-schedule/{id}', [TeacherExamScheduleController::class, 'deleteExam'])->name('delete.exam');
@@ -400,6 +400,9 @@ Route::delete('admin/timetables/{id}', [TeacherTimetableController::class, 'dest
 Route::get('/get-assignments-by-teacher/{teacher_id}', [TeacherTimetableController::class, 'getAssignments']);
 Route::get('/get-sections-subjects/{teacher_id}/{class_id}', [TeacherTimetableController::class, 'getSectionsSubjects']);
 Route::get('/teacher/timetable/{teacher_id}', [TeacherController::class, 'timetable'])->name('teacher.timetable');
+
+
+  Route::get('/student/attendance', [StudentController::class, 'attendance'])->name('student.attendance');
 
 
 

@@ -93,65 +93,71 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const classSelect = document.querySelector('select[name="class_id"]');
-        const sectionSelect = document.querySelector('select[name="section_id"]');
-        const subjectSelect = document.querySelector('select[name="subject_id"]');
+document.addEventListener('DOMContentLoaded', function () {
+    const classSelect = document.querySelector('select[name="class_id"]');
+    const sectionSelect = document.querySelector('select[name="section_id"]');
+    const subjectSelect = document.querySelector('select[name="subject_id"]');
 
-     classSelect.addEventListener('change', function () {
-    const classId = this.value;
+    classSelect.addEventListener('change', function () {
+        const classId = this.value;
 
-    // Reset section and subject dropdowns
-    sectionSelect.innerHTML = '<option value="">Loading sections...</option>';
-    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+        sectionSelect.innerHTML = '<option value="">Loading sections...</option>';
+        subjectSelect.innerHTML = '<option value="">Select Subject</option>';
 
-    // ✅ Updated fetch with Laravel session & header support
-    fetch(`/teacher/get-sections/${classId}`, {
-        credentials: 'same-origin',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(sections => {
-        sectionSelect.innerHTML = '<option value="">Select Section</option>';
-        sections.forEach(section => {
-            sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching sections:', error);
-        sectionSelect.innerHTML = '<option value="">Error loading sections</option>';
-    });
-});
-
-
-        // ✅ When section changes → fetch subjects
-        sectionSelect.addEventListener('change', function () {
-            const classId = classSelect.value;
-            const sectionId = this.value;
-
-            subjectSelect.innerHTML = '<option value="">Loading subjects...</option>';
-
-            // AJAX request to fetch assigned subjects
-            fetch(`/teacher/get-subjects/${classId}/${sectionId}`)
-                .then(response => response.json())
-                .then(subjects => {
-                    subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-                    subjects.forEach(subject => {
-    subjectSelect.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
-});
-
-                })
-                .catch(error => {
-                    console.error('Error fetching subjects:', error);
-                    subjectSelect.innerHTML = '<option value="">Error loading subjects</option>';
-                });
+        fetch(`/teacher/get-sections/${classId}`, {
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const sections = data.sections; // ✅ Access array correctly
+            if (!Array.isArray(sections)) {
+                throw new Error("Expected sections array, got: " + JSON.stringify(sections));
+            }
+            sectionSelect.innerHTML = '<option value="">Select Section</option>';
+            sections.forEach(section => {
+                sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching sections:', error);
+            sectionSelect.innerHTML = '<option value="">Error loading sections</option>';
         });
     });
+
+    sectionSelect.addEventListener('change', function () {
+        const classId = classSelect.value;
+        const sectionId = this.value;
+
+        console.log("Selected section_id:", sectionId);
+
+        subjectSelect.innerHTML = '<option value="">Loading subjects...</option>';
+
+        fetch(`/teacher/get-subjects/${classId}/${sectionId}`, {
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const subjects = data.subjects ?? data; // Adjust if needed
+            if (!Array.isArray(subjects)) {
+                throw new Error("Expected subjects array, got: " + JSON.stringify(subjects));
+            }
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjects.forEach(subject => {
+                subjectSelect.innerHTML += `<option value="${subject.id}">${subject.name}</option>`;
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching subjects:', error);
+            subjectSelect.innerHTML = '<option value="">Error loading subjects</option>';
+        });
+    });
+});
 </script>
+
+

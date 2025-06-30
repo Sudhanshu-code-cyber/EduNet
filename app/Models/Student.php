@@ -70,6 +70,16 @@ class Student extends Model
     {
         return $this->belongsTo(Transport::class);
     }
+public function getSubjects()
+{
+    return Subject::whereIn('id', function ($query) {
+        $query->select('subject_id')
+            ->from('assigned_teachers')
+            ->where('class_id', $this->class_id)
+            ->where('section_id', $this->section_id);
+    })->get();
+}
+
 
 
 

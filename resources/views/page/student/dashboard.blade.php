@@ -73,7 +73,7 @@
             <div class="flex items-start justify-between">
                 <div>
                     <h2 class="text-sm text-gray-500 font-medium mb-1">Attendance</h2>
-                    <p class="text-3xl font-extrabold text-emerald-600">94%</p>
+                    <p class="text-3xl font-extrabold text-emerald-600">{{$overallPercentage}}%</p>
                 </div>
                 <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

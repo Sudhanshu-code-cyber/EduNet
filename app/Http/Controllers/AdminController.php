@@ -112,38 +112,64 @@ class AdminController extends Controller
         return view('page.admin.student.edit-student', compact('student'));
     }
 
-    public function studentupdate(Request $request, $id)
-    {
-        $request->validate([
-            'full_name' => 'required|string|max:255',
-            'roll_no' => 'nullable|string|max:50|unique:students,roll_no,' . $id,
-            'email' => 'nullable|email|max:255|unique:students,email,' . $id,
-            'gender' => 'nullable|in:Male,Female',
-            'dob' => 'nullable|date',
-            'class_id' => 'nullable|string|max:100',
-            'section_id' => 'nullable|string|max:100',
-            'contact' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500',
-        ]);
+   public function studentupdate(Request $request, $id)
+{
+    $request->validate([
+        'full_name' => 'required|string|max:255',
+        'roll_no' => 'nullable|string|max:20|unique:students,roll_no,' . $id,
+        'admission_no' => 'nullable|string|max:50|unique:students,admission_no,' . $id,
+        'class_id' => 'required|string|max:20',
+        'section_id' => 'nullable|string|max:10',
+        'gender' => 'nullable|string',
+        'dob' => 'nullable|date',
+        'age' => 'nullable|string|max:10',
+        'blood_group' => 'nullable|string|max:10',
+        'religion' => 'nullable|string|max:50',
+        'email' => 'nullable|email|max:255|unique:students,email,' . $id,
+        'father_name' => 'nullable|string|max:255',
+        'mother_name' => 'nullable|string|max:255',
+        'father_occupation' => 'nullable|string|max:255',
+        'contact' => 'nullable|string|max:15',
+        'nationality' => 'nullable|string|max:100',
+        'present_address' => 'nullable|string|max:500',
+        'permanent_address' => 'nullable|string|max:500',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'parents_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        $student = Student::findOrFail($id);
+    $student = Student::findOrFail($id);
 
-        $student->full_name = $request->full_name;
-        $student->roll_no = $request->roll_no;
-        $student->gender = $request->gender;
-        $student->dob = $request->dob;
-        $student->class_id = $request->class_id;
-        $student->section_id = $request->section_id;
-        $student->contact = $request->contact;
-        $student->email = $request->email;
-        $student->present_address = $request->address;
-        $student->uses_transport = $request->has('uses_transport');
+    $data = $request->all();
 
-
-        $student->save();
-
-        return redirect()->back()->with('success', 'Student updated successfully.');
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/students'), $filename);
+        $data['photo'] = $filename;
     }
+
+    if ($request->hasFile('parents_photo')) {
+        $file = $request->file('parents_photo');
+        $filename = 'parents_' . time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/students'), $filename);
+        $data['parents_photo'] = $filename;
+    }
+
+    $data['uses_transport'] = $request->has('uses_transport');
+
+    $student->update($data);
+
+    // Optional: update related user as well
+    if ($student->user) {
+        $student->user->name = $student->full_name;
+        $student->user->email = $student->email;
+        $student->user->contact = $student->contact;
+        $student->user->save();
+    }
+
+    return redirect()->back()->with('success', 'Student updated successfully.');
+}
+
     public function deleteStudent($id)
     {
         $student = Student::findOrFail($id);

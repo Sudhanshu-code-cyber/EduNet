@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Subject extends Model
 {
@@ -16,6 +18,9 @@ class Subject extends Model
 {
     return $this->belongsTo(Subject::class, 'subject_id');
 }
-
+ public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
 
 }

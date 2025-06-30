@@ -97,7 +97,9 @@ public function getSections($classId)
         ->unique('id')
         ->values();
 
-    return response()->json($sections);
+    return response()->json(['sections' => $sections->toArray()]);
+
+
 }
 
 
