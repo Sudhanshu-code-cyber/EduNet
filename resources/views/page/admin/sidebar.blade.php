@@ -397,7 +397,24 @@
                     <span class="nav-text">Transport Management</span>
                 </a>
             </div>
-            
+            <div class="nav-item">
+             <a href="#" class="nav-link dropdown-toggle" id="financeDropdown">
+                 <i class="fas fa-calendar-alt nav-icon"></i> <span class="nav-text">Timetable Management</span>
+                 <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
+             </a>
+             <div class="dropdown-content" id="financeContent">
+                 <a href="{{ route('periods.index') }}" class="dropdown-link">periods</a>
+                 <a href="{{ route('timetable.index') }}" class="dropdown-link">Teacher Timetable</a>
+                 <a href="{{ route('fee-payment.create') }}" class="dropdown-link">Student Fee Payment</a>
+
+                 <a href="" class="dropdown-link">Staff Salary</a>
+             </div>
+     
+    </div>
+
+
+
+
             <div class="nav-item">
                 <a href="{{ route('notice.index') }}" class="nav-link">
                     <i class="fas fa-file-alt nav-icon"></i>

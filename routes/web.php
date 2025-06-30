@@ -3,9 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\SectionContoller;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherExamScheduleController;
+use App\Http\Controllers\TeacherTimetableController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController; 
@@ -366,6 +368,47 @@ Route::post('/teacher/attendance/get-students', [AttendanceController::class, 'g
 Route::get('/teacher/attendance/get-sections/{class_id}', [AttendanceController::class, 'getSectionsByClass']);
 // routes/web.php
 Route::get('/student/transport', [StudentController::class,'transport'])->name('student.transport');
+
+//timetable 
+
+// Show all periods
+Route::get('/admin/periods', [PeriodController::class, 'index'])->name('periods.index');
+
+// Show create form
+Route::get('/admin/periods/create', [PeriodController::class, 'create'])->name('periods.create');
+
+// Store new period
+Route::post('/admin/periods', [PeriodController::class, 'store'])->name('periods.store');
+
+// Show edit form
+Route::get('/admin/periods/{id}/edit', [PeriodController::class, 'edit'])->name('periods.edit');
+
+// Update period
+Route::put('/admin/periods/{id}', [PeriodController::class, 'update'])->name('periods.update');
+
+// Delete period
+Route::delete('/admin/periods/{id}', [PeriodController::class, 'destroy'])->name('periods.destroy');
+Route::get('/admin/timetables', [TeacherTimetableController::class, 'index'])->name('timetable.index');
+Route::get('/admin/timetables/create', [TeacherTimetableController::class, 'create'])->name('timetable.create');
+
+
+// Store new timetable
+Route::post('admin/timetables', [TeacherTimetableController::class, 'store'])->name('timetable.store');
+
+// Delete timetable
+Route::delete('admin/timetables/{id}', [TeacherTimetableController::class, 'destroy'])->name('timetable.destroy');
+Route::get('/get-assignments-by-teacher/{teacher_id}', [TeacherTimetableController::class, 'getAssignments']);
+Route::get('/get-sections-subjects/{teacher_id}/{class_id}', [TeacherTimetableController::class, 'getSectionsSubjects']);
+Route::get('/teacher/timetable/{teacher_id}', [TeacherController::class, 'timetable'])->name('teacher.timetable');
+
+
+
+
+
+
+
+
+
 
 
 

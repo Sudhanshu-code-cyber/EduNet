@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TeacherTimetable;
 use Illuminate\Http\Request;
 use App\Models\Notice;
 
@@ -56,56 +57,19 @@ class TeacherController extends Controller
     return view('page.teacher.my-classes', compact('classes'));
 }
 
-    public function timetable()
+    public function timetable($teacher_id)
 {
-    $weeklyTimetable = [
-        'Monday' => [
-            [
-                'subject' => 'Math',
-                'teacher' => 'Mr. Smith',
-                'start_time' => '09:00',
-                'end_time' => '10:00',
-                'type' => 'class',
-            ],
-            [
-                'subject' => 'Break',
-                'teacher' => null,
-                'start_time' => '10:00',
-                'end_time' => '10:15',
-                'type' => 'break',
-            ],
-            [
-                'subject' => 'Physics',
-                'teacher' => 'Ms. Johnson',
-                'start_time' => '10:15',
-                'end_time' => '11:15',
-                'type' => 'class',
-            ],
-        ],
-        'Tuesday' => [
-            [
-                'subject' => 'History',
-                'teacher' => 'Mrs. Davis',
-                'start_time' => '08:30',
-                'end_time' => '09:30',
-                'type' => 'class',
-            ],
-            [
-                'subject' => 'Free Period',
-                'teacher' => null,
-                'start_time' => '09:30',
-                'end_time' => '10:30',
-                'type' => 'free',
-            ],
-        ],
-        'Wednesday' => [],
-        'Thursday' => [],
-        'Friday' => [],
-        'Saturday' => [],
-        'Sunday' => [],
-    ];
+     $teacher = \App\Models\Teacher::findOrFail($teacher_id);
 
-    return view('page.teacher.timetable', compact('weeklyTimetable'));
+    // Fetch all timetables assigned to this teacher
+    $timetables = TeacherTimetable::with(['class', 'section', 'subject', 'period'])
+        ->where('teacher_id', $teacher_id)
+        ->orderBy('day_of_week')
+        ->orderBy('period_id')
+        ->get();
+
+    return view('page.teacher.timetable', compact('teacher', 'timetables'));
+
 
 }
 
