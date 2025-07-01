@@ -82,32 +82,33 @@
                             @enderror
                         </div>
 
-                        <!-- Class Dropdown -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
-                            <select id="class_id" name="class_id"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
-                                <option value="" disabled selected>Select class</option>
-                                @foreach ($classes as $class)
-                                    <option value="{{ $class->id }}">{{ $class->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('class_id')
-                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
+                       <!-- Class Dropdown -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
+    <select id="class_id" name="class_id"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+        <option value="" disabled selected>Select class</option>
+        @foreach ($classes as $class)
+            <option value="{{ $class->id }}">{{ $class->name }}</option>
+        @endforeach
+    </select>
+    @error('class_id')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+    @enderror
+</div>
 
-                        <!-- Section Dropdown -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
-                            <select id="section_id" name="section_id"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
-                                <option value="" disabled selected>Select section</option>
-                            </select>
-                            @error('section_id')
-                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                            @enderror
-                        </div>
+<!-- Section Dropdown -->
+<div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+    <select id="section_id" name="section_id"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none">
+        <option value="" disabled selected>Select section</option>
+    </select>
+    @error('section_id')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+    @enderror
+</div>
+
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Gender*</label>
@@ -368,35 +369,35 @@
 
     <script>
         $(document).ready(function() {
-            // Class-Section AJAX
-            $('#class_id').on('change', function() {
-                const classId = $(this).val();
-                $('#section_id').html('<option value="">Loading...</option>');
+           $('#class_id').on('change', function() {
+    const classId = $(this).val();
+    $('#section_id').html('<option value="">Loading...</option>');
 
-                if (classId) {
-                    $.ajax({
-                        url: `/sections/by-class/${classId}`,
-                        type: 'GET',
-                        success: function(data) {
-                            $('#section_id').empty().append(
-                                '<option value="" disabled selected>Select section</option>'
-                            );
-                            $.each(data, function(i, section) {
-                                $('#section_id').append(
-                                    `<option value="${section.id}">${section.name}</option>`
-                                );
-                            });
-                        },
-                        error: function() {
-                            $('#section_id').html(
-                                '<option value="" disabled selected>Error loading sections</option>'
-                            );
-                        }
-                    });
-                } else {
-                    $('#section_id').html('<option value="" disabled selected>Select section</option>');
-                }
-            });
+    if (classId) {
+        $.ajax({
+            url: `/sections/by-class/${classId}`,
+            type: 'GET',
+            success: function(data) {
+                $('#section_id').empty().append(
+                    '<option value="" disabled selected>Select section</option>'
+                );
+                $.each(data, function(i, section) {
+                    $('#section_id').append(
+                        `<option value="${section.id}">${section.name}</option>`
+                    );
+                });
+            },
+            error: function() {
+                $('#section_id').html(
+                    '<option value="" disabled selected>Error loading sections</option>'
+                );
+            }
+        });
+    } else {
+        $('#section_id').html('<option value="" disabled selected>Select section</option>');
+    }
+});
+
 
             // Transport Select2 with search
             $('#transport_id').select2({

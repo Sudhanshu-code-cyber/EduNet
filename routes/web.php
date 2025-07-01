@@ -297,6 +297,7 @@ Route::get('/admin/subjects/by-class/{id}', [SubjectController::class, 'getByCla
 
 Route::get('/admin/subjects/filter/{class_id?}', [SubjectController::class, 'filter'])->name('subjects.filter');
 
+Route::get('/sections/by-class/{classId}', [App\Http\Controllers\AdminController::class, 'getSectionsByClasses']);
 
 
 Route::get('/', function () {
