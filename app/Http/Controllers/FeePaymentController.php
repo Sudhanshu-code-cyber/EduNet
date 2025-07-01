@@ -28,7 +28,7 @@ $classes = ClassModel::all();
             $sections = Section::all();
             return view('page.admin.fee.fee-payment', compact('classes', 'sections'));
         }
-        // Validate input
+      
             $request->validate([
                 'class_id' => 'required|exists:classes,id',
             'section_id' => 'required|exists:sections,id',
@@ -43,14 +43,14 @@ $classes = ClassModel::all();
     
         if (!$student) {
             return back()->with('error', 'Student not found.')
-                         ->withInput(); // to retain old input values
+                         ->withInput(); 
         }
     
         $fees = FeeStructure::with('feeType')
                     ->where('class_id', $student->class_id)
                     ->get();
     
-        $classes = ClassModel::all(); // needed for re-rendering the form
+        $classes = ClassModel::all(); 
         $sections = Section::all();
     
         return view('page.admin.fee.fee-payment', compact('student', 'fees', 'classes', 'sections'));
@@ -60,16 +60,19 @@ $classes = ClassModel::all();
 public function store(Request $request)
 {
     $request->validate([
-    'fees' => 'required|array',
-    'student_id' => 'required|exists:students,id',
-    'payment_method' => 'required|string',
-]);
+        'fees' => 'required|array',
+        'student_id' => 'required|exists:students,id',
+        'payment_method' => 'required|string',
+    ]);
 
     $totalPaid = 0;
 
-   foreach ($request->fees as $fee) {
-    if (isset($fee['months']) && is_array($fee['months'])) {
-        foreach ($fee['months'] as $month) {
+    foreach ($request->fees as $fee) {
+        if (!isset($fee['selected'])) continue;
+
+        $months = $fee['months'] ?? [];
+
+        foreach ($months as $month) {
             FeePayment::create([
                 'student_id' => $request->student_id,
                 'fee_type_id' => $fee['fee_type_id'],
@@ -83,8 +86,8 @@ public function store(Request $request)
             $totalPaid += $fee['amount'];
         }
     }
-}
 
+    // Update student status if needed
     $student = Student::find($request->student_id);
     $requiredFees = FeeStructure::where('class_id', $student->class_id)->count();
     $paidFees = FeePayment::where('student_id', $student->id)->distinct('fee_type_id')->count('fee_type_id');
@@ -116,14 +119,13 @@ public function showFeeDetails(Request $request, $student_id)
 
     $paidFees = $query->with('feeType')->get();
 
-    // Grouping for disabling checkboxes
     $groupedPaid = $paidFees->groupBy(function ($item) {
-    return $item->fee_type_id . '-' . str_pad($item->month, 2, '0', STR_PAD_LEFT);
-});
+        return $item->fee_type_id . '-' . ($item->month === 'One-Time' ? 'One-Time' : str_pad($item->month, 2, '0', STR_PAD_LEFT));
+    });
 
-   return view('page.admin.fee.fee-payment-view', compact(
-    'student', 'feeStructures', 'groupedPaid', 'paidFees'
-));
+    return view('page.admin.fee.fee-payment-view', compact(
+        'student', 'feeStructures', 'groupedPaid', 'paidFees'
+    ));
 }
 
 public function storeFeePayment(Request $request)

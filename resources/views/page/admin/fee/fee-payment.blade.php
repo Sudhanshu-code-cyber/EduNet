@@ -78,40 +78,45 @@
                             <th class="p-2 border text-center">Select</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($fees as $fee)
-                      <tr>
+                  <tbody>
+@foreach($fees as $fee)
+<tr>
     <td class="p-2 border">{{ $fee->feeType->name }}</td>
     <td class="p-2 border">₹{{ number_format($fee->amount, 2) }}</td>
 
     <td class="p-2 border">
-        <div class="grid grid-cols-2 gap-1 max-h-32 overflow-y-auto">
-            @foreach (range(1, 12) as $month)
-                <label class="flex items-center space-x-1">
-                    <input 
-                        type="checkbox" 
-                        name="fees[{{ $loop->parent->index }}][months][]" 
-                        value="{{ $month }}" 
-                        data-amount="{{ $fee->amount }}"
-                        class="month-checkbox">
-                    <span class="text-xs">{{ date('M', mktime(0, 0, 0, $month, 1)) }}</span>
-                </label>
-            @endforeach
-        </div>
+        @if($fee->frequency === 'monthly')
+            <div class="grid grid-cols-2 gap-1 max-h-32 overflow-y-auto">
+                @foreach (range(1, 12) as $month)
+                    <label class="flex items-center space-x-1">
+                        <input 
+                            type="checkbox" 
+                            name="fees[{{ $loop->parent->index }}][months][]" 
+                            value="{{ $month }}" 
+                            data-amount="{{ $fee->amount }}"
+                            class="month-checkbox">
+                        <span class="text-xs">{{ date('M', mktime(0, 0, 0, $month, 1)) }}</span>
+                    </label>
+                @endforeach
+            </div>
+        @else
+            <span class="text-sm text-gray-600">One-Time</span>
+            <input type="hidden" name="fees[{{ $loop->index }}][months][]" value="One-Time">
+        @endif
     </td>
 
-   <td class="p-2 border text-center">
-    <input type="hidden" name="fees[{{ $loop->index }}][fee_type_id]" value="{{ $fee->fee_type_id }}">
-    <input type="hidden" name="fees[{{ $loop->index }}][amount]" value="{{ $fee->amount }}">
-    <input type="checkbox" 
-           name="fees[{{ $loop->index }}][selected]" 
-           value="1" 
-           class="select-fee-checkbox" 
-           data-index="{{ $loop->index }}">
-</td>
+    <td class="p-2 border text-center">
+        <input type="hidden" name="fees[{{ $loop->index }}][fee_type_id]" value="{{ $fee->fee_type_id }}">
+        <input type="hidden" name="fees[{{ $loop->index }}][amount]" value="{{ $fee->amount }}">
+        <input type="checkbox" 
+               name="fees[{{ $loop->index }}][selected]" 
+               value="1" 
+               class="select-fee-checkbox" 
+               data-index="{{ $loop->index }}">
+    </td>
 </tr>
-                        @endforeach
-                    </tbody>
+@endforeach
+</tbody>
                 </table>
 
                 <div class="flex justify-between items-center mt-4">
@@ -147,14 +152,19 @@
             document.querySelectorAll('.select-fee-checkbox').forEach(selectCb => {
                 if (selectCb.checked) {
                     const index = selectCb.getAttribute('data-index');
-                    const monthCheckboxes = document.querySelectorAll(`input[name="fees[${index}][months][]"]:checked`);
+                    const feeAmount = parseFloat(document.querySelector(`input[name="fees[${index}][amount]"]`).value);
 
-                    monthCheckboxes.forEach(cb => {
-                        const amount = parseFloat(cb.getAttribute('data-amount'));
-                        if (!isNaN(amount)) {
-                            total += amount;
-                        }
-                    });
+                    // Check if it's a monthly fee (has visible month checkboxes)
+                    const monthCheckboxes = document.querySelectorAll(`input[name="fees[${index}][months][]"]`);
+
+                    if (monthCheckboxes.length > 1) {
+                        // Monthly fee: count checked months
+                        const checkedMonths = Array.from(monthCheckboxes).filter(cb => cb.checked);
+                        total += checkedMonths.length * feeAmount;
+                    } else {
+                        // One-time fee (no visible checkboxes)
+                        total += feeAmount;
+                    }
                 }
             });
 
@@ -169,6 +179,7 @@
         updateTotal(); // on page load
     });
 </script>
+
 
 
 @endsection

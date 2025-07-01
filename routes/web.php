@@ -27,7 +27,7 @@ use App\Http\Controllers\Teacher\HomeworkController as TeacherHomeworkController
 use App\Http\Controllers\Student\HomeworkController as StudentHomeworkController;
 use App\Http\Controllers\Teacher\MarksEntryController;
 use App\Http\Controllers\ExamMasterController;
-
+use App\Http\Controllers\Student\FeeController;
 
 // Student Routes
 Route::controller(StudentController::class)->prefix('student')->group(function () {
@@ -215,6 +215,36 @@ Route::get('/get-subjects-by-class', [TeacherExamScheduleController::class, 'get
 Route::get('/admin/fee-payment-summary', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'index'])->name('admin.fee.summary');
 Route::get('/admin/fee-payment-summary/months', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'getFeeMonths'])->name('admin.fee.summary.months');
 Route::get('/admin/fee-payment-summary/months', [App\Http\Controllers\Admin\FeePaymentSummaryController::class, 'monthsData']);
+
+
+// Student Fee Overview
+Route::middleware(['web'])->prefix('student')->group(function () {
+// Simulate student login
+Route::get('/simulate-student-login', function () {
+session(['student_id' => 1]); // Set student_id here
+return redirect()->route('student.fees.overview');
+});
+
+// Student Fee Overview
+Route::get('/fees/overview', [FeeController::class, 'overview'])->name('student.fees.overview');
+
+// Student Fee Payment
+Route::post('/pay-fee', [FeeController::class, 'pay'])->name('student.fees.pay');
+Route::get('/pay-fees/{fee_type_id?}', [FeeController::class, 'payFeesPage'])->name('student.pay-fees');
+
+// Student Fee Payment History
+Route::get('/student/payment-history', [FeeController::class, 'paymentHistory'])->name('student.payment-history');
+
+});
+
+
+
+
+
+
+
+
+
 Route::get('/student/attendance/data', [StudentController::class, 'fetchStudentAttendance'])->name('student.attendance.data');
 
 

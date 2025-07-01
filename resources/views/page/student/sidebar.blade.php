@@ -139,13 +139,40 @@
                         </li>
                      </ul>
                   </li>
-                  <li>
+
+ <li class="relative group">
                      <a href="{{route('student.myfee')}}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-all duration-200 group">
-                        <span class="w-6 h-6 flex items-center justify-center bg-emerald-100 text-emerald-600 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">💰</span>
-                        <span class="font-medium">Fee Status</span>
+                        class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-all duration-200">
+                        <div class="flex items-center gap-3">
+                           <span class="w-6 h-6 flex items-center justify-center bg-red-100 text-red-600 rounded-lg group-hover:bg-red-600 group-hover:text-white transition-colors">💰</span>
+                           <span class="font-medium">Fee Status</span>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
                      </a>
+                     <ul class="absolute left-0 mt-1 w-full bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10 overflow-hidden border border-gray-100">
+                        <li>
+                           <a href="{{route('student.fees.overview')}}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                              <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                              Fee Overview
+                           </a>
+                        </li>
+                        <li>
+                           <a href="{{route('student.pay-fees')}}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                              <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                              Pay Fees
+                           </a>
+                        </li>
+                        <li>
+                           <a href="{{route('student.payment-history')}}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
+                              <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                              Payment History
+                           </a>
+                        </li>
+                     </ul>
                   </li>
+
                   <li>
                      <a href="{{ route('student.notice') }}"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-all duration-200 group">

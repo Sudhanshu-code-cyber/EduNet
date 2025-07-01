@@ -17,47 +17,50 @@ class FeePaymentSummaryController extends Controller
     {
         $students = Student::with('class', 'section')->get();
         $feeTypes = FeeType::all();
-    $classes = ClassModel::all(); 
-    $sections = Section::all(); 
+        $classes = ClassModel::all();
+        $sections = Section::all();
         $initialSummary = [];
         $academicStartMonth = 4; // April
         $currentMonth = (int) date('n');
 
         $classId = request('class_id');
-$sectionId = request('section_id');
-$name = request('name');
-$rollNo = request('roll_no');
+        $sectionId = request('section_id');
+        $name = request('name');
+        $rollNo = request('roll_no');
 
-$students = Student::with('class', 'section')
-    ->when($classId, fn($q) => $q->where('class_id', $classId))
-    ->when($sectionId, fn($q) => $q->where('section_id', $sectionId))
-    ->when($name, fn($q) => $q->where('full_name', 'like', "%$name%"))
-    ->when($rollNo, fn($q) => $q->where('roll_no', $rollNo))
-    ->get();
+        $students = Student::with('class', 'section')
+            ->when($classId, fn($q) => $q->where('class_id', $classId))
+            ->when($sectionId, fn($q) => $q->where('section_id', $sectionId))
+            ->when($name, fn($q) => $q->where('full_name', 'like', "%$name%"))
+            ->when($rollNo, fn($q) => $q->where('roll_no', $rollNo))
+            ->get();
 
         foreach ($students as $student) {
-            $total = 0;
-            $paid = 0;
-
-            $structures = FeeStructure::where('class_id', $student->class_id)
-                ->where('frequency', 'monthly')
-                ->get();
-
-            $amountMap = $structures->pluck('amount', 'fee_type_id');
-            $requiredFeeTypesPerMonth = count($amountMap);
-
+            $structures = FeeStructure::where('class_id', $student->class_id)->get();
             $payments = FeePayment::where('student_id', $student->id)->get();
 
-          foreach ($amountMap as $monthlyAmount) {
-    $total += $monthlyAmount * 12;
-}
-
+            $total = 0;
+            $paid = $payments->sum('amount');
             $monthPaidCount = [];
+
             foreach ($payments as $payment) {
-                $paid += $payment->amount;
                 $m = str_pad($payment->month, 2, '0', STR_PAD_LEFT);
                 $monthPaidCount[$m] = ($monthPaidCount[$m] ?? 0) + 1;
             }
+
+            $amountMap = [];
+            $requiredFeeTypesPerMonth = 0;
+
+            foreach ($structures as $structure) {
+                if ($structure->frequency === 'monthly') {
+                    $amountMap[$structure->fee_type_id] = $structure->amount;
+                    $total += $structure->amount * 12;
+                } else {
+                    $total += $structure->amount; // one_time fee
+                }
+            }
+
+            $requiredFeeTypesPerMonth = count(array_filter($structures->toArray(), fn($s) => $s['frequency'] === 'monthly'));
 
             $status = 'Not Paid';
             if ($paid >= $total) {
@@ -69,7 +72,6 @@ $students = Student::with('class', 'section')
             $monthFlags = [];
             foreach (range(1, 12) as $m) {
                 $code = str_pad($m, 2, '0', STR_PAD_LEFT);
-
                 if ($m < $academicStartMonth || $m > $currentMonth) {
                     $monthFlags[$code] = 'none';
                 } else {
@@ -111,23 +113,33 @@ $students = Student::with('class', 'section')
             ->where('fee_type_id', $feeTypeId)
             ->first();
 
-        $monthlyAmount = $structure->amount ?? 0;
+        $payments = FeePayment::where('student_id', $studentId)
+            ->where('fee_type_id', $feeTypeId)
+            ->get();
 
+        $paidAmount = $payments->sum('amount');
+
+        if ($structure->frequency === 'one_time') {
+            return response()->json([
+                'paidMonths' => [],
+                'dueMonths' => [],
+                'paidAmount' => number_format($paidAmount, 2),
+                'totalAmount' => number_format($structure->amount, 2),
+                'dueAmount' => number_format(max(0, $structure->amount - $paidAmount), 2),
+                'status' => $paidAmount >= $structure->amount ? 'Fully Paid' : ($paidAmount > 0 ? 'Partially Paid' : 'Not Paid')
+            ]);
+        }
+
+        $monthlyAmount = $structure->amount;
         $academicStartMonth = 4; // April
         $currentMonth = (int) date('n');
 
         $monthsTillNow = max(0, $currentMonth - $academicStartMonth + 1);
         $totalAmount = $monthlyAmount * $monthsTillNow;
 
-        $payments = FeePayment::where('student_id', $studentId)
-            ->where('fee_type_id', $feeTypeId)
-            ->get();
-
-        $paidAmount = $payments->sum('amount');
         $paidMonths = $payments->pluck('month')->map(fn($m) => str_pad($m, 2, '0', STR_PAD_LEFT))->toArray();
         $paidSet = collect($paidMonths)->unique()->toArray();
 
-        // Determine due months: April to current month minus paid
         $applicableMonths = collect(range($academicStartMonth, $currentMonth))
             ->map(fn($m) => str_pad($m, 2, '0', STR_PAD_LEFT))
             ->toArray();

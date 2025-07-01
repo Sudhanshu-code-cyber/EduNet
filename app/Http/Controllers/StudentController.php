@@ -25,6 +25,7 @@ public function dashboard()
 
     // Get the logged-in student's data
     $student = Student::where('user_id', Auth::id())->firstOrFail();
+session(['student_id' => $student->id]);
 
     // Latest notices for students
     $latestNotices = Notice::where('target', 'student')

@@ -94,9 +94,18 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $payment->student->roll_no }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $payment->feeType->name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ \DateTime::createFromFormat('!m', $payment->month)->format('F') }}
-                    </td>
+                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+    @php
+        $monthFormatted = 'N/A';
+        if (is_numeric($payment->month)) {
+            $dt = \DateTime::createFromFormat('!m', $payment->month);
+            $monthFormatted = $dt ? $dt->format('F') : 'Invalid';
+        } elseif ($payment->month === 'One-Time') {
+            $monthFormatted = 'One-Time';
+        }
+    @endphp
+    {{ $monthFormatted }}
+</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
                         ₹{{ number_format($payment->amount, 2) }}
                     </td>
