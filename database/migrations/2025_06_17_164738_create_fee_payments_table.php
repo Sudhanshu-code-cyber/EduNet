@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('fee_type_id')->constrained();
             $table->decimal('amount', 10, 2);
-            $table->string('month')->nullable(); // Only for monthly
+             $table->json('months')->nullable(); 
             $table->string('payment_method');
             $table->enum('status', ['Paid', 'Pending'])->default('Paid');
             $table->date('payment_date');

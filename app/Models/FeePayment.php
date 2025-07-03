@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class FeePayment extends Model
 {
     protected $fillable = [
-        'student_id', 'fee_type_id', 'amount', 'month', 'payment_method', 'status', 'payment_date',
+        'student_id', 'fee_type_id', 'amount', 'months', 'payment_method', 'status', 'payment_date',
+    ];
+
+        protected $casts = [
+        'months' => 'array',  
+        'payment_date' => 'date',
     ];
 
     public function feeType() {

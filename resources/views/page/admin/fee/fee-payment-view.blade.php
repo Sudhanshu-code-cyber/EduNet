@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="p-6 space-y-8">
-
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-gray-800">Fee Payment</h1>
     <div class="text-right">
@@ -57,19 +56,31 @@
           </thead>
           <tbody>
             @foreach($feeStructures as $fee)
-              @php $loopIndex = $loop->index; @endphp
+              @php 
+                $loopIndex = $loop->index; 
+                $feeTypeId = $fee->feeType->id; 
+              @endphp
               <tr class="border-b hover:bg-gray-50">
                 <td class="p-3 border">{{ $loop->iteration }}</td>
                 <td class="p-3 border">{{ $fee->feeType->name }}</td>
                 <td class="p-3 border">
                   ₹{{ number_format($fee->amount, 2) }}
-                  <input type="hidden" name="fees[{{ $loopIndex }}][fee_type_id]" value="{{ $fee->fee_type_id }}">
+                  <input type="hidden" name="fees[{{ $loopIndex }}][fee_type_id]" value="{{ $feeTypeId }}">
                   <input type="hidden" name="fees[{{ $loopIndex }}][amount]" value="{{ $fee->amount }}">
+                  <input type="hidden" name="fees[{{ $loopIndex }}][selected]" value="1">
                 </td>
                 <td class="p-3 border">
                   @if($fee->frequency === 'one_time')
-                    <label class="flex items-center text-sm text-blue-600 font-semibold">
-                      <input type="checkbox" name="fees[{{ $loopIndex }}][months][]" value="One-Time" class="mr-2" {{ isset($groupedPaid[$fee->fee_type_id . '-One-Time']) ? 'checked disabled' : '' }}> One-Time
+                    @php
+                      $isPaid = isset($paidData[$feeTypeId]) && in_array('One-Time', $paidData[$feeTypeId]);
+                    @endphp
+                    <label class="flex items-center text-sm font-semibold {{ $isPaid ? 'text-green-600' : 'text-blue-600' }}">
+                      <input type="checkbox"
+                             name="fees[{{ $loopIndex }}][months][]"
+                             value="One-Time"
+                             class="mr-2"
+                             {{ $isPaid ? 'checked disabled' : '' }}>
+                      One-Time
                     </label>
                   @else
                     <div class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
@@ -77,18 +88,17 @@
                         @php
                           $monthNum = str_pad($m, 2, '0', STR_PAD_LEFT);
                           $monthName = DateTime::createFromFormat('!m', $m)->format('F');
-                          $key = $fee->fee_type_id . '-' . $monthNum;
-                          $isPaid = isset($groupedPaid[$key]);
+                          $isPaid = isset($paidData[$feeTypeId]) && in_array($monthNum, $paidData[$feeTypeId]);
                         @endphp
                         <label title="₹{{ $fee->amount }} for {{ $monthName }}"
-                               class="flex items-center space-x-1 {{ $isPaid ? 'text-gray-400 line-through' : 'text-gray-700' }}">
+                               class="flex items-center space-x-1 px-1 rounded {{ $isPaid ? 'bg-green-100 text-green-700 font-semibold' : 'text-gray-700' }}">
                           <input 
                             type="checkbox"
                             class="month-checkbox"
                             name="fees[{{ $loopIndex }}][months][]"
                             value="{{ $monthNum }}"
                             data-amount="{{ $fee->amount }}"
-                            @if($isPaid) checked disabled @endif
+                            {{ $isPaid ? 'checked disabled' : '' }}
                           >
                           <span class="text-xs">{{ $monthName }}</span>
                         </label>
@@ -125,7 +135,7 @@
           </div>
         </div>
 
-        <div class="w-full md:w-auto mt-2 md:mt-0 mb-[-6px]">
+        <div class="w-full md:w-auto mt-2 md:mt-0">
           <button 
             type="submit"
             onclick="return confirm('Are you sure you want to submit this payment?')"
@@ -158,8 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cb.addEventListener("change", updateTotal);
   });
 
-  updateTotal();
+  updateTotal(); // Initial calculation
 });
 </script>
 @endsection
-v

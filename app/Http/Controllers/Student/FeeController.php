@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\FeeStructure;
 use App\Models\FeePayment;
+use App\Models\FeeType; 
 use Illuminate\Http\Request;
 
 class FeeController extends Controller
@@ -26,29 +27,38 @@ class FeeController extends Controller
 
         $payments = FeePayment::where('student_id', $student->id)->get();
 
-        $paymentMap = [];
-        $monthPaidMap = [];
+        $paymentMap = [];     // feeTypeId_Month => amount
+        $monthPaidMap = [];   // feeTypeId => array of paid months
 
         foreach ($payments as $payment) {
             $feeTypeId = $payment->fee_type_id;
             $structure = $feeStructures->firstWhere('fee_type_id', $feeTypeId);
             if (!$structure) continue;
 
-            if ($structure->frequency === 'one_time') {
-                $key = $feeTypeId . '_One-Time';
-            } else {
-                $month = is_numeric($payment->month)
-                    ? date('M', mktime(0, 0, 0, (int) $payment->month, 1))
-                    : $payment->month;
-                $key = $feeTypeId . '_' . $month;
-            }
+            $months = is_array($payment->months)
+                ? $payment->months
+                : json_decode($payment->months, true);
 
-            if (!isset($paymentMap[$key])) {
-                $paymentMap[$key] = 0;
-            }
-            $paymentMap[$key] += (float) $payment->amount;
+            if (!is_array($months)) continue;
 
-            $monthPaidMap[$feeTypeId][] = $payment->month;
+            foreach ($months as $month) {
+                $monthKey = $structure->frequency === 'one_time'
+                    ? 'One-Time'
+                    : (is_numeric($month)
+                        ? date('M', mktime(0, 0, 0, (int)$month, 1))
+                        : $month);
+
+                $key = $feeTypeId . '_' . $monthKey;
+
+                if (!isset($paymentMap[$key])) {
+                    $paymentMap[$key] = 0;
+                }
+
+                // Divide total by months paid to get actual contribution per month
+                $paymentMap[$key] += round($payment->amount / count($months), 2);
+
+                $monthPaidMap[$feeTypeId][] = $monthKey;
+            }
         }
 
         return view('page.student.fees.fee-overview', compact('student', 'feeStructures', 'paymentMap', 'monthPaidMap'));
@@ -76,7 +86,7 @@ class FeeController extends Controller
         FeePayment::create([
             'student_id' => $studentId,
             'fee_type_id' => $fee['fee_type_id'],
-            'months' => json_encode($months), 
+           'months' => $months,
             'amount' => $fee['amount'] * count($months),
             'payment_method' => $request->payment_method,
             'status' => 'Paid',
@@ -125,17 +135,37 @@ foreach ($payments as $payment) {
     return view('page.student.fees.pay-fees', compact('student', 'feeStructures', 'groupedPaid'));
 }
 
-public function paymentHistory()
+public function paymentHistory(Request $request)
 {
     $student = auth()->user()->student;
 
-    $payments = \App\Models\FeePayment::with('feeType')
-                ->where('student_id', $student->id)
-                ->orderBy('payment_date', 'desc')
-                ->get();
+    $query = FeePayment::with('feeType')
+                ->where('student_id', $student->id);
 
-    return view('page.student.fees.payment-history', compact('student', 'payments'));
+    // Apply filters
+    if ($request->filled('from')) {
+        $query->whereDate('payment_date', '>=', $request->from);
+    }
+
+    if ($request->filled('to')) {
+        $query->whereDate('payment_date', '<=', $request->to);
+    }
+
+    if ($request->filled('fee_type_id')) {
+        $query->where('fee_type_id', $request->fee_type_id);
+    }
+
+    if ($request->filled('payment_method')) {
+        $query->where('payment_method', $request->payment_method);
+    }
+
+    $payments = $query->orderBy('payment_date', 'desc')->get();
+
+    $feeTypes = FeeType::all();
+
+    return view('page.student.fees.payment-history', compact('student', 'payments', 'feeTypes'));
 }
+
 
 }
 

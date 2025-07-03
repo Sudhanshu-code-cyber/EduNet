@@ -32,6 +32,48 @@
     <div class="bg-white shadow rounded-lg p-6">
         <h3 class="text-lg font-bold text-gray-700 mb-4">Past Fee Payments</h3>
 
+{{-- Filters --}}
+<form method="GET" action="{{ route('student.payment-history') }}" class="bg-white shadow rounded-lg p-4 mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div>
+        <label class="block text-sm font-semibold text-gray-700">From Date</label>
+        <input type="date" name="from" value="{{ request('from') }}" class="w-full mt-1 p-2 border rounded">
+    </div>
+    <div>
+        <label class="block text-sm font-semibold text-gray-700">To Date</label>
+        <input type="date" name="to" value="{{ request('to') }}" class="w-full mt-1 p-2 border rounded">
+    </div>
+    <div>
+        <label class="block text-sm font-semibold text-gray-700">Fee Type</label>
+        <select name="fee_type_id" class="w-full mt-1 p-2 border rounded">
+            <option value="">All</option>
+            @foreach($feeTypes as $feeType)
+                <option value="{{ $feeType->id }}" {{ request('fee_type_id') == $feeType->id ? 'selected' : '' }}>
+                    {{ $feeType->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-semibold text-gray-700">Payment Method</label>
+        <select name="payment_method" class="w-full mt-1 p-2 border rounded">
+            <option value="">All</option>
+            <option value="Cash" {{ request('payment_method') == 'Cash' ? 'selected' : '' }}>Cash</option>
+            <option value="Online" {{ request('payment_method') == 'Online' ? 'selected' : '' }}>Online</option>
+            <option value="UPI" {{ request('payment_method') == 'UPI' ? 'selected' : '' }}>UPI</option>
+        </select>
+    </div>
+
+    <div class="md:col-span-4 flex justify-end space-x-2 mt-2">
+        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-800 transition">
+            Filter
+        </button>
+        <a href="{{ route('student.payment-history') }}" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 transition">
+            Reset
+        </a>
+    </div>
+</form>
+
+
         <div class="overflow-x-auto">
             <table class="w-full text-sm border border-collapse">
                 <thead class="bg-gray-100 text-gray-800">

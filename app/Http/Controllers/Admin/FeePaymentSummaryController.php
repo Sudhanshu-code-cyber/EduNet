@@ -13,21 +13,24 @@ use Illuminate\Http\Request;
 
 class FeePaymentSummaryController extends Controller
 {
-  public function index()
+ 
+    public function index()
     {
-        $students = Student::with('class', 'section')->get();
         $feeTypes = FeeType::all();
         $classes = ClassModel::all();
         $sections = Section::all();
         $initialSummary = [];
+
         $academicStartMonth = 4; // April
         $currentMonth = (int) date('n');
 
+        // Filters
         $classId = request('class_id');
         $sectionId = request('section_id');
         $name = request('name');
         $rollNo = request('roll_no');
 
+        // Students with filters
         $students = Student::with('class', 'section')
             ->when($classId, fn($q) => $q->where('class_id', $classId))
             ->when($sectionId, fn($q) => $q->where('section_id', $sectionId))
@@ -41,33 +44,31 @@ class FeePaymentSummaryController extends Controller
 
             $total = 0;
             $paid = $payments->sum('amount');
-            $monthPaidCount = [];
 
-            foreach ($payments as $payment) {
-                $m = str_pad($payment->month, 2, '0', STR_PAD_LEFT);
-                $monthPaidCount[$m] = ($monthPaidCount[$m] ?? 0) + 1;
-            }
-
-            $amountMap = [];
-            $requiredFeeTypesPerMonth = 0;
+            $requiredMonthlyFeeTypes = $structures->filter(fn($s) => $s->frequency === 'monthly')
+                ->pluck('fee_type_id')
+                ->unique()
+                ->toArray();
 
             foreach ($structures as $structure) {
-                if ($structure->frequency === 'monthly') {
-                    $amountMap[$structure->fee_type_id] = $structure->amount;
-                    $total += $structure->amount * 12;
-                } else {
-                    $total += $structure->amount; // one_time fee
-                }
+                $total += $structure->frequency === 'monthly'
+                    ? $structure->amount * 12
+                    : $structure->amount;
             }
 
-            $requiredFeeTypesPerMonth = count(array_filter($structures->toArray(), fn($s) => $s['frequency'] === 'monthly'));
+            $paidMonthMap = [];
+          foreach ($payments as $payment) {
+    $feeTypeId = $payment->fee_type_id;
+    
+    $months = is_array($payment->months)
+        ? $payment->months
+        : (json_decode($payment->months, true) ?? []);
 
-            $status = 'Not Paid';
-            if ($paid >= $total) {
-                $status = 'Fully Paid';
-            } elseif ($paid > 0) {
-                $status = 'Partially Paid';
-            }
+    foreach ($months as $month) {
+        $code = str_pad($month, 2, '0', STR_PAD_LEFT);
+        $paidMonthMap[$code][$feeTypeId] = true;
+    }
+}
 
             $monthFlags = [];
             foreach (range(1, 12) as $m) {
@@ -75,9 +76,17 @@ class FeePaymentSummaryController extends Controller
                 if ($m < $academicStartMonth || $m > $currentMonth) {
                     $monthFlags[$code] = 'none';
                 } else {
-                    $paidCount = $monthPaidCount[$code] ?? 0;
-                    $monthFlags[$code] = $paidCount >= $requiredFeeTypesPerMonth ? 'paid' : 'due';
+                    $paidForMonth = isset($paidMonthMap[$code]) ? array_keys($paidMonthMap[$code]) : [];
+                    $allPaid = empty(array_diff($requiredMonthlyFeeTypes, $paidForMonth));
+                    $monthFlags[$code] = $allPaid ? 'paid' : 'due';
                 }
+            }
+
+            $status = 'Not Paid';
+            if ($paid >= $total) {
+                $status = 'Fully Paid';
+            } elseif ($paid > 0) {
+                $status = 'Partially Paid';
             }
 
             $initialSummary[$student->id] = [
@@ -89,15 +98,20 @@ class FeePaymentSummaryController extends Controller
             ];
         }
 
-        return view('page.admin.fee.fee-payment-summary', compact('students', 'feeTypes', 'initialSummary', 'classes', 'sections'));
+        return view('page.admin.fee.fee-payment-summary', compact(
+            'students', 'feeTypes', 'initialSummary', 'classes', 'sections'
+        ));
     }
 
     public function getFeeMonths(Request $request)
     {
         $paidMonths = FeePayment::where('student_id', $request->student_id)
             ->where('fee_type_id', $request->fee_type_id)
-            ->pluck('month')
+            ->get()
+            ->flatMap(fn($p) => $p->months ?? [])
             ->map(fn($m) => str_pad($m, 2, '0', STR_PAD_LEFT))
+            ->unique()
+            ->values()
             ->toArray();
 
         return response()->json($paidMonths);
@@ -111,7 +125,7 @@ class FeePaymentSummaryController extends Controller
         $student = Student::findOrFail($studentId);
         $structure = FeeStructure::where('class_id', $student->class_id)
             ->where('fee_type_id', $feeTypeId)
-            ->first();
+            ->firstOrFail();
 
         $payments = FeePayment::where('student_id', $studentId)
             ->where('fee_type_id', $feeTypeId)
@@ -131,20 +145,22 @@ class FeePaymentSummaryController extends Controller
         }
 
         $monthlyAmount = $structure->amount;
-        $academicStartMonth = 4; // April
+        $academicStartMonth = 4;
         $currentMonth = (int) date('n');
-
         $monthsTillNow = max(0, $currentMonth - $academicStartMonth + 1);
         $totalAmount = $monthlyAmount * $monthsTillNow;
 
-        $paidMonths = $payments->pluck('month')->map(fn($m) => str_pad($m, 2, '0', STR_PAD_LEFT))->toArray();
-        $paidSet = collect($paidMonths)->unique()->toArray();
+        $paidMonths = $payments->flatMap(fn($p) => $p->months ?? [])
+            ->map(fn($m) => str_pad($m, 2, '0', STR_PAD_LEFT))
+            ->unique()
+            ->values()
+            ->toArray();
 
         $applicableMonths = collect(range($academicStartMonth, $currentMonth))
             ->map(fn($m) => str_pad($m, 2, '0', STR_PAD_LEFT))
             ->toArray();
 
-        $dueMonths = array_values(array_diff($applicableMonths, $paidSet));
+        $dueMonths = array_values(array_diff($applicableMonths, $paidMonths));
 
         $status = 'Not Paid';
         if ($paidAmount >= $totalAmount) {
@@ -154,7 +170,7 @@ class FeePaymentSummaryController extends Controller
         }
 
         return response()->json([
-            'paidMonths' => $paidSet,
+            'paidMonths' => $paidMonths,
             'dueMonths' => $dueMonths,
             'paidAmount' => number_format($paidAmount, 2),
             'totalAmount' => number_format($totalAmount, 2),

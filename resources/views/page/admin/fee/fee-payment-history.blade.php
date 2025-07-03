@@ -87,25 +87,26 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($payments as $payment)
                 <tr class="hover:bg-gray-50 transition duration-150">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $payment->payment_date }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {{ \Carbon\Carbon::parse($payment->payment_date)->format('d M Y') }}
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $payment->student->full_name }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ $payment->student->class->name ?? '' }} / {{ $payment->student->section->name ?? '' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $payment->student->roll_no }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $payment->feeType->name }}</td>
-                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-    @php
-        $monthFormatted = 'N/A';
-        if (is_numeric($payment->month)) {
-            $dt = \DateTime::createFromFormat('!m', $payment->month);
-            $monthFormatted = $dt ? $dt->format('F') : 'Invalid';
-        } elseif ($payment->month === 'One-Time') {
-            $monthFormatted = 'One-Time';
-        }
-    @endphp
-    {{ $monthFormatted }}
-</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        @php
+                            $months = is_array($payment->months) ? $payment->months : json_decode($payment->months, true);
+                            $formattedMonths = collect($months)->map(function ($m) {
+                                return $m === 'One-Time'
+                                    ? 'One-Time'
+                                    : (\DateTime::createFromFormat('!m', $m)?->format('F') ?? 'Invalid');
+                            })->implode(', ');
+                        @endphp
+                        {{ $formattedMonths ?: 'N/A' }}
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-green-600">
                         ₹{{ number_format($payment->amount, 2) }}
                     </td>
@@ -131,6 +132,5 @@
             </tbody>
         </table>
     </div>
-
 </div>
 @endsection

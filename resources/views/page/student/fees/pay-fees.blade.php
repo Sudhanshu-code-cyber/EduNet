@@ -38,7 +38,6 @@
         </div>
     </div>
 
-
     {{-- Fee Form --}}
     <form method="POST" action="{{ route('student.fees.pay') }}" class="space-y-6">
         @csrf
@@ -47,6 +46,7 @@
         <div class="bg-white shadow rounded-lg p-5">
             <h3 class="text-lg font-bold mb-4">Select Fee & Month</h3>
 
+            {{-- Legend --}}
             <div class="flex gap-4 mb-4 text-sm">
                 <div class="flex items-center gap-2">
                     <div class="w-4 h-4 bg-green-600 rounded"></div> Paid
@@ -72,15 +72,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                @php
+                    use Carbon\Carbon;
+                    $months = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+                    $academicMonths = ['Apr'=>4,'May'=>5,'Jun'=>6,'Jul'=>7,'Aug'=>8,'Sep'=>9,'Oct'=>10,'Nov'=>11,'Dec'=>12,'Jan'=>1,'Feb'=>2,'Mar'=>3];
+                @endphp
+
                 @foreach($feeStructures as $index => $fee)
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="p-3 border">{{ $loop->iteration }}</td>
+                    <tr class="border-t">
+                        <td class="p-3 border">{{ $index + 1 }}</td>
                         <td class="p-3 border">{{ $fee->feeType->name }}</td>
-                        <td class="p-3 border">
-                            ₹{{ number_format($fee->amount, 2) }}
-                            <input type="hidden" name="fees[{{ $index }}][fee_type_id]" value="{{ $fee->fee_type_id }}">
-                            <input type="hidden" name="fees[{{ $index }}][amount]" value="{{ $fee->amount }}">
-                        </td>
+                        <td class="p-3 border">₹{{ number_format($fee->amount, 2) }}</td>
                         <td class="p-3 border">
                             <div class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
                             @if($fee->frequency === 'one_time')
@@ -88,7 +90,7 @@
                                     $key = $fee->fee_type_id . '_One-Time';
                                     $isPaid = isset($groupedPaid[$key]);
                                 @endphp
-                                <label class="text-xs font-semibold text-white {{ $isPaid ? 'bg-green-600' : 'bg-red-600' }} px-2 py-1 rounded">
+                                <label class="text-xs font-semibold text-white {{ $isPaid ? 'bg-green-600' : 'bg-red-600 month-label' }} px-2 py-1 rounded cursor-pointer">
                                     <input 
                                         type="checkbox"
                                         class="month-checkbox hidden"
@@ -100,17 +102,18 @@
                                     One-Time
                                 </label>
                             @else
-                                @for ($m = 1; $m <= 12; $m++)
+                                @foreach($academicMonths as $mon => $m)
                                     @php
                                         $monthNum = str_pad($m, 2, '0', STR_PAD_LEFT);
-                                        $monthName = DateTime::createFromFormat('!m', $m)->format('M');
+                                        $monthName = $mon;
                                         $key = $fee->fee_type_id . '-' . $monthNum;
                                         $isPaid = isset($groupedPaid[$key]);
-                                        $now = now();
-                                        $year = $m >= 4 ? $now->year : $now->year + 1;
-                                        $monthDate = \Carbon\Carbon::createFromDate($year, $m, 1);
+
+                                        $year = $m >= 4 ? now()->year : now()->year + 1;
+                                        $monthDate = Carbon::createFromDate($year, $m, 1);
                                         $isApplicable = $monthDate->isPast() || $monthDate->isCurrentMonth();
                                     @endphp
+
                                     @if($isPaid)
                                         <label class="text-xs font-semibold text-white bg-green-600 px-2 py-1 rounded">
                                             <input 
@@ -124,7 +127,7 @@
                                             {{ $monthName }}
                                         </label>
                                     @elseif($isApplicable)
-                                        <label class="month-label text-xs font-semibold text-white bg-red-600 px-2 py-1 rounded cursor-pointer hover:bg-blue-600">
+                                        <label class="month-label text-xs font-semibold text-white bg-red-600 px-2 py-1 rounded cursor-pointer">
                                             <input 
                                                 type="checkbox"
                                                 class="month-checkbox hidden"
@@ -139,9 +142,11 @@
                                             {{ $monthName }}
                                         </label>
                                     @endif
-                                @endfor
+                                @endforeach
                             @endif
                             </div>
+                            <input type="hidden" name="fees[{{ $index }}][fee_type_id]" value="{{ $fee->fee_type_id }}">
+                            <input type="hidden" name="fees[{{ $index }}][amount]" value="{{ $fee->amount }}">
                         </td>
                     </tr>
                 @endforeach
@@ -184,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let total = 0;
         document.querySelectorAll("input.month-checkbox").forEach(cb => {
             if (cb.checked && !cb.disabled) {
-                const amt = parseFloat(cb.getAttribute('data-amount'));
+                const amt = parseFloat(cb.dataset.amount);
                 if (!isNaN(amt)) total += amt;
             }
         });
@@ -195,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const checkbox = label.querySelector("input.month-checkbox");
 
         label.addEventListener("click", function (e) {
+            e.preventDefault();
             if (checkbox.disabled) return;
 
             checkbox.checked = !checkbox.checked;
@@ -214,4 +220,5 @@ document.addEventListener("DOMContentLoaded", function () {
     updateTotal();
 });
 </script>
+
 @endsection
