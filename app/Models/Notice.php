@@ -10,6 +10,12 @@ class Notice extends Model
 
     protected $fillable = [
         'title', 'details', 'date', 'expires_at',
-        'created_by', 'creator_role', 'target',
+        'created_by', 'creator_role', 'target','attachment',
     ];
+
+    public function creator()
+{
+    return $this->belongsTo(User::class, 'created_by');
+}
+
 }

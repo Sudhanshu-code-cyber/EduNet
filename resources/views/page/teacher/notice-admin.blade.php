@@ -17,10 +17,24 @@
                     <div class="bg-white p-4 shadow rounded-lg">
                         <div class="flex justify-between items-center mb-2">
                             <h2 class="text-xl font-semibold text-gray-800">{{ $notice->title }}</h2>
-                            <span class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($notice->date)->format('d M Y') }}</span>
+                            <span class="text-sm text-gray-500">
+                                {{ \Carbon\Carbon::parse($notice->date)->format('d M Y') }}
+                            </span>
                         </div>
-                        <p class="text-gray-700">{{ $notice->details }}</p>
-                        <div class="mt-2 text-sm text-gray-500 italic">
+
+                        <p class="text-gray-700 whitespace-pre-line">{{ $notice->details }}</p>
+
+                        <div class="mt-3">
+                            @if($notice->attachment)
+                                <a href="{{ Storage::url($notice->attachment) }}"
+                                   target="_blank"
+                                   class="inline-block mt-2 text-sm text-blue-600 hover:underline font-medium">
+                                   📎 View Attachment
+                                </a>
+                            @endif
+                        </div>
+
+                        <div class="mt-3 text-sm text-gray-500 italic">
                             Posted by: {{ ucfirst($notice->creator_role) }}
                         </div>
                     </div>

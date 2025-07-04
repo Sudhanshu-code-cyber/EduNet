@@ -52,23 +52,45 @@
                                     <h3 class="text-xl font-semibold text-blue-700">{{ $notice->title }}</h3>
                                     <p class="text-gray-800 whitespace-pre-line">{{ $notice->details }}</p>
                                     <div class="text-sm text-gray-500 space-x-4">
-                                        <span><strong>Posted By:</strong> {{ $notice->created_by }}</span>
+                                     <span><strong>Posted By:</strong> {{ $notice->creator->name ?? 'Unknown' }}</span>
                                         <span><strong>Date:</strong> {{ $notice->date }}</span>
+                                        <p class="text-gray-800 whitespace-pre-line">{{ $notice->details }}</p>
+
+@if($notice->attachment)
+    <div class="mt-2">
+        <a href="{{ Storage::url($notice->attachment) }}"
+           target="_blank"
+           class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-800">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="h-5 w-5 mr-1"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            View Attachment
+        </a>
+    </div>
+@endif
+
                                     </div>
                                 </div>
                                 <div class="flex gap-3 mt-4 md:mt-0 md:ml-6">
                                     @if($notice->created_by == auth()->id())
-                                    <a href="javascript:void(0);"
-                                    onclick="openEditModal({!! json_encode([
-                                         'id' => $notice->id,
-                                         'title' => $notice->title,
-                                         'posted_by' => \App\Models\User::find($notice->created_by)?->name,
-                                         'details' => $notice->details,
-                                         'date' => $notice->date,
-                                     ]) !!})"
-                                    class="text-blue-600 hover:underline font-semibold">
-                                    Edit
-                                 </a>                                                             
+                              <a href="javascript:void(0);"
+   onclick="openEditModal({!! htmlspecialchars(json_encode([
+       'id' => $notice->id,
+       'title' => $notice->title,
+      'posted_by' => \App\Models\User::find($notice->created_by)?->name,
+       'details' => $notice->details,
+       'date' => $notice->date,
+   ]), ENT_QUOTES, 'UTF-8') !!})"
+   class="text-blue-600 hover:underline font-semibold">
+   Edit
+</a>                            
                                  
                                         <form method="POST" action="{{ route('notice.destroy', $notice->id) }}">
                                             @csrf
@@ -104,7 +126,7 @@
                 <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-xl mx-auto z-50 overflow-y-auto max-h-[90vh]">
                     <h2 class="text-2xl font-bold text-blue-700 mb-6">📝 Create Notice</h2>
 
-                    <form method="POST" action="{{ route('notice.store') }}" class="space-y-5">
+                    <form method="POST" action="{{ route('notice.store') }}" class="space-y-5"  enctype="multipart/form-data">
                         @csrf
                     
                         <!-- Title input -->
@@ -139,6 +161,7 @@
                                 @enderror
                             </div>
                     
+
                             <div>
                                 <label for="date" class="text-gray-700 font-medium">Date</label>
                                 <input type="date" name="date" id="date"
@@ -150,6 +173,12 @@
                             </div>
                         </div>
                     
+<div>
+    <label for="attachment" class="block text-sm font-medium">Attachment</label>
+    <input type="file" name="attachment" id="attachment"
+           class="mt-1 block w-full border rounded-md shadow-sm" />
+</div>
+
                         <!-- Hidden Fields -->
                         <input type="hidden" name="created_by" value="{{ auth()->id() }}">
                         <input type="hidden" name="creator_role" value="admin">
@@ -195,4 +224,7 @@
     </script>
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    @include('page.admin.notice-edit-modal')
+
 @endsection

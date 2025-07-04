@@ -7,7 +7,7 @@
     <div class="bg-white rounded-lg shadow-lg p-6 z-10 w-11/12 sm:w-1/2 relative max-h-screen overflow-y-auto">
         <h2 class="text-2xl font-semibold mb-4 text-blue-700">Edit Notice</h2>
 
-        <form id="editNoticeForm" method="POST">
+      <form id="editNoticeForm" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -22,8 +22,8 @@
 
                 <div class="w-full sm:w-1/2">
                     <label for="edit_posted_by" class="block text-gray-700 font-medium mb-1">Posted By</label>
-                    <input type="text" name="posted_by" id="edit_posted_by" required
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                   <input type="text" name="posted_by" id="edit_posted_by" readonly
+    class="w-full border border-gray-200 bg-gray-100 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
 
@@ -40,6 +40,17 @@
                         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
             </div>
+
+<div class="mt-4">
+    <label for="edit_attachment" class="block text-gray-700 font-medium mb-1">Upload New Attachment (optional)</label>
+    <input type="file" name="attachment" id="edit_attachment"
+        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+
+<!-- Show existing attachment if available -->
+<div id="current_attachment_wrapper" class="mt-2 text-sm text-gray-600 hidden">
+    Current Attachment: <a id="current_attachment_link" href="#" target="_blank" class="text-blue-600 underline">View</a>
+</div>
 
             <div class="flex gap-4 mt-6">
                 <button type="submit"
@@ -60,21 +71,30 @@
 
 <script>
     function openEditModal(notice) {
-        document.getElementById('edit_id').value = notice.id;
-        document.getElementById('edit_title').value = notice.title;
-        document.getElementById('edit_posted_by').value = notice.posted_by;
-        document.getElementById('edit_details').value = notice.details;
-        document.getElementById('edit_date').value = notice.date;
+    console.log('Edit button clicked with notice:', notice);
+    document.getElementById('edit_id').value = notice.id;
+    document.getElementById('edit_title').value = notice.title;
+    document.getElementById('edit_posted_by').value = notice.posted_by;
+    document.getElementById('edit_details').value = notice.details;
 
-        // Set form action dynamically
-        document.getElementById('editNoticeForm').action = `/admin/notice/${notice.id}`;
+    // Set formatted date
+    const formattedDate = new Date(notice.date).toISOString().split('T')[0];
+    document.getElementById('edit_date').value = formattedDate;
 
-        // Show modal
-        document.getElementById('editNoticeModal').classList.remove('hidden');
+    // Set form action
+    document.getElementById('editNoticeForm').action = `/admin/notice/${notice.id}`;
+
+    // Show current attachment if exists
+    if (notice.attachment) {
+        document.getElementById('current_attachment_wrapper').classList.remove('hidden');
+        document.getElementById('current_attachment_link').href = `/storage/${notice.attachment}`;
+    } else {
+        document.getElementById('current_attachment_wrapper').classList.add('hidden');
     }
 
-    function closeEditModal() {
-        document.getElementById('editNoticeModal').classList.add('hidden');
-    }
+    // Show modal
+    document.getElementById('editNoticeModal').classList.remove('hidden');
+}
+
 </script>
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Notice; 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TeacherNoticeController extends Controller
 {
@@ -18,8 +19,7 @@ class TeacherNoticeController extends Controller
             ->where('created_by', Auth::id())
             ->where('target', 'student')
             ->where(function ($query) {
-                $query->whereNull('expires_at')
-                      ->orWhere('expires_at', '>=', now());
+                $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
             })
             ->latest()
             ->paginate(4);
@@ -29,38 +29,32 @@ class TeacherNoticeController extends Controller
 
     public function adminNotices()
     {
-        $notices = \App\Models\Notice::where('target', 'teacher')
+        $notices = Notice::where('target', 'teacher')
             ->where('creator_role', 'admin')
             ->where(function ($query) {
                 $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
             })
-            ->orderByDesc('created_at')
+            ->latest()
             ->paginate(5);
-    
+
         return view('page.teacher.notice-admin', compact('notices'));
     }
-    
 
-    /**
-     * Show the form to create a new notice.
-     */
     public function create()
     {
-        return view('page.teacher.notices'); // Should be a separate create form
+        return view('page.teacher.notices');
     }
 
-    /**
-     * Store a newly created notice in the database.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'title'   => 'required|string|max:255',
-            'details' => 'required|string',
-            'date'    => 'required|date',
+            'title'      => 'required|string|max:255',
+            'details'    => 'required|string',
+            'date'       => 'required|date',
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
 
-        Notice::create([
+        $notice = new Notice([
             'title'        => $request->title,
             'details'      => $request->details,
             'date'         => $request->date,
@@ -70,12 +64,18 @@ class TeacherNoticeController extends Controller
             'target'       => 'student',
         ]);
 
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('notices', $filename, 'public');
+            $notice->attachment = $path;
+        }
+
+        $notice->save();
+
         return redirect()->route('teacher.notice.index')->with('success', 'Notice created successfully.');
     }
 
-    /**
-     * Show the form for editing a notice.
-     */
     public function edit($id)
     {
         $notice = Notice::findOrFail($id);
@@ -84,12 +84,9 @@ class TeacherNoticeController extends Controller
             abort(403, 'Unauthorized to edit this notice.');
         }
 
-        return view('page.teacher.notice-edit-modal', compact('notice')); // Should be a separate edit view
+        return view('page.teacher.notice-edit-modal', compact('notice'));
     }
 
-    /**
-     * Update an existing notice.
-     */
     public function update(Request $request, $id)
     {
         $notice = Notice::findOrFail($id);
@@ -99,23 +96,33 @@ class TeacherNoticeController extends Controller
         }
 
         $request->validate([
-            'title'   => 'required|string|max:255',
-            'details' => 'required|string',
-            'date'    => 'required|date',
+            'title'      => 'required|string|max:255',
+            'details'    => 'required|string',
+            'date'       => 'required|date',
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
 
-        $notice->update([
-            'title'   => $request->title,
-            'details' => $request->details,
-            'date'    => $request->date,
-        ]);
+        $notice->title = $request->title;
+        $notice->details = $request->details;
+        $notice->date = $request->date;
+
+        if ($request->hasFile('attachment')) {
+            // Delete old file if exists
+            if ($notice->attachment && Storage::disk('public')->exists($notice->attachment)) {
+                Storage::disk('public')->delete($notice->attachment);
+            }
+
+            $file = $request->file('attachment');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('notices', $filename, 'public');
+            $notice->attachment = $path;
+        }
+
+        $notice->save();
 
         return redirect()->route('teacher.notice.index')->with('success', 'Notice updated successfully!');
     }
 
-    /**
-     * Delete a notice permanently.
-     */
     public function destroy($id)
     {
         $notice = Notice::findOrFail($id);
@@ -124,14 +131,16 @@ class TeacherNoticeController extends Controller
             abort(403, 'Unauthorized to delete this notice.');
         }
 
+        // Delete attached file if exists
+        if ($notice->attachment && Storage::disk('public')->exists($notice->attachment)) {
+            Storage::disk('public')->delete($notice->attachment);
+        }
+
         $notice->delete();
 
         return redirect()->route('teacher.notice.index')->with('error', 'Notice deleted successfully!');
     }
 
-    /**
-     * Search for notices based on title or date.
-     */
     public function search(Request $request)
     {
         $query = Notice::where('creator_role', 'teacher')

@@ -180,9 +180,9 @@
                                 <h3 class="text-sm font-semibold text-gray-900">{{ $note->title }}</h3>
                                 <span class="text-xs text-gray-500">{{ $note->date }}</span>
                             </div>
-                            <p class="mt-1 text-sm text-gray-600 line-clamp-2">{{ $note->descripption }}</p>
+                            <p class="mt-1 text-sm text-gray-600 line-clamp-2">{{ $note->description }}</p>
                             <div class="mt-2 text-xs text-gray-500">
-                                Posted by: {{ $note->posted_by }}
+                                Posted by:  {{ $note->creator->name ?? 'Unknown' }}
                             </div>
                         </div>
                     </div>
