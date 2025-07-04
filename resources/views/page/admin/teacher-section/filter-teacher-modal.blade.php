@@ -13,18 +13,23 @@
             </div>
 
             <form action="{{ route('teacher.search') }}" method="GET" class="p-6 space-y-4">
+                {{-- Qualification --}}
                 <div>
-                    <label class="block text-sm font-medium mb-1">Class</label>
-                    <input type="text" name="class" value="{{ request('class') }}" placeholder="Enter class"
-                        class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    <label class="block text-sm font-medium mb-1">Qualification</label>
+                    <select name="qualification" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                        <option value="">-- Select Qualification --</option>
+                        <option value="B.Ed" {{ request('qualification') == 'B.Ed' ? 'selected' : '' }}>B.Ed</option>
+                        <option value="M.Ed" {{ request('qualification') == 'M.Ed' ? 'selected' : '' }}>M.Ed</option>
+                        <option value="B.Sc" {{ request('qualification') == 'B.Sc' ? 'selected' : '' }}>B.Sc</option>
+                        <option value="M.Sc" {{ request('qualification') == 'M.Sc' ? 'selected' : '' }}>M.Sc</option>
+                        <option value="B.A" {{ request('qualification') == 'B.A' ? 'selected' : '' }}>B.A</option>
+                        <option value="M.A" {{ request('qualification') == 'M.A' ? 'selected' : '' }}>M.A</option>
+                        <option value="Ph.D" {{ request('qualification') == 'Ph.D' ? 'selected' : '' }}>Ph.D</option>
+                        <option value="Other" {{ request('qualification') == 'Other' ? 'selected' : '' }}>Other</option>
+                    </select>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-1">Section</label>
-                    <input type="text" name="section" value="{{ request('section') }}" placeholder="Enter section"
-                        class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">
-                </div>
-
+                {{-- Gender --}}
                 <div>
                     <label class="block text-sm font-medium mb-1">Gender</label>
                     <select name="gender" class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-400">

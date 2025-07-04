@@ -50,18 +50,20 @@
                             class="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400">
                     </div>
 
-                    <!-- Class -->
+                    <!-- Qualification -->
                     <div>
-                        <label class="block mb-1 font-medium">Class</label>
-                        <input type="text" name="class" value="{{ $teacher->class }}"
-                            class="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400">
-                    </div>
-
-                    <!-- Section -->
-                    <div>
-                        <label class="block mb-1 font-medium">Section</label>
-                        <input type="text" name="section" value="{{ $teacher->section }}"
-                            class="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400">
+                        <label class="block mb-1 font-medium">Qualification</label>
+                        <select name="qualification" class="w-full border rounded px-4 py-2 focus:ring-2 focus:ring-blue-400">
+                            <option value="">Select Qualification</option>
+                            <option value="B.Ed" {{ $teacher->qualification == 'B.Ed' ? 'selected' : '' }}>B.Ed</option>
+                            <option value="M.Ed" {{ $teacher->qualification == 'M.Ed' ? 'selected' : '' }}>M.Ed</option>
+                            <option value="B.Sc" {{ $teacher->qualification == 'B.Sc' ? 'selected' : '' }}>B.Sc</option>
+                            <option value="M.Sc" {{ $teacher->qualification == 'M.Sc' ? 'selected' : '' }}>M.Sc</option>
+                            <option value="B.A" {{ $teacher->qualification == 'B.A' ? 'selected' : '' }}>B.A</option>
+                            <option value="M.A" {{ $teacher->qualification == 'M.A' ? 'selected' : '' }}>M.A</option>
+                            <option value="Ph.D" {{ $teacher->qualification == 'Ph.D' ? 'selected' : '' }}>Ph.D</option>
+                            <option value="Other" {{ $teacher->qualification == 'Other' ? 'selected' : '' }}>Other</option>
+                        </select>
                     </div>
 
                     <!-- Address -->

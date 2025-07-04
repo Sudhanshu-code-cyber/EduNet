@@ -40,8 +40,8 @@
         <!-- Additional Info -->
         <div class="border border-gray-200 rounded-lg p-4 shadow-sm">
             <div class="mb-4">
-                <h2 class="text-xl font-semibold text-gray-700 border-b border-gray-300 pb-1">Class & Section</h2>
-                <p class="text-gray-600 mt-1">{{ $teacher->class ?? '-' }} - {{ $teacher->section ?? '-' }}</p>
+                <h2 class="text-xl font-semibold text-gray-700 border-b border-gray-300 pb-1">Qualification</h2>
+                <p class="text-gray-600 mt-1">{{ $teacher->qualification ?? '-' }}</p>
             </div>
             <div class="mb-4">
                 <h2 class="text-xl font-semibold text-gray-700 border-b border-gray-300 pb-1">ID Number</h2>
@@ -82,4 +82,3 @@
     </div>
 </div>
 @endsection
-

@@ -17,20 +17,28 @@
     <!-- Search & Filter -->
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <!-- Search Form -->
-        <form action="{{ route('teacher.search') }}" method="GET" class="flex flex-wrap gap-3">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or id or email"
-                   class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-60 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-            <button type="submit"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm">
-                <i class="fa-solid fa-magnifying-glass"></i> Search
-            </button>
-        </form>
+      <form action="{{ route('teacher.search') }}" method="GET" class="flex flex-wrap gap-3">
+    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name or id or email"
+           class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-60 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+    <button type="submit"
+        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+    </button>
+
+    @if(request()->has('search') && request('search') != '')
+        <a href="{{ route('teacher.index') }}"
+           class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg text-sm shadow hover:shadow-md">
+           Reset
+        </a>
+    @endif
+</form>
+
 
         <!-- Filter Button -->
-        <button data-modal-target="filter-teacher-modal" data-modal-toggle="filter-teacher-modal"
-            class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-6 py-2 shadow-md hover:shadow-lg text-sm flex items-center gap-2">
-            <i class="fa-solid fa-filter"></i> Filter
-        </button>
+      <button id="openFilterModal" 
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    Filter
+</button>
     </div>
 
     <!-- Teacher Table -->
@@ -38,14 +46,13 @@
         <table class="min-w-full divide-y divide-gray-200 text-sm">
             <thead class="bg-blue-100 text-gray-700">
                 <tr>
-                    <th class="px-4 py-3 text-left">ID </th>
+                    <th class="px-4 py-3 text-left">ID</th>
                     <th class="px-4 py-3 text-left">Name</th>
                     <th class="px-4 py-3 text-left">Photo</th>
                     <th class="px-4 py-3 text-left">Gender</th>
                     <th class="px-4 py-3 text-left">Email</th>
                     <th class="px-4 py-3 text-left">Phone</th>
-                    <th class="px-4 py-3 text-left">Class</th>
-                    <th class="px-4 py-3 text-left">Section</th>
+                    <th class="px-4 py-3 text-left">Qualification</th>
                     <th class="px-4 py-3 text-left">Address</th>
                     <th class="px-4 py-3 text-left">Action</th>
                 </tr>
@@ -65,8 +72,7 @@
                         <td class="px-4 py-3">{{ $teacher->gender }}</td>
                         <td class="px-4 py-3">{{ $teacher->email }}</td>
                         <td class="px-4 py-3">{{ $teacher->phone }}</td>
-                        <td class="px-4 py-3">{{ $teacher->class }}</td>
-                        <td class="px-4 py-3">{{ $teacher->section }}</td>
+                        <td class="px-4 py-3">{{ $teacher->qualification ?? 'N/A' }}</td>
                         <td class="px-4 py-3">{{ $teacher->address }}</td>
                         <td class="px-4 py-3">
                             <div class="flex gap-3 text-gray-600">
@@ -92,7 +98,7 @@
                     @include('page.admin.teacher-section.edit-teacher-modal')
                 @empty
                     <tr>
-                        <td colspan="10" class="px-4 py-4 text-center text-gray-500">No teachers found.</td>
+                        <td colspan="9" class="px-4 py-4 text-center text-gray-500">No teachers found.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -102,4 +108,29 @@
         </div>
     </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const openBtn = document.getElementById("openFilterModal");
+    const modal = document.getElementById("filter-teacher-modal");
+
+    if (!modal) return;
+
+    const closeBtns = modal.querySelectorAll("[data-modal-hide]");
+
+    openBtn?.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+    });
+
+    closeBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+    });
+});
+
+</script>
+
+@include('page.admin.teacher-section.filter-teacher-modal')
+
 @endsection

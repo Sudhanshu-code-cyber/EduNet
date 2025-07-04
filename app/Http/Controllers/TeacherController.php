@@ -115,6 +115,7 @@ public function updateProfile(Request $request)
 {
     $request->validate([
         'contact' => 'required|string|max:20',
+        
         'password' => 'nullable|string|min:6|confirmed',
     ]);
     

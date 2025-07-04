@@ -17,8 +17,6 @@
                         @error('first_name')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
-
-
                     </div>
 
                     <div>
@@ -108,23 +106,28 @@
                         <input type="email" name="email"
                             class="border border-gray-300 rounded-lg w-96 h-12 text-base px-4 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             placeholder="Enter email">
-                             @error('email')
+                        @error('email')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Class</label>
-                        <select name="class"
+                        <label class="block font-semibold mb-2 text-gray-700">Qualification</label>
+                        <select name="qualification" required
                             class="border border-gray-300 rounded-lg w-96 h-12 text-base px-4 focus:ring-2 focus:ring-blue-400 focus:outline-none">
-                            <option value="" disabled selected>Select class</option>
-                            <option>Nursery</option>
-                            <option>LKG</option>
-                            <option>UKG</option>
-                            <option>1</option>
-                            <option>2</option>
+                            <option value="">Select Qualification</option>
+                            <option value="B.Ed">B.Ed (Bachelor of Education)</option>
+                            <option value="M.Ed">M.Ed (Master of Education)</option>
+                            <option value="B.Sc">B.Sc</option>
+                            <option value="M.Sc">M.Sc</option>
+                            <option value="B.A">B.A</option>
+                            <option value="M.A">M.A</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="M.Tech">M.Tech</option>
+                            <option value="Ph.D">Ph.D</option>
+                            <option value="Other">Other</option>
                         </select>
-                         @error('class')
+                        @error('qualification')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -132,25 +135,11 @@
 
                 <div class="flex gap-2">
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Section</label>
-                        <select name="section"
-                            class="border border-gray-300 rounded-lg w-96 h-12 text-base px-4 focus:ring-2 focus:ring-blue-400 focus:outline-none">
-                            <option value="" disabled selected>Select section</option>
-                            <option>A</option>
-                            <option>B</option>
-                            <option>C</option>
-                        </select>
-                         @error('section')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div>
                         <label class="block font-semibold mb-2 text-gray-700">Phone</label>
                         <input type="text" name="phone"
                             class="border border-gray-300 rounded-lg w-96 h-12 text-base px-4 focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             placeholder="Enter phone number">
-                             @error('phone')
+                        @error('phone')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -159,7 +148,7 @@
                         <label class="block font-semibold mb-2 text-gray-700">Upload Photo</label>
                         <input type="file" name="photo" accept="image/*"
                             class="border border-gray-300 rounded-lg w-96 h-12 text-base px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none">
-                             @error('photo')
+                        @error('photo')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -171,9 +160,9 @@
                 <textarea name="address" rows="3"
                     class="w-[95%] border border-gray-300 rounded-lg px-4 py-3 text-base focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     placeholder="Enter full address"></textarea>
-                     @error('address')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
+                @error('address')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             <div>
@@ -181,9 +170,9 @@
                 <textarea name="short_bio" rows="3"
                     class="w-[95%] border border-gray-300 rounded-lg px-4 py-3 text-base focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     placeholder="Write a short bio about the teacher"></textarea>
-                     @error('short_bio')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
+                @error('short_bio')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="flex justify-end gap-4 mt-16 pr-12">

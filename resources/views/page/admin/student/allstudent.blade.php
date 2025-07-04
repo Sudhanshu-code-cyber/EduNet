@@ -14,21 +14,31 @@
 
     <!-- Search Bar -->
     <form action="{{ route('student.search') }}" method="GET" class="mb-6">
-        <div class="bg-white p-4 rounded-lg shadow-sm flex flex-col md:flex-row items-center gap-4">
-            <div class="relative w-full md:w-80">
-                <input type="text" name="search" value="{{ request('search') }}"
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
-                    placeholder="Search by Name or Roll No.">
-                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <i class="fas fa-search"></i>
-                </div>
+    <div class="bg-white p-4 rounded-lg shadow-sm flex flex-col md:flex-row items-center gap-4">
+        <div class="relative w-full md:w-80">
+            <input type="text" name="search" value="{{ request('search') }}"
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
+                placeholder="Search by Name or Roll No.">
+            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <i class="fas fa-search"></i>
             </div>
-            <button type="submit"
-                class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-5 py-2.5 rounded-md text-sm flex items-center gap-2 shadow">
-                <i class="fas fa-search"></i> Search
-            </button>
         </div>
-    </form>
+
+        <!-- Search Button -->
+        <button type="submit"
+            class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-5 py-2.5 rounded-md text-sm flex items-center gap-2 shadow">
+            <i class="fas fa-search"></i> Search
+        </button>
+
+        <!-- Reset Button (show only when searching) -->
+        @if(request()->has('search') && request('search') != '')
+            <a href="{{ route('admin.allstudent') }}"
+               class="text-sm px-5 py-2.5 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700 shadow">
+                Reset
+            </a>
+        @endif
+    </div>
+</form>
 
     <!-- Student Table -->
     <div class="bg-white shadow-md rounded-lg overflow-x-auto">
@@ -41,7 +51,6 @@
                     <th class="px-4 py-3">Gender</th>
                     <th class="px-4 py-3 hidden lg:table-cell">Parent</th>
                     <th class="px-4 py-3">Class</th>
-                    <th class="px-4 py-3">Section</th>
                     <th class="px-4 py-3 hidden lg:table-cell">Address</th>
                     <th class="px-4 py-3 hidden lg:table-cell">DOB</th>
                     <th class="px-4 py-3 hidden lg:table-cell">Mobile</th>
@@ -63,8 +72,7 @@
             <td class="px-4 py-2 font-medium">{{ $student->full_name }}</td>
             <td class="px-4 py-2">{{ $student->gender }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ $student->father_name }}</td>
-            <td class="px-4 py-2">{{ $student->class->name }}</td>
-            <td class="px-4 py-2">{{ $student->section->name }}</td>
+            <td class="px-4 py-2">{{ $student->class->name }}  '{{ $student->section->name }}'</td>
             <td class="px-4 py-2 hidden lg:table-cell truncate w-32">{{ $student->present_address }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ \Carbon\Carbon::parse($student->dob)->format('d/m/Y') }}</td>
             <td class="px-4 py-2 hidden lg:table-cell">{{ $student->contact }}</td>
