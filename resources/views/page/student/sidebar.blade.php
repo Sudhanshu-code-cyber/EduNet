@@ -233,11 +233,14 @@
 
          <!-- Logout -->
          <div class="mt-auto">
-            <a href="{{route('user.logout')}}"
+             <form method="POST" action="{{ route('user.logout') }}">
+    @csrf
+            <button type="submit"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-600 hover:bg-red-50 transition-all duration-200 group">
                <span class="w-6 h-6 flex items-center justify-center bg-red-100 rounded-lg group-hover:bg-red-600 group-hover:text-white transition-colors">⏻</span>
                <span class="font-medium">Logout</span>
-            </a>
+             </button>
+            </form>
          </div>
 
       </div>

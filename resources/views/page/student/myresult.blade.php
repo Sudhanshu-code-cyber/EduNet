@@ -59,71 +59,61 @@
         </form>
 
         <!-- 🧾 Result Table -->
-        @if($exam && $subjects->count())
-            <div class="overflow-x-auto mt-6">
-                <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-                    <thead class="bg-gray-100 text-gray-700">
-                        <tr>
-                            <th class="p-4 text-left font-semibold">Subject</th>
-                            <th class="p-4 text-left font-semibold">Max Marks</th>
-                            <th class="p-4 text-left font-semibold">Pass Marks</th>
-                            <th class="p-4 text-left font-semibold">Obtained</th>
-                            <th class="p-4 text-left font-semibold">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white text-gray-800 divide-y divide-gray-100">
-                        @php
-                            $total = 0;
-                            $obtained = 0;
-                            $fail = false;
-                        @endphp
+     <!-- 🧾 Result Table -->
+@if($exam && $subjects->count())
+    <div class="overflow-x-auto mt-6">
+        <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+            <thead class="bg-gray-100 text-gray-700">
+                <tr>
+                    <th class="p-4 text-left font-semibold">Subject</th>
+                    <th class="p-4 text-left font-semibold">Max Marks</th>
+                    <th class="p-4 text-left font-semibold">Pass Marks</th>
+                    <th class="p-4 text-left font-semibold">Obtained</th>
+                    <th class="p-4 text-left font-semibold">Status</th>
+                </tr>
+            </thead>
+           <tbody class="bg-white text-gray-800 divide-y divide-gray-100">
+    @foreach($subjects as $subject)
+        @php
+            $entry = $marks[$subject->subject_id] ?? null;
+            $obtained = $entry->marks_obtained ?? null;
+            $isFail = !is_null($obtained) && $obtained < $subject->pass_marks;
+        @endphp
+        <tr class="hover:bg-gray-50">
+            <td class="p-4">{{ $subject->subject->name }}</td>
+            <td class="p-4">{{ $subject->max_marks }}</td>
+            <td class="p-4">{{ $subject->pass_marks }}</td>
+            <td class="p-4">{{ !is_null($obtained) ? $obtained : 'N/A' }}</td>
+            <td class="p-4 font-semibold {{ is_null($obtained) ? 'text-gray-500' : ($isFail ? 'text-red-600' : 'text-green-600') }}">
+                {{ is_null($obtained) ? 'N/A' : ($isFail ? 'Fail' : 'Pass') }}
+            </td>
+        </tr>
+    @endforeach
 
-                        @foreach($subjects as $subject)
-                            @php
-                                $subjectId = $subject->subject_id;
-                                $maxMarks = $subject->max_marks;
-                                $passMarks = $subject->pass_marks;
-                                $entry = $marks[$subjectId] ?? null;
-                                $mark = $entry->marks_obtained ?? 0;
+    <!-- Total -->
+    <tr class="bg-gray-100 font-semibold">
+        <td class="p-4">Total</td>
+        <td class="p-4">{{ $totalMax }}</td>
+        <td class="p-4">—</td>
+        <td class="p-4">{{ $hasAllMarks ? $totalObtained : 'N/A' }}</td>
+        <td class="p-4 {{ $finalResult === 'Fail' ? 'text-red-600' : ($finalResult === 'Pass' ? 'text-green-600' : 'text-gray-600') }}">
+            {{ $finalResult }}
+        </td>
+    </tr>
 
-                                $total += $maxMarks;
-                                $obtained += $mark;
-                                $isFail = $mark < $passMarks;
-                                $fail = $fail || $isFail;
-                            @endphp
-                            <tr class="hover:bg-gray-50">
-                                <td class="p-4">{{ $subject->subject->name }}</td>
-                                <td class="p-4">{{ $maxMarks }}</td>
-                                <td class="p-4">{{ $passMarks }}</td>
-                                <td class="p-4">{{ $mark }}</td>
-                                <td class="p-4 font-semibold {{ $isFail ? 'text-red-600' : 'text-green-600' }}">
-                                    {{ $isFail ? 'Fail' : 'Pass' }}
-                                </td>
-                            </tr>
-                        @endforeach
-
-                        <!-- Summary -->
-                        <tr class="bg-gray-100 font-semibold">
-                            <td class="p-4">Total</td>
-                            <td class="p-4">{{ $total }}</td>
-                            <td class="p-4">—</td>
-                            <td class="p-4">{{ $obtained }}</td>
-                            <td class="p-4 {{ $fail ? 'text-red-600' : 'text-green-600' }}">
-                                {{ $fail ? 'Fail' : 'Pass' }}
-                            </td>
-                        </tr>
-                        <tr class="bg-blue-50 font-semibold">
-                            <td colspan="4" class="p-4 text-right">Percentage</td>
-                            <td class="p-4 text-xl text-blue-700 font-bold">
-                                {{ $total ? round(($obtained / $total) * 100, 2) : 0 }}%
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        @elseif(request('exam_master_id'))
-            <div class="mt-6 text-red-500 text-sm">No marks found for this exam.</div>
-        @endif
+    <!-- Percentage -->
+    <tr class="bg-blue-50 font-semibold">
+        <td colspan="4" class="p-4 text-right">Percentage</td>
+        <td class="p-4 text-xl text-blue-700 font-bold">
+            {{ $hasAllMarks ? $percentage . '%' : 'N/A' }}
+        </td>
+    </tr>
+</tbody>
+        </table>
+    </div>
+@elseif(request('exam_master_id'))
+    <div class="mt-6 text-red-500 text-sm">No marks found for this exam.</div>
+@endif
     </div>
 </div>
 @endsection

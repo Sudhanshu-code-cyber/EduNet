@@ -63,9 +63,13 @@
                 </a>
             </li>
             <li class="border-t border-gray-100 pt-2 bg-gray-50">
-    <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100">
-        <i class="fas fa-sign-out-alt mr-3 text-gray-500 w-5"></i> Sign Out
-    </a>
+  <form method="POST" action="{{ route('user.logout') }}">
+    @csrf
+    <button type="submit" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 w-full text-left">
+        <i class="fas fa-sign-out-alt mr-3 text-gray-500 w-5"></i>
+        <span>Sign Out</span>
+    </button>
+</form>
             </li>
         </ul>
     </div>

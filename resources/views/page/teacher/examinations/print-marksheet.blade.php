@@ -1,34 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Print Marksheet</title>
+    <meta charset="UTF-8">
+    <title>Student Marksheet</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
-        .header { text-align: center; }
-        .student-info, .marks-table { margin-top: 30px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background-color: #f5f5f5; }
-        .footer { margin-top: 40px; text-align: center; }
-        .pass { color: green; font-weight: bold; }
-        .fail { color: red; font-weight: bold; }
+        body {
+            font-family: 'Georgia', serif;
+            margin: 40px;
+            color: #000;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            border: 2px solid #444;
+            padding: 30px;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo, .photo {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid #999;
+            border-radius: 8px;
+        }
+
+        .header-text {
+            text-align: center;
+            flex: 1;
+        }
+
+        .header-text h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .header-text h4 {
+            margin: 5px 0;
+            font-size: 18px;
+            color: #444;
+        }
+
+        .student-info {
+            margin-top: 30px;
+            line-height: 1.6;
+        }
+
+        .student-info p {
+            margin: 4px 0;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            font-size: 15px;
+        }
+
+        th, td {
+            border: 1px solid #777;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .pass {
+            color: green;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: red;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 60px;
+        }
+
+        .signature-line {
+            display: inline-block;
+            margin-top: 30px;
+            border-top: 1px solid #000;
+            width: 200px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+        }
     </style>
 </head>
 <body onload="window.print()">
-    <div class="header">
-        <h2>School Name</h2>
-        <h4>Student Marksheet</h4>
-        <p><strong>Exam:</strong> {{ $exam->exam_name ?? $exam->name }}</p>
-    </div>
+    <div class="container">
+        <!-- Header -->
+        <div class="top-row">
+          <img src="{{ asset('storage/homeworks/images.jpeg') }}" alt="School Logo" class="w-20 h-20 object-cover rounded">
 
-    <div class="student-info">
-        <p><strong>Name:</strong> {{ $student->full_name }}</p>
-        <p><strong>Roll No:</strong> {{ $student->roll_no }}</p>
-        <p><strong>Class:</strong> {{ $student->class->name ?? 'N/A' }}</p>
-        <p><strong>Section:</strong> {{ $student->section->name ?? 'N/A' }}</p>
-    </div>
+            <div class="header-text">
+                <h2>{{ config('app.name', 'ABC International School') }}</h2>
+                <h4>123 Learning Road, Knowledge City, India</h4>
+                <h4>Marksheet - {{ $exam->exam_name ?? $exam->name }}</h4>
+            </div>
 
-    <div class="marks-table">
+            <img src="{{ asset('uploads/students/' . $student->photo) }}" class="photo" alt="Student Photo">
+        </div>
+
+        <!-- Student Info -->
+        <div class="student-info">
+            <p><strong>Name:</strong> {{ $student->full_name }}</p>
+            <p><strong>Roll No:</strong> {{ $student->roll_no }}</p>
+            <p><strong>Class:</strong> {{ $student->class->name ?? 'N/A' }}</p>
+            <p><strong>Section:</strong> {{ $student->section->name ?? 'N/A' }}</p>
+        </div>
+
+        <!-- Marks Table -->
         <table>
             <thead>
                 <tr>
@@ -41,41 +154,51 @@
             </thead>
             <tbody>
                 @php
-                    $total = 0;
-                    $obtained = 0;
+                    $totalMax = 0;
+                    $totalObtained = 0;
                     $fail = false;
                 @endphp
 
-           @foreach ($subjects as $subject)
-    @php
-        $subjectId = $subject->subject->id ?? null;
-        $entry = $marks[$subjectId] ?? null;
-        $obtainedMarks = $entry->marks_obtained ?? 0;
-        $maxMarks = $subject->max_marks ?? 0;
-        $passMarks = $subject->pass_marks ?? 0;
-        $result = $obtainedMarks >= $passMarks ? 'Pass' : 'Fail';
-        $total += $maxMarks;
-        $obtained += $obtainedMarks;
-        if ($obtainedMarks < $passMarks) $fail = true;
-    @endphp
-    <tr>
-        <td>{{ $subject->subject->name ?? 'N/A' }}</td>
-        <td>{{ $maxMarks }}</td>
-        <td>{{ $passMarks }}</td>
-        <td>{{ $obtainedMarks }}</td>
-        <td class="{{ $result == 'Pass' ? 'pass' : 'fail' }}">{{ $result }}</td>
-    </tr>
-@endforeach
+                @foreach ($subjects as $classSubject)
+                    @php
+                        $subjectId = $classSubject->subject_id;
+                        $subjectName = $classSubject->subject->name ?? 'N/A';
 
+                        $entry = $marks->get($subjectId);
+                        $obtainedMarks = $entry->marks_obtained ?? null;
+
+                        $maxMarks = $classSubject->max_marks ?? 0;
+                        $passMarks = $classSubject->pass_marks ?? 0;
+
+                        $result = $obtainedMarks !== null && $obtainedMarks >= $passMarks ? 'Pass' : 'Fail';
+
+                        if ($obtainedMarks !== null) {
+                            $totalMax += $maxMarks;
+                            $totalObtained += $obtainedMarks;
+                            if ($obtainedMarks < $passMarks) {
+                                $fail = true;
+                            }
+                        }
+                    @endphp
+                    <tr>
+                        <td>{{ $subjectName }}</td>
+                        <td>{{ $maxMarks }}</td>
+                        <td>{{ $passMarks }}</td>
+                        <td>{{ $obtainedMarks !== null ? $obtainedMarks : 'N/A' }}</td>
+                        <td class="{{ $obtainedMarks === null ? '' : ($result === 'Pass' ? 'pass' : 'fail') }}">
+                            {{ $obtainedMarks === null ? 'N/A' : $result }}
+                        </td>
+                    </tr>
+                @endforeach
 
                 <tr>
                     <th colspan="3">Total</th>
-                    <th>{{ $obtained }}</th>
-                    <th>{{ $total }}</th>
+                    <th>{{ $totalObtained }}</th>
+                    <th>{{ $totalMax }}</th>
                 </tr>
                 <tr>
                     <th colspan="4">Percentage</th>
-                    <th>{{ $total ? round(($obtained / $total) * 100, 2) : 0 }}%</th>
+                    <th>{{ $totalMax ? round(($totalObtained / $totalMax) * 100, 2) : 'N/A' }}%</th>
                 </tr>
                 <tr>
                     <th colspan="4">Final Result</th>
@@ -83,10 +206,16 @@
                 </tr>
             </tbody>
         </table>
-    </div>
 
-    <div class="footer">
-        <p>Generated on: {{ now()->format('d-m-Y') }}</p>
+        <!-- Footer -->
+        <div class="footer">
+            <p>Generated on: {{ now()->format('d-m-Y') }}</p>
+            <p><em>This is a system-generated marksheet. No signature required.</em></p>
+        </div>
+
+        <div class="signature">
+            <div class="signature-line">Principal’s Signature</div>
+        </div>
     </div>
 </body>
 </html>

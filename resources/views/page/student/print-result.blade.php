@@ -19,21 +19,22 @@
         }
     </style>
 </head>
-<body class="bg-white text-gray-800 font-sans text-sm leading-relaxed">
+<body class="bg-white text-gray-900 font-sans text-sm leading-relaxed">
 
-<div class="max-w-4xl mx-auto p-6 border border-gray-300 rounded shadow">
-    <!-- Header -->
-    <div class="flex justify-between items-center border-b pb-4 mb-4">
-        <img src="{{ asset('storage/homework/images.jpeg') }}" alt="School Logo" class="w-20 h-20 object-cover rounded">
-        <div class="text-center">
-            <h1 class="text-2xl font-bold uppercase">School Model</h1>
-            <h2 class="text-lg font-semibold text-gray-600 uppercase">International School</h2>
+<div class="max-w-4xl mx-auto p-8 border border-gray-300 rounded shadow-lg bg-white">
+    <!-- Header Section -->
+    <div class="flex justify-between items-center border-b border-gray-300 pb-4 mb-4">
+          <img src="{{ asset('storage/homeworks/images.jpeg') }}" alt="School Logo" class="w-32 h-24 object-cover rounded">
+
+        <div class="text-center flex-1">
+            <h1 class="text-3xl font-bold uppercase tracking-wide">ABC International School</h1>
+            <p class="text-sm text-gray-600 mt-1">123 Knowledge Street, Learning City, India</p>
         </div>
-        <img src="{{ asset('uploads/students/' . $student->photo) }}" alt="Student Photo" class="w-20 h-20 object-cover rounded-full border border-gray-300">
+        <img src="{{ asset('uploads/students/' . $student->photo) }}" alt="Student Photo" class="w-16 h-16 object-cover rounded-full border border-gray-300">
     </div>
 
-    <!-- Student Info -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6 text-gray-700">
+    <!-- Student Details -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6 text-gray-700">
         <p><span class="font-semibold">Name:</span> {{ $student->full_name }}</p>
         <p><span class="font-semibold">Admission No:</span> {{ $student->roll_no }}</p>
         <p><span class="font-semibold">Gender:</span> {{ ucfirst($student->gender) }}</p>
@@ -42,15 +43,15 @@
         <p><span class="font-semibold">Term:</span> {{ $exam->exam_name ?? '-' }}</p>
     </div>
 
-    <!-- Marksheet Table -->
+    <!-- Marks Table -->
     <div class="overflow-x-auto">
-        <table class="w-full border border-collapse text-center text-gray-800">
-            <thead class="bg-gray-100">
+        <table class="w-full border border-collapse text-center">
+            <thead class="bg-gray-100 text-sm uppercase tracking-wide">
                 <tr>
                     <th class="border p-2">Subject</th>
                     <th class="border p-2">Max Marks</th>
                     <th class="border p-2">Pass Marks</th>
-                    <th class="border p-2">Obtained Marks</th>
+                    <th class="border p-2">Obtained</th>
                     <th class="border p-2">Result</th>
                 </tr>
             </thead>
@@ -74,7 +75,7 @@
                         $isFail = $mark < $passMarks;
                         $fail = $fail || $isFail;
                     @endphp
-                    <tr>
+                    <tr class="hover:bg-gray-50">
                         <td class="border p-2 text-left">{{ $subject->subject->name }}</td>
                         <td class="border p-2">{{ $maxMarks }}</td>
                         <td class="border p-2">{{ $passMarks }}</td>
@@ -95,9 +96,9 @@
                         {{ $fail ? 'Fail' : 'Pass' }}
                     </td>
                 </tr>
-                <tr class="bg-blue-50 font-semibold">
+                <tr class="bg-blue-50 font-semibold text-blue-800">
                     <td colspan="4" class="text-right border p-2">Percentage</td>
-                    <td class="border p-2 text-xl text-blue-700 font-bold">
+                    <td class="border p-2 text-lg">
                         {{ $total ? round(($obtained / $total) * 100, 2) : 0 }}%
                     </td>
                 </tr>
@@ -106,7 +107,7 @@
     </div>
 
     <!-- Remarks -->
-    <div class="mt-6 border-t pt-4 text-gray-600 text-sm">
+    <div class="mt-6 text-gray-700 text-sm border-t pt-4">
         <p><span class="font-semibold">Remarks:</span>
             @if($fail)
                 Needs improvement in some subjects.
@@ -116,16 +117,16 @@
         </p>
     </div>
 
-    <!-- Signature -->
-    <div class="mt-8 flex justify-end">
+    <!-- Footer -->
+    <div class="mt-10 flex justify-between items-center text-sm text-gray-600">
+        <p>Generated on: {{ now()->format('d-m-Y') }}</p>
         <div class="text-center">
-            <p class="border-t border-gray-500 w-48 text-gray-700 pt-2">Principal's Signature</p>
+            <p class="border-t border-gray-400 w-48 pt-2">Principal's Signature</p>
         </div>
     </div>
 </div>
 
 <script>
-    // Auto print when page loads
     window.onload = function () {
         window.print();
     }

@@ -27,7 +27,13 @@
     class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 opacity-0 invisible transition duration-300 z-50">
     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
-    <a href="{{route('user.logout')}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+   <form method="POST" action="{{ route('user.logout') }}">
+    @csrf
+    <button type="submit" class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 w-full text-left">
+        <i class="fas fa-sign-out-alt mr-3 text-gray-500 w-5"></i>
+        <span>LogOut</span>
+    </button>
+</form>
   </div>
 </div>
 

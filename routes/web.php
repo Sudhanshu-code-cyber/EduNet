@@ -307,7 +307,8 @@ Route::get('/', function () {
 Route::get('/register',[AuthController::class,'register'])->name('register');
 Route::post('/register',[AuthController::class,'userRegister'])->name('userRegister');
 Route::post('/',[AuthController::class,'Userlogin'])->name('Userlogin');
-Route::get('/logout',[AuthController::class,'logout'])->name('user.logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('user.logout');
+
 
 use App\Http\Controllers\EventController;
 

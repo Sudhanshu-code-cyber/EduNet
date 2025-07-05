@@ -2,11 +2,13 @@
 
 @section('content')
 <div class="max-w-6xl mx-auto px-4 py-6">
+
     <!-- Search Filter Card -->
-    <div class="bg-white border shadow rounded-lg p-6 mb-10 ">
+    <div class="bg-white border shadow rounded-lg p-6 mb-10">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Search Students for Marks Entry</h2>
         <form method="POST" action="{{ route('marks.entry.search') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             @csrf
+
             <div>
                 <label class="block font-semibold text-sm mb-1">Exam Type</label>
                 <select name="exam_master_id" class="w-full border border-gray-300 p-2 rounded" required>
@@ -44,35 +46,44 @@
 
     <!-- Marks Entry Card -->
     @if(isset($student))
-    <div class="bg-white border shadow rounded-lg p-6" id="marksWrapper">
-       
-
-        {{-- Include the student marks form --}}
-        @include('page.teacher.examinations.marks-form')
-    </div>
+        <div class="bg-white border shadow rounded-lg p-6" id="marksWrapper">
+            @include('page.teacher.examinations.marks-form')
+        </div>
     @endif
 </div>
 
+{{-- JS --}}
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    attachClassChangeHandler();
+    attachSaveAndNextHandler();
+    attachMarksCalculationHandler();
+});
+
+// Load Sections when class is selected
 function attachClassChangeHandler() {
     const classDropdown = document.getElementById('class_id');
-    if (classDropdown) {
-        classDropdown.addEventListener('change', function () {
-            const classId = this.value;
-        fetch("{{ route('marks.getSections', ['class_id' => '__CLASS_ID__']) }}".replace('__CLASS_ID__', classId))
-                .then(res => res.json())
-                .then(sections => {
-                    let sectionSelect = document.getElementById('section_id');
-                    sectionSelect.innerHTML = '<option value="">Select Section</option>';
-                    sections.forEach(section => {
-                        sectionSelect.innerHTML += `<option value="${section.id}">${section.name}</option>`;
-                    });
+    const sectionDropdown = document.getElementById('section_id');
+
+    classDropdown?.addEventListener('change', function () {
+        const classId = this.value;
+        sectionDropdown.innerHTML = '<option value="">Loading...</option>';
+
+        fetch(`{{ route('marks.getSections', ['class_id' => '__CLASS_ID__']) }}`.replace('__CLASS_ID__', classId))
+            .then(res => res.json())
+            .then(sections => {
+                sectionDropdown.innerHTML = '<option value="">Select Section</option>';
+                sections.forEach(section => {
+                    sectionDropdown.innerHTML += `<option value="${section.id}">${section.name}</option>`;
                 });
-        });
-    }
+            })
+            .catch(() => {
+                sectionDropdown.innerHTML = '<option value="">Error loading sections</option>';
+            });
+    });
 }
 
-
+// Save marks + load next student
 function attachSaveAndNextHandler() {
     const btn = document.getElementById('saveNext');
     if (!btn) return;
@@ -81,7 +92,30 @@ function attachSaveAndNextHandler() {
         const form = document.getElementById('marksForm');
         const formData = new FormData(form);
 
-        fetch("{{ route('marks.entry.save') }}", {
+        // === Validation ===
+        let isValid = true;
+        const errorMessages = [];
+
+        form.querySelectorAll('input[name^="subject_marks"]').forEach(input => {
+            const val = parseFloat(input.value);
+            const max = parseFloat(input.getAttribute('data-max'));
+
+            if (val > max) {
+                isValid = false;
+                input.classList.add('border-red-500');
+                errorMessages.push(`${input.name} cannot exceed ${max}`);
+            } else {
+                input.classList.remove('border-red-500');
+            }
+        });
+
+        if (!isValid) {
+            alert('Some marks exceed maximum allowed. Please correct them.');
+            return;
+        }
+
+        // Save marks
+        fetch(`{{ route('marks.entry.save') }}`, {
             method: 'POST',
             headers: { 'X-CSRF-TOKEN': formData.get('_token') },
             body: formData
@@ -89,7 +123,8 @@ function attachSaveAndNextHandler() {
         .then(res => res.json())
         .then(response => {
             if (response.success) {
-                fetch("{{ route('marks.entry.next') }}", {
+                // Get next student
+                fetch(`{{ route('marks.entry.next') }}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -108,22 +143,28 @@ function attachSaveAndNextHandler() {
                         alert('All students completed!');
                         window.location.reload();
                     } else {
-                       document.querySelector('#marksWrapper').innerHTML = `<div class="bg-white border shadow rounded-lg p-6">${data.view}</div>`;
-                        attachMarksCalculationHandler();
+                        document.getElementById('marksWrapper').innerHTML = `<div class="bg-white border shadow rounded-lg p-6">${data.view}</div>`;
                         attachSaveAndNextHandler();
+                        attachMarksCalculationHandler();
                     }
                 });
+            } else {
+                alert('Failed to save marks. Please try again.');
             }
         });
     });
 }
 
+// Auto-calculate totals & result
 function calculateMarks() {
     let obtained = 0, total = 0;
+
     document.querySelectorAll('input[name^="subject_marks"]').forEach(input => {
-        let val = parseInt(input.value) || 0;
-        obtained += val;
-        total += parseInt(input.getAttribute('data-max')) || 0;
+        let val = parseFloat(input.value);
+        let max = parseFloat(input.getAttribute('data-max'));
+
+        if (!isNaN(val)) obtained += val;
+        if (!isNaN(max)) total += max;
     });
 
     document.getElementById('totalMarks').value = total;
@@ -131,18 +172,14 @@ function calculateMarks() {
     document.getElementById('resultStatus').value = (obtained >= total * 0.33) ? 'Pass' : 'Fail';
 }
 
+// Attach calculation to inputs
 function attachMarksCalculationHandler() {
-    document.querySelectorAll('input[name^="subject_marks"]').forEach(input => {
-        input.addEventListener('input', calculateMarks);
+    const inputs = document.querySelectorAll('input[name^="subject_marks"]');
+    inputs.forEach(input => {
+        input.removeEventListener('input', calculateMarks); // Clean existing
+        input.addEventListener('input', calculateMarks);    // Attach new
     });
     calculateMarks();
 }
-
-// Attach all on page load
-document.addEventListener('DOMContentLoaded', () => {
-    attachClassChangeHandler();
-    attachSaveAndNextHandler();
-    attachMarksCalculationHandler();
-});
 </script>
 @endsection

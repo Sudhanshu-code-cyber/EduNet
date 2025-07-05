@@ -12,6 +12,7 @@ use App\Models\MarksEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class MarksEntryController extends Controller
 {
   public function index()
@@ -80,17 +81,24 @@ class MarksEntryController extends Controller
         return response()->json(['success' => true]);
     }
 
-   public function nextStudent(Request $request)
+  public function nextStudent(Request $request)
 {
-    $nextStudent = Student::where('class_id', $request->class_id)
+    // Get ordered student list of the class and section
+    $students = Student::where('class_id', $request->class_id)
         ->where('section_id', $request->section_id)
-        ->where('id', '>', $request->current_student_id)
-        ->orderBy('id')
-        ->first();
+       ->orderBy('roll_no')
+        ->get();
 
-    if (!$nextStudent) {
-        return response()->json(['done' => true]);
+    // Find current student index
+    $currentIndex = $students->search(function ($student) use ($request) {
+        return $student->id == $request->current_student_id;
+    });
+
+    if ($currentIndex === false || $currentIndex + 1 >= $students->count()) {
+        return response()->json(['done' => true]); // No next student
     }
+
+    $nextStudent = $students[$currentIndex + 1];
 
     $subjects = ClassSubject::with('subject')
         ->where('class_id', $request->class_id)
@@ -233,7 +241,7 @@ class MarksEntryController extends Controller
         return redirect()->route('marks.list')->with('success', 'Marks deleted successfully.');
     }
 
-   public function viewResult(Request $request)
+ public function viewResult(Request $request)
 {
     $student = auth()->user()->student;
     $exams = ExamMaster::all();
@@ -242,22 +250,69 @@ class MarksEntryController extends Controller
     $subjects = collect();
     $marks = collect();
 
+    $finalResult = 'N/A';
+    $percentage = 'N/A';
+    $totalObtained = 0;
+    $totalMax = 0;
+    $allPassed = true;
+    $hasAllMarks = true;
+
     if ($request->filled('exam_master_id')) {
         $exam = ExamMaster::find($request->exam_master_id);
 
-        // Fetch subjects assigned to the student's class
+        // Fetch subjects for student's class
         $subjects = ClassSubject::where('class_id', $student->class_id)
             ->with('subject')
             ->get();
 
-        // Fetch marks entries for this student and exam
-        $marks = \App\Models\MarksEntry::where('student_id', $student->id)
+        // Fetch marks
+        $marks = MarksEntry::where('student_id', $student->id)
             ->where('exam_master_id', $exam->id)
             ->get()
-            ->keyBy('subject_id'); // Easier to access in Blade
+            ->keyBy('subject_id');
+
+        foreach ($subjects as $subject) {
+            $entry = $marks->get($subject->subject_id);
+            $obtained = $entry->marks_obtained ?? null;
+
+            // Always count max marks
+            $totalMax += $subject->max_marks;
+
+            // If no marks, mark as incomplete
+            if (is_null($obtained)) {
+                $hasAllMarks = false;
+                $allPassed = false;
+                continue;
+            }
+
+            $totalObtained += $obtained;
+
+            if ($obtained < $subject->pass_marks) {
+                $allPassed = false;
+            }
+        }
+
+        // Only calculate result if all marks are available and total is non-zero
+        if ($hasAllMarks && $totalMax > 0) {
+            $percentage = round(($totalObtained / $totalMax) * 100, 2);
+            $finalResult = $allPassed ? 'Pass' : 'Fail';
+        } else {
+            $percentage = 'N/A';
+            $finalResult = 'N/A';
+        }
     }
 
-    return view('page.student.myresult', compact('exams', 'exam', 'subjects', 'marks'));
+    return view('page.student.myresult', compact(
+        'exams',
+        'exam',
+        'subjects',
+        'marks',
+        'finalResult',
+        'percentage',
+        'totalObtained',
+        'totalMax',
+        'hasAllMarks'
+    ));
 }
 
 public function printResult(Request $request)
@@ -266,11 +321,11 @@ public function printResult(Request $request)
     $studentId = $request->input('student_id');
 
     if (auth()->check() && auth()->user()->role === 'student') {
-        // If student is logged in
+      
         $student = auth()->user()->student;
         $isTeacherView = false;
     } elseif ($studentId) {
-        // If teacher is printing
+      
         $student = Student::findOrFail($studentId);
         $isTeacherView = true;
     } else {
@@ -292,19 +347,24 @@ public function printResult(Request $request)
 
 public function printMarksheet(Request $request, $studentId, $examId)
 {
-    $student = Student::findOrFail($studentId);
+    
+    $student = Student::with(['class', 'section'])->findOrFail($studentId);
     $exam = ExamMaster::findOrFail($examId);
 
-    $subjects = ClassSubject::where('class_id', $student->class_id)->with('subject')->get();
+    $subjects = ClassSubject::with('subject')
+        ->where('class_id', $student->class_id)
+        ->get();
 
     $marks = MarksEntry::where('student_id', $student->id)
         ->where('exam_master_id', $examId)
         ->get()
         ->keyBy('subject_id');
 
-    $isTeacherView = true;
 
-    return view('page.teacher.examinations.print-marksheet', compact('student', 'exam', 'subjects', 'marks', 'isTeacherView'));
+
+    return view('page.teacher.examinations.print-marksheet', compact(
+        'student', 'exam', 'subjects', 'marks'
+    ));
 }
 
 }
