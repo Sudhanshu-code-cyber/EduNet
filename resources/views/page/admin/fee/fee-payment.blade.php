@@ -57,6 +57,13 @@
         <button type="submit" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Search</button>
     </form>
 
+@if (session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6 mt-10">
+        {{ session('success') }}
+    </div>
+@endif
+
+
     {{-- Step 2: Show Fee Payment Form --}}
     @if(isset($student))
     <div class="mt-10 p-6 bg-gray-50 rounded-lg border">
@@ -141,7 +148,10 @@
                 </div>
             </div>
 
-            <button type="submit" class="mt-6 bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 w-full">Submit Payment</button>
+          <button type="submit" onclick="return confirm('Confirm fee payment?')" 
+    class="mt-6 bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 w-full">
+    Submit Payment
+</button>
         </form>
     </div>
     @endif
