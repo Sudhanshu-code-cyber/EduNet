@@ -38,11 +38,11 @@
             </div>
             <div class="bg-green-50 p-4 rounded-xl">
                 <h3 class="text-gray-500 text-sm font-medium">Completed</h3>
-                <p class="text-2xl font-bold mt-1">{{ $homeworks->where('submission_status', 'submitted')->count() }}</p>
+                <p class="text-2xl font-bold mt-1">{{ $completed }}</p>
             </div>
             <div class="bg-orange-50 p-4 rounded-xl">
                 <h3 class="text-gray-500 text-sm font-medium">Pending</h3>
-                <p class="text-2xl font-bold mt-1">{{ $homeworks->where('submission_status', 'pending')->count() }}</p>
+                <p class="text-2xl font-bold mt-1">{{ $pending }}</p>
             </div>
         </div>
     </div>

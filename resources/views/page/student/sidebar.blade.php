@@ -104,7 +104,6 @@
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-purple-50 text-purple-700 group transition-all duration-200">
                         <span class="w-6 h-6 flex items-center justify-center bg-purple-100 text-purple-600 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-colors">📝</span>
                         <span class="font-medium">Homework</span>
-                        <span class="ml-auto bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full">3 New</span>
                      </a>
                   </li>
                   <li class="relative group">
@@ -178,7 +177,6 @@
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-all duration-200 group">
                         <span class="w-6 h-6 flex items-center justify-center bg-blue-100 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">📢</span>
                         <span class="font-medium">Notices</span>
-                        <span class="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">5 New</span>
                      </a>
                   </li>
                   <li>

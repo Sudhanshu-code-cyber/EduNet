@@ -171,6 +171,10 @@ Route::prefix('teacher')->name('teacher.')->group(function () {
     Route::get('homework/submissions', [TeacherHomeworkController::class, 'submissions'])->name('homework.submissions');
 Route::get('get-sections/{class_id}', [TeacherHomeworkController::class, 'getSections'])->name('homework.get-sections');
 Route::get('get-subjects/{class_id}/{section_id}', [TeacherHomeworkController::class, 'getSubjects'])->name('homework.get-subjects');
+Route::put('homework/{id}', [TeacherHomeworkController::class, 'update'])->name('homework.update');
+Route::get('homework/report', [TeacherHomeworkController::class, 'report'])->name('homework.report');
+Route::get('homework/get-sections-by-class', [TeacherHomeworkController::class, 'getSectionsByClass']);
+
 });
 
 // Student Routes for Homework
@@ -348,17 +352,17 @@ Route::post('/teacher/attendance/store', [AttendanceController::class, 'store'])
 Route::get('/teacher/calendar', [AttendanceController::class, 'showCalendar'])->name('teacher.calendar');
 Route::get('/teacher/attendance-events', [AttendanceController::class, 'getAttendanceAjax'])->name('teacher.attendance.ajax');
 
-Route::get('/teacher/get-sections/{class_id}', function ($class_id) {
-    $teacherId = auth()->id();
-    $sections = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
-        ->where('class_id', $class_id)
-        ->with('section')
-        ->get()
-        ->pluck('section')
-        ->unique('id')
-        ->values();
-    return response()->json(['sections' => $sections]);
-});
+// Route::get('/teacher/get-sections/{class_id}', function ($class_id) {
+//     $teacherId = auth()->id();
+//     $sections = \App\Models\AssignedTeacher::where('teacher_id', $teacherId)
+//         ->where('class_id', $class_id)
+//         ->with('section')
+//         ->get()
+//         ->pluck('section')
+//         ->unique('id')
+//         ->values();
+//     return response()->json(['sections' => $sections]);
+// });
 
 Route::get('/teacher/get-subjects/{class_id}', function ($class_id) {
     $teacherId = auth()->id();

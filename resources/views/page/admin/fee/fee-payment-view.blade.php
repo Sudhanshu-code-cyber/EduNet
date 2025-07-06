@@ -118,32 +118,44 @@
       </div>
     </div>
 
-    {{-- Payment Method --}}
-    <div class="bg-white shadow-lg rounded-xl p-6 max-w-4xl mx-auto my-10">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="w-full md:w-1/2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
-          <div class="relative">
+   {{-- Payment Method --}}
+<div class="bg-white shadow-lg rounded-xl p-6 max-w-4xl mx-auto my-10">
+    <div class="grid md:grid-cols-2 gap-6 items-end">
+        
+        {{-- Payment Method Dropdown --}}
+        <div>
+            <label for="payment_method" class="block  font-semibold text-gray-700 mb-1">Payment Method</label>
             <select 
-              name="payment_method" 
-              class="block w-full pl-3 pr-10 py-2.5 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-              <option value="Cash">Cash</option>
-              <option value="UPI">UPI</option>
-              <option value="Card">Credit/Debit Card</option>
-              <option value="Net Banking">Net Banking</option>
+                name="payment_method" 
+                id="payment_method"
+                class="w-full border-gray-300 rounded-lg shadow-sm px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                <option value="Cash">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="Card">Credit/Debit Card</option>
+                <option value="Net Banking">Net Banking</option>
             </select>
-          </div>
         </div>
 
-        <div class="w-full md:w-auto mt-2 md:mt-0">
-          <button 
-            type="submit"
-            onclick="return confirm('Are you sure you want to submit this payment?')"
-            class="w-full md:w-auto px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150 flex items-center justify-center">
-            Submit Payment
-          </button>
+        {{-- Action Buttons --}}
+        <div class="flex gap-4 flex-col sm:flex-row">
+            <button 
+                type="submit"
+                onclick="return confirm('Are you sure you want to submit this payment?')"
+                class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md transition">
+                 Submit Payment
+            </button>
+            
+            <button 
+                type="button"
+                onclick="window.print()" 
+                class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md transition print:hidden">
+                 Print Receipt
+            </button>
         </div>
-      </div>
+
+    </div>
+</div>
+
     </div>
   </form>
 </div>

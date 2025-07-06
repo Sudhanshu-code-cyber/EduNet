@@ -19,14 +19,23 @@
 
     <!-- Search and Filters -->
    <!-- Search Form -->
-<form method="GET" action="{{ route('teacher.homework.search') }}" class="flex gap-3 mb-4">
-    <input type="text" name="search" placeholder="Search by title..."
-        value="{{ request('search') }}"
-        class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-60 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-    <button type="submit"
-        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:shadow-md text-sm">
-        <i class="fa-solid fa-magnifying-glass"></i> Search
-    </button>
+<form method="GET" action="{{ route('teacher.homework.search') }}" class="flex gap-4 mb-6">
+    <input 
+        type="text" 
+        name="search" 
+        value="{{ request('search') }}" 
+        placeholder="Search homework by title"
+        class="w-full px-4 py-2 border border-gray-300 rounded"
+    >
+    
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Search</button>
+
+    @if(request()->has('search') && request('search') != '')
+        <a href="{{ route('teacher.homework.index') }}" 
+            class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg shadow hover:shadow-md">
+           Reset
+        </a>
+    @endif
 </form>
 
 
@@ -70,19 +79,17 @@
                         </td>
                         <td class="px-4 py-3">
                             <div class="flex gap-3 text-gray-600">
-                                <a href="" title="View">
-                                    <i class="fa-regular fa-eye hover:text-blue-600"></i>
-                                </a>
-                                <a href="{{ route('teacher.homework.edit', $homework->id) }}" title="Edit">
-                                    <i class="fa-regular fa-pen-to-square hover:text-yellow-500"></i>
-                                </a>
-                                <form method="POST" action="{{ route('teacher.homework.destroy', $homework->id) }}" onsubmit="return confirm('Are you sure?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" title="Delete">
-                                        <i class="fa-regular fa-trash-can hover:text-red-600"></i>
-                                    </button>
-                                </form>
+                              <button type="button" onclick='openEditModal(@json($homework))' title="Edit">
+    <i class="fa-regular fa-pen-to-square hover:text-yellow-500"></i>
+</button>
+<form action="{{ route('teacher.homework.destroy', $homework->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="text-red-600 hover:underline">
+         <i class="fa-regular fa-trash-can hover:text-red-600"></i>
+    </button>
+</form>
+
                             </div>
                         </td>
                     </tr>
@@ -110,4 +117,9 @@
 @push('scripts')
 <!-- Flowbite JS -->
 <script src="https://unpkg.com/flowbite@1.6.5/dist/flowbite.min.js"></script>
+@include('page.teacher.classwork.edit-homework-modal')
+
+@push('scripts')
+<script src="https://unpkg.com/flowbite@1.6.5/dist/flowbite.min.js"></script>
 @endpush
+

@@ -7,40 +7,51 @@
         <h1 class="text-4xl font-bold text-blue-800 mb-6">📥 Homework Submission Report</h1>
 
         <!-- Search Homework Report Form -->
-        <form method="GET" action="" class="bg-white p-4 rounded-lg shadow mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Class Dropdown -->
-                <select name="class" class="border border-gray-300 rounded-md p-2 w-full">
-                    <option value="">Select Class</option>
-                    <option value="Class 6">Class 6</option>
-                    <option value="Class 7">Class 7</option>
-                    <option value="Class 8">Class 8</option>
-                </select>
+     <form method="GET" action="{{ route('teacher.homework.report') }}" class="p-6 bg-white shadow-md rounded-lg mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <!-- Class Dropdown -->
+        <select name="class" id="class-dropdown" class="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Select Class</option>
+            @foreach($assignedClasses as $class)
+                <option value="{{ $class->id }}" {{ (string) request('class') === (string) $class->id ? 'selected' : '' }}>
+                    {{ $class->name }}
+                </option>
+            @endforeach
+        </select>
 
-                <!-- Section Dropdown -->
-                <select name="section" class="border border-gray-300 rounded-md p-2 w-full">
-                    <option value="">Select Section</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                </select>
+        <!-- Section Dropdown -->
+        <select name="section" id="section-dropdown" class="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Select Section</option>
+            @if(request('class') && request('section') && $selectedSection)
+                <option value="{{ $selectedSection->id }}" selected>{{ $selectedSection->name }}</option>
+            @endif
+        </select>
 
-                <!-- Subject Input -->
-                <input type="text" name="subject" placeholder="Subject"
-                    class="border border-gray-300 rounded-md p-2 w-full">
+        <!-- Subject Input -->
+        <input type="text" name="subject" placeholder="Subject"
+            class="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
 
-                <!-- Submission Date -->
-                <input type="date" name="submission_date"
-                    class="border border-gray-300 rounded-md p-2 w-full">
-            </div>
+        <!-- Submission Date -->
+        <input type="date" name="submission_date"
+            class="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
 
-            <div class="mt-4 flex justify-end">
-                <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
-                    🔍 Search
-                </button>
-            </div>
-        </form>
+<div class="mt-6 flex justify-end gap-3">
+    @if(request()->has('class') || request()->has('section') || request()->has('subject') || request()->has('submission_date'))
+        <!-- Show Reset button only when any filter is active -->
+        <a href="{{ route('teacher.homework.report') }}"
+           class="inline-flex items-center px-6 py-2 bg-gray-300 text-gray-800 font-semibold rounded-md hover:bg-gray-400">
+             Reset
+        </a>
+    @endif
+
+    <!-- Always show Search button -->
+    <button type="submit"
+        class="inline-flex items-center px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+         Search
+    </button>
+</div>
+</form>
 
         <!-- Dynamic Homework Submissions Table -->
         @forelse($homeworks as $homework)
@@ -94,4 +105,32 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const classDropdown = document.getElementById('class-dropdown');
+    const sectionDropdown = document.getElementById('section-dropdown');
+
+    classDropdown.addEventListener('change', function () {
+        const selectedClass = this.value;
+
+        sectionDropdown.innerHTML = '<option value="">Loading...</option>';
+
+        fetch(`/teacher/homework/get-sections-by-class?class_id=${selectedClass}`)
+            .then(response => response.json())
+            .then(data => {
+                let options = '<option value="">Select Section</option>';
+                data.forEach(section => {
+                    options += `<option value="${section.id}">${section.name}</option>`;
+                });
+                sectionDropdown.innerHTML = options;
+            })
+            .catch(error => {
+                console.error('Error fetching sections:', error);
+                sectionDropdown.innerHTML = '<option value="">Error loading</option>';
+            });
+    });
+});
+</script>
+
 @endsection
