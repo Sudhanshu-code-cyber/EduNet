@@ -27,7 +27,6 @@
                 <h2 class="text-2xl font-bold text-indigo-700">📚 My Homework</h2>
                 <p class="text-sm text-gray-500">View and submit your pending assignments.</p>
             </div>
-            <button class="text-sm text-indigo-600 hover:underline font-medium">🔍 View All</button>
         </div>
 
         <!-- Progress Summary -->
