@@ -62,6 +62,7 @@
                 </div>
             </div>
 
+            
             <table class="w-full text-sm text-left border border-collapse">
                 <thead class="bg-gray-100 text-gray-800">
                     <tr>
@@ -160,27 +161,30 @@
 
         {{-- Payment --}}
         <div class="bg-white shadow-lg rounded-xl p-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-                <div class="w-full md:w-1/2">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
-                    <select name="payment_method" class="block w-full border rounded px-3 py-2">
-                        <option value="Cash">Cash</option>
-                        <option value="UPI">UPI</option>
-                        <option value="Card">Credit/Debit Card</option>
-                        <option value="Net Banking">Net Banking</option>
-                    </select>
-                </div>
-                <div class="w-full md:w-auto mt-4 md:mt-0">
-                    <button type="submit" onclick="return confirm('Are you sure you want to proceed?')" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
-                        Pay Now
-                    </button>
-                </div>
-            </div>
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-sm text-gray-600">
+            <p class="font-medium">Proceed to secure online payment via Razorpay.</p>
         </div>
+
+        <button type="button"
+                id="razorpay-button"
+                onclick="return confirm('Are you sure you want to proceed?')"
+                class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 8c1.657 0 3-1.343 3-3S13.657 2 12 2 9 3.343 9 5s1.343 3 3 3zm0 2c-2.21 0-4 1.79-4 4v5h8v-5c0-2.21-1.79-4-4-4z"/>
+            </svg>
+            Pay with Razorpay
+        </button>
+    </div>
+</div>
+
     </form>
 </div>
 
 {{-- Script --}}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const totalEl = document.getElementById("totalAmount");
@@ -218,6 +222,100 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     updateTotal();
+   function getSelectedFeeData() {
+        let selectedFees = [];
+
+        document.querySelectorAll("input.month-checkbox:checked:not(:disabled)").forEach(cb => {
+            const td = cb.closest("td");
+            const feeTypeIdInput = td.querySelector("input[name*='fee_type_id']");
+            const feeTypeId = feeTypeIdInput ? feeTypeIdInput.value : null;
+            const amount = cb.dataset.amount;
+            const month = cb.value;
+
+            if (feeTypeId) {
+                selectedFees.push({
+                    fee_type_id: feeTypeId,
+                    month: month,
+                    amount: amount
+                });
+            }
+        });
+
+        return selectedFees;
+    }
+
+    document.getElementById('razorpay-button').addEventListener('click', function () {
+        const total = parseFloat(totalEl.innerText);
+        if (!total || total <= 0) {
+            alert("Please select at least one unpaid month to proceed.");
+            return;
+        }
+
+        const selectedFees = getSelectedFeeData();
+
+        // Step 1: Initiate Razorpay Order
+        fetch('{{ route('student.fees.razorpay.initiate') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                student_id: {{ $student->id }},
+                total_amount: total
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Step 2: Open Razorpay Checkout
+            const options = {
+                key: data.razorpay_key,
+                amount: data.amount,
+                currency: "INR",
+                name: "School Fee Payment",
+                description: "Student Fee Payment",
+                image: "{{ asset('storage/homeworks/images.jpeg') }}",
+                order_id: data.order_id,
+                handler: function (response) {
+                    // Step 3: Store Payment and Fee Months
+                    fetch('{{ route('student.fees.razorpay.store') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_order_id: response.razorpay_order_id,
+                            student_id: {{ $student->id }},
+                            selected_fees: selectedFees
+                        })
+                    })
+                    .then(() => {
+                        window.location.href = "{{ route('student.fees.overview') }}";
+                    })
+                    .catch(() => {
+                        alert('Payment completed, but fee data could not be saved.');
+                    });
+                },
+                prefill: {
+                    name: data.student.name,
+                    email: data.student.email,
+                    contact: data.student.contact
+                },
+                theme: {
+                    color: "#3B82F6"
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        })
+        .catch(error => {
+            console.error("Razorpay Init Error:", error);
+            alert("Failed to start payment. Please try again.");
+        });
+    });
 });
 </script>
 

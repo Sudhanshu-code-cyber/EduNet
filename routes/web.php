@@ -236,8 +236,9 @@ Route::post('/pay-fee', [FeeController::class, 'pay'])->name('student.fees.pay')
 Route::get('/pay-fees/{fee_type_id?}', [FeeController::class, 'payFeesPage'])->name('student.pay-fees');
 
 // Student Fee Payment History
-Route::get('/student/payment-history', [FeeController::class, 'paymentHistory'])->name('student.payment-history');
-
+Route::get('/payment-history', [FeeController::class, 'paymentHistory'])->name('student.payment-history');
+Route::post('/fees/razorpay-initiate', [FeeController::class, 'initiateRazorpay'])->name('student.fees.razorpay.initiate');
+Route::post('/fees/store-razorpay-success', [FeeController::class, 'storeRazorpaySuccess'])->name('student.fees.razorpay.store');
 });
 
 
