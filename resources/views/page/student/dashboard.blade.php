@@ -29,7 +29,9 @@
             <div class="flex items-start justify-between">
                 <div>
                     <h2 class="text-sm text-gray-500 font-medium mb-1">Notice</h2>
-                    <p class="text-3xl font-extrabold text-indigo-600">{{ $countNotice }}</p>
+                <p class="text-3xl font-extrabold text-indigo-600">
+    {{ str_pad($countNotice, 2, '0', STR_PAD_LEFT) }}
+</p>
                 </div>
                 <div class="p-2 bg-indigo-100 rounded-lg text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -50,8 +52,10 @@
         <div class="bg-white rounded-xl shadow-sm p-5 hover:shadow-md transition-all duration-300 border-l-4 border-green-500 group">
             <div class="flex items-start justify-between">
                 <div>
-                    <h2 class="text-sm text-gray-500 font-medium mb-1">Events</h2>
-                    <p class="text-3xl font-extrabold text-green-600">05</p>
+                    <h2 class="text-sm text-gray-500 font-medium mb-1">Homework</h2>
+             <p class="text-3xl font-extrabold text-green-600">
+    {{ str_pad($homeworkCount, 2, '0', STR_PAD_LEFT) }}
+</p>
                 </div>
                 <div class="p-2 bg-green-100 rounded-lg text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,8 +64,8 @@
                 </div>
             </div>
             <div class="mt-3">
-                <a href="#" class="text-xs font-medium text-green-600 hover:underline flex items-center gap-1">
-                    View calendar
+                <a href="{{ route('student.homework.index') }}" class="text-xs font-medium text-green-600 hover:underline flex items-center gap-1">
+                    View homework
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
@@ -69,25 +73,27 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm p-5 hover:shadow-md transition-all duration-300 border-l-4 border-emerald-500 group">
-            <div class="flex items-start justify-between">
-                <div>
-                    <h2 class="text-sm text-gray-500 font-medium mb-1">Attendance</h2>
-                    <p class="text-3xl font-extrabold text-emerald-600">{{$overallPercentage}}%</p>
-                </div>
-                <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-            </div>
-            <div class="mt-3">
-                <div class="w-full bg-gray-200 rounded-full h-1.5">
-                    <div class="bg-emerald-600 h-1.5 rounded-full" style="width: 94%"></div>
-                </div>
-                <p class="text-xs text-gray-500 mt-1">Better than 85% of your class</p>
-            </div>
+      <div class="bg-white rounded-xl shadow-sm p-5 hover:shadow-md transition-all duration-300 border-l-4 border-emerald-500 group">
+    <div class="flex items-start justify-between">
+        <div>
+            <h2 class="text-sm text-gray-500 font-medium mb-1">Attendance</h2>
+            <p class="text-3xl font-extrabold text-emerald-600">{{ $overallPercentage }}%</p>
         </div>
+        <div class="p-2 bg-emerald-100 rounded-lg text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </div>
+    </div>
+    <div class="mt-3">
+        <div class="w-full bg-gray-200 rounded-full h-1.5">
+            <div class="bg-emerald-600 h-1.5 rounded-full transition-all duration-500" style="width: {{ $overallPercentage }}%"></div>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">
+            {{ $overallPercentage > 85 ? 'Better than 85% of your class' : 'Try to improve!' }}
+        </p>
+    </div>
+</div>
     </div>
 
     <!-- Main Content Grid -->

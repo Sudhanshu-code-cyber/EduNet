@@ -144,13 +144,6 @@
                 class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md transition">
                  Submit Payment
             </button>
-            
-            <button 
-                type="button"
-                onclick="window.print()" 
-                class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-md transition print:hidden">
-                 Print Receipt
-            </button>
         </div>
 
     </div>

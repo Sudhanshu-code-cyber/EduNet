@@ -54,7 +54,6 @@
                                     <div class="text-sm text-gray-500 space-x-4">
                                      <span><strong>Posted By:</strong> {{ $notice->creator->name ?? 'Unknown' }}</span>
                                         <span><strong>Date:</strong> {{ $notice->date }}</span>
-                                        <p class="text-gray-800 whitespace-pre-line">{{ $notice->details }}</p>
 
 @if($notice->attachment)
     <div class="mt-2">

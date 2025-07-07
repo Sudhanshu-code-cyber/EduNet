@@ -435,7 +435,8 @@ Route::post('admin/timetables', [TeacherTimetableController::class, 'store'])->n
 Route::delete('admin/timetables/{id}', [TeacherTimetableController::class, 'destroy'])->name('timetable.destroy');
 Route::get('/get-assignments-by-teacher/{teacher_id}', [TeacherTimetableController::class, 'getAssignments']);
 Route::get('/get-sections-subjects/{teacher_id}/{class_id}', [TeacherTimetableController::class, 'getSectionsSubjects']);
-Route::get('/teacher/timetable/{teacher_id}', [TeacherController::class, 'timetable'])->name('teacher.timetable');
+Route::get('/teacher/timetable', [TeacherController::class, 'timetable'])->name('teacher.timetable');
+
 
 
   Route::get('/student/attendance', [StudentController::class, 'attendance'])->name('student.attendance');

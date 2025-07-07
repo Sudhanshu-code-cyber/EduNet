@@ -70,7 +70,7 @@
                             <th class="p-4">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="text-sm text-gray-600">
+                    <tbody class="text-sm text-gray-600 text-center">
                         @forelse($homework->submissions as $submission)
                             <tr class="border-b hover:bg-gray-50">
                                 <td class="p-4">{{ $submission->student->full_name }}</td>

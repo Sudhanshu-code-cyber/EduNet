@@ -8,10 +8,7 @@
         <h1 class="text-4xl font-bold text-blue-700 relative after:block after:w-24 after:h-1 after:bg-blue-500 after:mt-2">
             Teacher List
         </h1>
-        <a href="{{ route('teacher.create') }}"
-           class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg text-sm px-6 py-3 shadow-md hover:shadow-lg transition duration-300 flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i>Add Teacher
-        </a>
+        
     </div>
 
     <!-- Search & Filter -->
@@ -33,12 +30,10 @@
     @endif
 </form>
 
-
-        <!-- Filter Button -->
-      <button id="openFilterModal" 
-    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-    Filter
-</button>
+<a href="{{ route('teacher.create') }}"
+           class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg text-sm px-6 py-3 shadow-md hover:shadow-lg transition duration-300 flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i>Add Teacher
+        </a>
     </div>
 
     <!-- Teacher Table -->
@@ -88,7 +83,7 @@
                                 <form action="{{ route('teacher.destroy',$teacher->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" title="Delete">
+                                    <button type="submit" title="Delete" >
                                         <i class="fa-regular fa-trash-can hover:text-red-600"></i>
                                     </button>
                                 </form>

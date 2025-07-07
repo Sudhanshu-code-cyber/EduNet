@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\TeacherTimetable;
 use Illuminate\Http\Request;
 use App\Models\Notice;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
@@ -25,7 +27,32 @@ class TeacherController extends Controller
         ->take(3)
         ->get();
 
-    return view('page.teacher.dashboard', compact('latestNotices'));
+        $totalClasses = \App\Models\ClassModel::count(); // replace with your actual Class model
+    $totalSubjects = \App\Models\Subject::count();
+    $totalNotices = Notice::where('creator_role', 'admin')->where('target', 'teacher')->count();
+
+    $stats = [
+        ['label' => 'Total Classes', 'value' => $totalClasses, 'icon' => 'chalkboard-teacher', 'color' => 'blue-500', 'bg' => 'blue-100'],
+        ['label' => 'Total Subjects', 'value' => $totalSubjects, 'icon' => 'book-open', 'color' => 'green-500', 'bg' => 'green-100'],
+        ['label' => 'Total Notices', 'value' => $totalNotices, 'icon' => 'clipboard-list', 'color' => 'orange-500', 'bg' => 'orange-100'],
+    ];
+
+      $user = auth()->user();
+    $teacher = \App\Models\Teacher::where('user_id', $user->id)->first();
+
+    if (!$teacher) {
+        abort(403, 'No teacher profile linked to this user.');
+    }
+
+    $today = Carbon::now()->format('l');
+
+    $todaysSchedule = TeacherTimetable::with(['class', 'section', 'subject', 'period'])
+        ->where('teacher_id', $teacher->id)
+        ->where('day_of_week', $today)
+        ->orderBy('period_id')
+        ->get();
+
+    return view('page.teacher.dashboard', compact('latestNotices','stats','todaysSchedule'));
 }
 
     
@@ -57,20 +84,20 @@ class TeacherController extends Controller
     return view('page.teacher.my-classes', compact('classes'));
 }
 
-    public function timetable($teacher_id)
+  public function timetable()
 {
-     $teacher = \App\Models\Teacher::findOrFail($teacher_id);
+    $user = Auth::user();
+    $teacher = \App\Models\Teacher::where('user_id', $user->id)->first();
 
-    // Fetch all timetables assigned to this teacher
-    $timetables = TeacherTimetable::with(['class', 'section', 'subject', 'period'])
-        ->where('teacher_id', $teacher_id)
-        ->orderBy('day_of_week')
-        ->orderBy('period_id')
-        ->get();
+    if (!$teacher) {
+        abort(403, 'No teacher profile linked to this user.');
+    }
+
+    $timetables = TeacherTimetable::where('teacher_id', $teacher->id)
+                    ->with(['class', 'section', 'subject', 'period'])
+                    ->get();
 
     return view('page.teacher.timetable', compact('teacher', 'timetables'));
-
-
 }
 
 public function noticeBoard()

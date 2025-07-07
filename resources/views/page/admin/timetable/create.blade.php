@@ -1,6 +1,6 @@
 @extends('page.admin.parent')
 @section('content')
-<div class="max-w-4xl mx-auto bg-white shadow p-6 rounded">
+<div class="max-w-4xl mx-auto bg-white shadow p-6 rounded mt-16">
     <h2 class="text-xl font-semibold mb-4">Assign Teacher Timetable</h2>
     
     @if ($errors->any())

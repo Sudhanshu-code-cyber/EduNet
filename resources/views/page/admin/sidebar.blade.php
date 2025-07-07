@@ -330,9 +330,9 @@
                 </a>
                 <div class="dropdown-content" id="studentsContent">
                     <a href="{{route('admin.allstudent')}}" class="dropdown-link">Total Students</a>
-                    <a href="#" class="dropdown-link">Student Details</a>
+                    {{-- <a href="#" class="dropdown-link">Student Details</a> --}}
                     <a href="{{route('student.create')}}" class="dropdown-link">Add New Student</a>
-                    <a href="#" class="dropdown-link">Fees</a>
+                    {{-- <a href="#" class="dropdown-link">Fees</a> --}}
                 </div>
             </div>
             
@@ -343,9 +343,9 @@
                     <i class="fas fa-chevron-down nav-icon dropdown-icon"></i>
                 </a>
                 <div class="dropdown-content" id="teachersContent">
-                    <a href="{{ route('teacher.index') }}" class="dropdown-link">All Teacher</a>
+                    <a href="{{ route('teacher.index') }}" class="dropdown-link">All Teachers</a>
                     <a href="{{ route('teacher.create') }}" class="dropdown-link">Add New Teacher</a>
-                    <a href="#" class="dropdown-link">Payment</a>
+                    {{-- <a href="#" class="dropdown-link">Payment</a> --}}
 
                 </div>
             </div>
@@ -405,9 +405,9 @@
              <div class="dropdown-content" id="financeContent">
                  <a href="{{ route('periods.index') }}" class="dropdown-link">periods</a>
                  <a href="{{ route('timetable.index') }}" class="dropdown-link">Teacher Timetable</a>
-                 <a href="{{ route('fee-payment.create') }}" class="dropdown-link">Student Fee Payment</a>
+                 {{-- <a href="{{ route('fee-payment.create') }}" class="dropdown-link">Student Fee Payment</a> --}}
 
-                 <a href="" class="dropdown-link">Staff Salary</a>
+                 {{-- <a href="" class="dropdown-link">Staff Salary</a> --}}
              </div>
      
     </div>
@@ -422,27 +422,30 @@
                 </a>
             </div>
 
-             <div class="nav-item">
+             {{-- <div class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="fas fa-file-alt nav-icon"></i>
                     <span class="nav-text">Reports</span>
                 </a>
-            </div>
+            </div> --}}
             
             
 
              <div class="nav-item">
                 <a href="{{route('admin.calendar')}}" class="nav-link">
                     <i class="fas fa-calendar-alt nav-icon"></i>
-                    <span class="nav-text">Calender </span>
+                    <span class="nav-text">Event Calendar</span>
                 </a>
             </div>
 
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-cog nav-icon"></i>
-                    <span class="nav-text">Settings</span>
-                </a>
+            <div class="nav-item ">
+                <form method="POST" action="{{ route('user.logout') }}">
+    @csrf
+    <button type="submit" class="flex items-center px-4 py-3 text-gray-100 w-full text-left">
+        <i class="fas fa-sign-out-alt mr-3 text-gray-500 w-5"></i>
+        <span>LogOut</span>
+    </button>
+</form>
             </div>
         </nav>
         

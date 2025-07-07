@@ -1,16 +1,15 @@
 @extends('page.teacher.parent')
 
 @section('content')
-    <div class="min-h-screen bg-gray-100 p-6">
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
         <div class="max-w-7xl mx-auto ">
             <h1 class="text-4xl font-bold text-blue-800 mb-6">Exam Schedule</h1>
-            @include('page.teacher.examinations.filter-modal')
             @include('page.teacher.examinations.exam-schedule-modal')
         </div>
 
         <div class="overflow-x-auto bg-white rounded-lg shadow">
             <table class="min-w-full table-auto">
-                <thead class="bg-gray-100 text-gray-700">
+                <thead class="bg-blue-600 text-white">
                     <tr class="text-left text-sm">
                         <th class="p-4">Subject</th>
                         <th class="p-4">Exam Date</th>

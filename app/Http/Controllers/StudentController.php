@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Homework; 
 
 use Illuminate\Http\Request;
 
@@ -43,8 +44,17 @@ session(['student_id' => $student->id]);
         ->get();
 
     // Counts
-    $countNotice = Notice::count();
+   $countNotice = Notice::where('target', 'student')
+    ->where(function ($query) {
+        $query->whereNull('expires_at')->orWhere('expires_at', '>=', now());
+    })
+    ->count();
+
     $countExamShedules = ExamSchedule::count();
+
+$homeworkCount = Homework::where('class_id', $student->class_id)
+    ->where('section_id', $student->section_id)
+    ->count();
 
     // Attendance calculation
     $attendances = Attendance::where('student_id', $student->id)->get();
@@ -57,8 +67,10 @@ session(['student_id' => $student->id]);
         'examSchedules',
         'countExamShedules',
         'countNotice',
-        'overallPercentage'
+        'overallPercentage',
+        'homeworkCount'
     ));
+    
 }
 
 

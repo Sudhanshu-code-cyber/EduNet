@@ -2,16 +2,18 @@
 
 
 @section('content')
-<div class="max-w-4xl mx-auto bg-white shadow p-6 rounded">
-    <h2 class="text-xl font-semibold mb-4">Periods List</h2>
+<div class="max-w-4xl mx-auto bg-white shadow p-6 rounded mt-6">
+    <div class="flex justify-between items-center mb-4">
+<h2 class="text-xl font-semibold mb-4">Periods List</h2>
+    <a href="{{ route('periods.create') }}" class="bg-green-500 text-white px-4 py-2 rounded mb-4 inline-block"> + Add New Period</a>
+    </div>
 
     @if(session('success'))
         <div class="bg-green-100 text-green-700 p-2 rounded mb-4">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('periods.create') }}" class="bg-green-500 text-white px-4 py-2 rounded mb-4 inline-block">Add New Period</a>
 
-    <table class="w-full table-auto border-collapse">
+    <table class="w-full table-auto border-collapse ">
         <thead>
             <tr class="bg-gray-200">
                 <th class="border p-2">Period Number</th>

@@ -61,8 +61,31 @@
         }
     </style>
     <div>
+
+
         <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto p-8">
+        <main class="flex-1 overflow-y-auto p-8 ">
+
+<div class="py-5 px-4 md:px-8 max-w-7xl mx-auto min-h-screen space-y-8 mt-[-20px]">
+        <!-- Welcome Section -->
+        <div class="bg-white p-6 rounded-2xl shadow-md flex justify-between items-center ">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Welcome back, <span class="text-primary">{{auth()->user()->name}}</span>!
+                </h1>
+                <p class="text-sm text-gray-500 mt-2">
+                    You’re making a difference. Keep inspiring minds every day!
+                </p>
+            </div>
+            <div class="text-right hidden md:block">
+                <span class="inline-block bg-indigo-100 text-indigo-600 text-sm px-3 py-1 rounded-full font-medium">
+                    Today is {{ now()->format('l, M j') }}
+                </span>
+            </div>
+        </div>
+
+
+
             <!-- Summary Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div class="card-hover bg-white p-6 rounded-xl shadow-sm border-l-4 border-primary">

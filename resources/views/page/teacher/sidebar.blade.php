@@ -35,12 +35,6 @@
         <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Classroom</p>
         <ul class="space-y-0.5">
           <li>
-            <a href="{{ route('teacher.myclass') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
-              <i class="fas fa-chalkboard-teacher w-4 text-center text-gray-500"></i>
-              My Classes
-            </a>
-          </li>
-          <li>
             <a href="{{ route('teacher.student-list.index') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
               <i class="fas fa-users w-4 text-center text-gray-500"></i>
               Student List
@@ -118,12 +112,12 @@
        Exam Schedule
         </a>
       </li>
-      <li>
+      {{-- <li>
         <a href=""
           class="block px-3 py-1.5 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700">
        Exam Results
         </a>
-      </li>
+      </li> --}}
     </ul>
   </li>
 
@@ -154,7 +148,7 @@
       </li>
 
   <li>
-   <a href="{{ route('teacher.timetable', auth()->user()->id) }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
+   <a href="{{ route('teacher.timetable') }}" class="block px-3 py-2 rounded-md hover:bg-gray-200 transition duration-200 text-gray-700 items-center gap-2">
   <i class="fas fa-clock w-4 text-center text-gray-500"></i>
   Timetable
 </a>
@@ -202,9 +196,8 @@
           </li>
         </ul>
       </div>
-    </nav>
 
-    <!-- Logout -->
+       <!-- Logout -->
     <div class="mt-auto">
         <form method="POST" action="{{ route('user.logout') }}">
     @csrf
@@ -214,5 +207,8 @@
       </button>
     </form>
     </div>
+    </nav>
+
+   
   </div>
 </aside>

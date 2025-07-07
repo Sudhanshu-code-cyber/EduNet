@@ -22,9 +22,9 @@
         };
     </script>
 
-    <div class="py-5 px-4 md:px-8 max-w-7xl mx-auto min-h-screen space-y-8">
+    <div class="py-5 px-4 md:px-8 max-w-7xl mx-auto min-h-screen space-y-8 mt-[-20px]">
         <!-- Welcome Section -->
-        <div class="bg-white p-6 rounded-2xl shadow-md flex justify-between items-center">
+        <div class="bg-white p-6 rounded-2xl shadow-md flex justify-between items-center ">
             <div>
                 <h1 class="text-3xl font-bold text-gray-800">
                     Welcome back, <span class="text-primary">{{auth()->user()->name}}</span>!
@@ -40,42 +40,44 @@
             </div>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @php
-                $stats = [
-                    ['label' => 'Total Classes', 'value' => 5, 'icon' => 'chalkboard-teacher', 'color' => 'primary', 'bg' => 'indigo-100'],
-                    ['label' => 'Total Subjects', 'value' => 5, 'icon' => 'book-open', 'color' => 'secondary', 'bg' => 'indigo-100'],
-                    ['label' => 'Total Notices', 'value' => 5, 'icon' => 'clipboard-list', 'color' => 'accent', 'bg' => 'orange-100'],
-                ];
-            @endphp
-
-            @foreach ($stats as $stat)
-                <div class="bg-white p-6 rounded-2xl shadow-md border-l-4 border-{{ $stat['color'] }}">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="text-gray-500 font-medium">{{ $stat['label'] }}</p>
-                            <h2 class="text-3xl font-bold mt-2">{{ str_pad($stat['value'], 2, '0', STR_PAD_LEFT) }}</h2>
-                        </div>
-                        <div class="p-4 rounded-full bg-{{ $stat['bg'] }}">
-                            <i class="fas fa-{{ $stat['icon'] }} text-{{ $stat['color'] }} text-2xl"></i>
-                        </div>
-                    </div>
+       <!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    @foreach ($stats as $stat)
+        <div class="bg-white p-6 rounded-2xl shadow-md border-l-4 border-{{ $stat['color'] }}">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-gray-500 font-medium">{{ $stat['label'] }}</p>
+                    <h2 class="text-3xl font-bold mt-2">
+                        {{ str_pad($stat['value'], 2, '0', STR_PAD_LEFT) }}
+                    </h2>
                 </div>
-            @endforeach
+                <div class="p-4 rounded-full bg-{{ $stat['bg'] }}">
+                    <i class="fas fa-{{ $stat['icon'] }} text-{{ $stat['color'] }} text-2xl"></i>
+                </div>
+            </div>
         </div>
+    @endforeach
+</div>
+
 
         <!-- Schedule & Notice Board -->
-        <div class="flex flex-col lg:flex-row gap-6">
+        <div class="flex flex-col lg:flex-row gap-6 h-52">
             <!-- Schedule -->
-            <div class="bg-white p-6 rounded-xl shadow-md w-full lg:w-1/2 border-l-4 border-primary">
-                <h2 class="text-lg font-semibold text-primary mb-4">📅 Today's Schedule</h2>
-                <ul class="text-sm text-gray-700 space-y-2">
-                    <li>✅ 10:00 AM - Class 5B - Science</li>
-                    <li>✅ 12:00 PM - Class 6A - Biology</li>
-                    <li>📌 2:00 PM - Meeting with Principal</li>
-                </ul>
-            </div>
+      <div class="bg-white p-6 rounded-xl shadow-md w-full lg:w-1/2 border-l-4 border-primary">
+    <h2 class="text-lg font-semibold text-primary mb-4">📅 Today's Schedule</h2>
+  <ul class="text-sm text-gray-700 space-y-2">
+    @forelse ($todaysSchedule as $schedule)
+        <li>
+            ✅ {{ $schedule->period->start_time }} - 
+            {{ $schedule->class->name }} {{ $schedule->section->name }} - 
+            {{ $schedule->subject->name }}
+        </li>
+    @empty
+        <li>No schedule for today.</li>
+    @endforelse
+</ul>
+</div>
+
 
             <!-- Notice Board -->
         <div class="bg-white w-full lg:w-1/2 p-5 rounded-lg shadow">

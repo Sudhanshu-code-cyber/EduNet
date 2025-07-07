@@ -67,30 +67,7 @@
                            <span class="w-6 h-6 flex items-center justify-center bg-amber-100 text-amber-600 rounded-lg group-hover:bg-amber-600 group-hover:text-white transition-colors">🧭</span>
                            <span class="font-medium">Attendance</span>
                         </div>
-                        <svg class="w-4 h-4 text-gray-400 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
                      </a>
-                     <ul class="absolute left-0 mt-1 w-full bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10 overflow-hidden border border-gray-100">
-                        <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                              <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
-                              Daily Report
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                              <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
-                              Monthly Summary
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                              <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span>
-                              Yearly Overview
-                           </a>
-                        </li>
-                     </ul>
                   </li>
                </ul>
             </div>
@@ -107,7 +84,7 @@
                      </a>
                   </li>
                   <li class="relative group">
-                     <a href="{{route('student.result')}}"
+                     <a href=""
                         class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 transition-all duration-200">
                         <div class="flex items-center gap-3">
                            <span class="w-6 h-6 flex items-center justify-center bg-red-100 text-red-600 rounded-lg group-hover:bg-red-600 group-hover:text-white transition-colors">🧪</span>
@@ -128,12 +105,6 @@
                            <a href="{{route('student.examschedule')}}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
                               <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
                               Exam Schedule
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                              <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                              Grade Reports
                            </a>
                         </li>
                      </ul>
@@ -200,30 +171,7 @@
                            <span class="w-6 h-6 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">👤</span>
                            <span class="font-medium">My Profile</span>
                         </div>
-                        <svg class="w-4 h-4 text-gray-400 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
                      </a>
-                     <ul class="absolute left-0 mt-1 w-full bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10 overflow-hidden border border-gray-100">
-                        <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                              <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
-                              Personal Info
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                              <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
-                              Change Password
-                           </a>
-                        </li>
-                        <li>
-                           <a href="#" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2">
-                              <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
-                              Privacy Settings
-                           </a>
-                        </li>
-                     </ul>
                   </li>
                </ul>
             </div>
