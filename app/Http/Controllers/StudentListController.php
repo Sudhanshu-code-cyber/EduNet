@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentListController extends Controller
 {
-  // In your StudentListController
+
 public function index()
 {
     $assignedClasses = ClassModel::whereIn('id', function($query) {
@@ -35,7 +35,7 @@ public function index()
             return $query->where('section_id', $sectionId);
         })
         ->with(['class', 'section'])
-        ->paginate(15); // Add pagination here
+        ->paginate(15); 
 
     return view('page.teacher.student-list', compact('assignedClasses', 'assignedSections', 'students'));
 }

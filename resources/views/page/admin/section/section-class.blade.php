@@ -45,7 +45,7 @@
 
             <button type="submit"
                 class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
-                ➕ Save Sections
+                Save Sections
             </button>
         </form>
     </div>
@@ -74,15 +74,13 @@
                                 @endforeach
                             </td>
                             <td class="px-4 py-3 space-x-2">
-                                <a href=""
-                                    class="text-indigo-600 hover:text-indigo-800 font-medium text-sm">✏️ Edit</a>
                                 <form action="{{route('delete.section',$section->class_id)}}" method="POST"
                                     class="inline-block"
                                     onsubmit="return confirm('Are you sure you want to delete this class\'s sections?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        class="text-red-600 hover:text-red-800 font-medium text-sm">🗑️ Delete</button>
+                                        class="text-red-600 hover:text-red-800 font-medium text-sm"> Delete</button>
                                 </form>
                             </td>
                         </tr>

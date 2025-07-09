@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            const sections = data.sections; // ✅ Access array correctly
+            const sections = data.sections; 
             if (!Array.isArray(sections)) {
                 throw new Error("Expected sections array, got: " + JSON.stringify(sections));
             }

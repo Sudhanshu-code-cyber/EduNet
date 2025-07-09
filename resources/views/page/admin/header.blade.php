@@ -1,10 +1,9 @@
 <!-- Admin Header -->
-<header style=" background: linear-gradient(160deg, #2c3e50 0%, #1a2530 100%);" class=" shadow-md px-6 py-2 flex justify-between items-center w-full sticky top-0 z-50">
+<header style=" background: linear-gradient(160deg, #2c3e50 0%, #1a2530 100%);" class=" shadow-md px-6 py-2 flex justify-between items-center w-[1370px] ml-4 sticky top-0 z-50">
   <!-- Left: Logo + Page Title -->
   <div class="flex items-center space-x-4">
     <i class="fas fa-cogs text-blue-600 text-2xl"></i>
     <h1 class="text-xl sm:text-2xl font-bold text-white">Admin Panel</h1>
-    <span class="hidden sm:inline text-gray-100 text-sm">Welcome back, Admin!</span>
   </div>
 
   <!-- Right: Search, Notifications, User -->
